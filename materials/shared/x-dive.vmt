@@ -1,0 +1,78 @@
+// Rockman X DiVE preset by Debiddo
+// $basetexture RGBA channels sendo Alpha para modular $color2 ou $selfillum ou $color2
+// $phongexponenttexture RGBA sendo Alpha para modular o $rimlightmask 1
+// $bumpmap RGBA sendo Alpha para modular $phong 1 e $envmapmask
+// $detail RGB para efeitos em HDR
+// Efeitos de "glow" são feitos individualmente ou por outro .vmt
+"VertexLitGeneric"
+{
+$model "1" // this texture is made for models, and not menus
+$nodecal "0" // allow decals by default
+$nocull "0" // render just the face frontside, set zero to also render the "inside" of the mesh
+$alphatest "0" // disable alpha test by default
+$translucent "0" // the true gradient
+$additive "0" // like $translucent render pass but ignore light
+//$alphatestreference "0.01" // threshold to when $alphatest is usable. Alpha transparency clip point (Almost incompatible with everything)
+$allowalphatocoverage "1" // allow $alphatest be "anti-aliased" based on client's AA settings
+$basealphaenvmapmask "0" //  use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
+$normalmapalphaenvmapmask "0" // use $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
+$basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask
+$basemapalphaphongmask "0" // use $basetexture alpha channel as phong mask
+$allowdiffusemodulation "1" // allow $color2 tint
+$blendtintbybasealpha "0" // use $basetexture Alpha channel as $color2 mask, not compatible with $selfillum "1"
+$blendtintcoloroverbase "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
+$halflambert "0" // halflambert shading
+$phongdisablehalflambert "1" // force disable halflambert, use with $halflambert 0
+$surfaceprop "flesh" // control the decal and sound on hit; Buggy in gmod since 2018
+
+
+// Enable / Disable tilling
+$ClampS "1" // Clamp S/X texture coordinates by default
+$ClampT "1" // Clamp T/Y texture coordinates by default
+$ClampU "0" // Clamp U/Z texture coordinates by default
+
+$basetexture "shared/generic_base" // Diffuse or Albedo texture, alpha by default do nothing
+$bumpmap "shared/generic_normalmap" // Bump/Normal map and by default Alpha Channel is phong mask
+$phongexponenttexture "shared/generic_base" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for $rimlightmask 1
+//$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
+$lightwarptexture "shared/lightwarp_anime" //  is like an diffuse color ramp
+
+//$color2 " { 190 190 190 } " // used to tint the Albedo, " { 255 255 255 } " default
+
+$selfillum "0" // enable and use $basetexture alpha as selfillum mask. Works as decal render layer pass
+$selfillummaskscale "1.5" // multiply map computed light by this amount
+$selfIllumFresnel "1" // enable/disable fresnel effect
+$selfillumtint " [ 1 1 1 ] " // RGB vectors for light intensity
+$selfIllumFresnelMinMaxExp " [ .337 1.8 1 ] " // Mininum, Maximum and Exponent Values for fresnel
+
+$phong "1" // enable phong, set zero to disable all phong and rimlight at same time
+$invertphongmask "0" // invert the phong mask for $bumpmap alpha
+$forcephong "1" // force phong enabled even on lowend cards
+$phongboost "1.85" // multiply phong by this value
+$phongalbedotint "1" // use the $basetexture's RGB as tint value per textel
+//$phongtint " { 0 0 255 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
+$phongalbedoboost "1" // for SFM, multiply the $phongexponenttexture Green channel by this value
+//$phongexponent "4" // for override the default $phongexponenttexture's Red Channel
+//$phongexponent2 "5" // for CS:GO compatibles, used in specific light sources
+$phongexponentfactor "1" // multiply the $phongexponenttexture red channel by this value
+$phongfresnelranges " [ .0 .625 1.197 ] " // XYZ fresnel values, you can use any float values
+
+//$detail "shared/generic_base" // here the magic, we boost the $basetexture with $detail
+$detailscale "1" // do not scale, and use the original size
+$detailblendmode "0" // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
+$detailblendfactor ".476" // multiply the $detail by this value. like: how much the effect is in use.
+
+$rimlight "1" // rimlight enabled
+$rimlightboost "2" // multiply the rimlight by this value
+$rimlightexponent "7" // multiply the rimlight fresnel by this value
+$rimlightmask "1" // use $phongexponenttexture Alpha Channel as mask
+
+// Envmap / Reflections, recommended use a mask
+//$envmap "env_cubemap" // The Envirovment texture. "env_cubemap" for auto. "shared/envmap_x-dive" for the make static
+$envmaptint " [ .3 .3 .3 ] " // {RGB} or [vector] values to tune EnvMap
+//$envmapcontrast ".4" // how much is multply by color*color . 0 is the "natural" value
+//$envmaplightscale ".55" // determine how much is tinted by an light source and Cubemap (CS:GO)
+$envmapfresnel ".98" // Multiply Fresnel Envirovment by this value
+//$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values, (not compatible with $bumpmap)
+$noenvmapmip "1" // CD:GO flag to disable MipMap for Cubemaps
+}

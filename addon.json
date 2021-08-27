@@ -1,0 +1,24 @@
+{
+  "title": "Arkanjos Shared Materials",
+  "workshopid": 2086033839,
+  "type": "effects",
+  "tags":
+  [
+    "scenic",
+    "build"
+  ],
+  "ignore":
+  [
+    "*.txt",
+    "*.jpg",
+    "*.png",
+    "*.tga",
+    "*.dds",
+    "*.bak",
+    "*.psd",
+    "*/*/Digimon_Masters_GlowEffect.vmt",
+    "*/*/pbr.vmt",
+    "*/*/env_cybersleuth.vtf",
+    "*/*/glow_line.vtf"
+  ]
+}

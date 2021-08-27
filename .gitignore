@@ -1,0 +1,32 @@
+# Compiled Lua sources
+luac.out
+
+# luarocks build files
+*.src.rock
+*.zip
+*.tar.gz
+
+# Image Files
+*.png
+*.tga
+*.dds
+*.psd
+
+# Outro
+*.blend0
+*.blend1
+*.blend2
+*.blend3
+*.blend4
+*.blend5
+*.blend6
+*.blend7
+*.blend8
+*.blend9
+*.bak
+*.old
+*.tmp
+*.txt
+
+# Folders
+eyes/

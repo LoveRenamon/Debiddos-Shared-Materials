@@ -1,0 +1,30 @@
+"VertexlitGeneric" {
+$model "1"
+$nodecal "0"
+$nocull "0"
+$alphatest "0"
+$basealphaenvmapmask "0"
+$normalmapalphaenvmapmask "0"
+$blendtintbybasealpha "0"
+$allowalphatocoverage "0"
+$halflambert "1"
+$surfaceprop "flesh"
+
+$basetexture "shared/generic_mouth"
+$bumpmap ""
+$phongexponenttexture "shared/lightwarp_white"
+$phongwarptexture ""
+$lightwarptexture "shared/lightwarp_toon"
+$detail ""
+
+$phong "1"
+$phongboost "1.28"
+$phongalbedotint "0"
+$phongtint " { 222 190 180 } "
+$phongalbedoboost ".98"
+$phongexponent "92"
+$phongexponent2 "94"
+$phongexponentfactor "1.28"
+
+$rimlight "0"
+}

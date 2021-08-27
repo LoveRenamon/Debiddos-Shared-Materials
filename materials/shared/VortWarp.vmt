@@ -1,0 +1,9 @@
+"VortWarp"
+{
+$unlit "0"
+$basetexture "shared/generic_base"
+$flowmap "shadertest/cloud"
+$selfillummap "shadertest/lump"
+$selfillumtint " [ .05 .01 .001 ] "
+$warpparam "1"
+}

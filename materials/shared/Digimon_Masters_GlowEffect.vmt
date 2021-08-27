@@ -1,0 +1,24 @@
+// Use this material as "patch" to be editable or pointed directly to use as is
+// Work in Progress
+"VertexLitGeneric"
+{
+$model "1" // say that this material is used by models
+$nodecal "0" // decals is enabled by default
+$nocull "0" // render just the face frontside
+$alphatest "0" // alphatest is disabled by default
+$allowalphatocoverage "0" // disable alpha bellow this point
+$nolod "0" // disable Level of Detail texture scaling to reduce VRAM usage. Good for LowRes Textures
+$ClampS "0" // enable/disable ClampS texture coordinades
+$ClampT "0" // enable/disable ClampT texture coordinades
+$ClampU "0" // enable/disable ClampT texture coordinades
+$no_fullbright "1" // disable the full bright
+$AmbientOcclusion "1" // A fake Ambient Occlusion
+
+$EmissiveBlendEnabled "1"
+$EmissiveBlendTexture "shared/glow_line" // our effect
+//$EmissiveBlendBaseTexture "texture" // a BW image pattern (where should be emissive) (I8 format)
+//$EmissiveBlendFlowTexture "texture" // a RGB image vector
+$EmissiveBlendTint " [ 1 1 1 ] "
+$EmissiveBlendStrength ".1"
+$EmissiveBlendScrollVector " [ 0 .0337 ] "
+}

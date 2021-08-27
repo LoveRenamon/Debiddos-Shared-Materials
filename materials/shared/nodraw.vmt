@@ -1,0 +1,6 @@
+// Turn off something
+"UnlitGeneric"
+{
+$basetexture "shared/generic_base"
+$no_draw "1"
+}
