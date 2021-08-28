@@ -6,8 +6,8 @@ O propósito de um repo como esse é que desenvolvedores e modders tenham uma bi
  
  ## VMT
  A lista de [VMT](https://developer.valvesoftware.com/wiki/Material) leitura dos comenários:
-  * [vertexlit_anime](./tree/dev/materials/shared/)
-  * [vertexlit_colorable](./tree/dev/materials/shared/)
+  * [vertexlit_anime](./tree/dev/materials/shared/vertexlit_anime.vmt)
+  * [vertexlit_colorable](./tree/dev/materials/shared/vertexlit_colorable.vmt)
   * [VortWarp](./tree/dev/materials/shared/VortWarp.vmt)
   * [honkai3rd](./tree/dev/materials/shared/honkai3rd.vmt)
   * [x-dive](./tree/dev/materials/shared/x-dive.vmt)
