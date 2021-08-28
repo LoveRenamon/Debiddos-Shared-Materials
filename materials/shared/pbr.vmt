@@ -21,7 +21,7 @@ $bumpmap "shared/generic_normalmap" // New Bump/Normal map
 //$normaltexture "shared/generic_normalmap" // older Bump/Normal map
 $mraotexture "shared/generic_base" // MRO channels = RGB channels || Red Metalness +  Green Roughness + Blue Occlusion
 $speculartexture "shared/generic_base" // Specular texture. metalness channel is ignored and $basetexture is treated as diffuse
-$emissiontexture // self illumination texture.
+$emissiontexture "" // self illumination texture.
 
 $parallax "0" // 1 to enable parallax mapping.
 $parallaxdepth ".9" // <float> - Height of the depth map.
