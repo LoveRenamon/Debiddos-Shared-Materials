@@ -16,9 +16,9 @@
     "*.dds",
     "*.bak",
     "*.psd",
+    ".git*",
     "*/*/Digimon_Masters_GlowEffect.vmt",
     "*/*/pbr.vmt",
-    "*/*/env_cybersleuth.vtf",
     "*/*/glow_line.vtf",
     "*/*/eyes"
   ]
