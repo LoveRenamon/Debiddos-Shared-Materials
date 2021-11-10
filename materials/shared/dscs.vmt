@@ -1,5 +1,5 @@
 // Digimon Story: CyberSleuth | LinkZ | ReArise | New Century
-"Character"
+"VertexLitGeneric"
 {
 $model "1" // this texture is made for models, and not menu
 $nodecal "0" // allow decals by default
