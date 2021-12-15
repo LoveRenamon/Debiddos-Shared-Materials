@@ -1,0 +1,45 @@
+"VertexLitGeneric"
+{
+// Purpose: Sample for BBQ tank hits
+	$PhongFresnelRange_0 ".128"
+	$PhongFresnelRange_1 ".667"
+	$PhongFresnelRange_2 "5"
+	$PhongFresnelRanges " [ 0 .5 1 ] "
+
+	$BBQAmount ".0"
+	$BBQMult "1.01"
+	$BBQ ".0"
+
+	Proxies
+	{
+		BBQLevel
+		{
+			resultVar $BBQAmount
+		}
+		Multiply
+		{
+			srcVar1 $BBQAmount
+			srcVar2 $BBQMult
+			resultVar $BBQ
+		}
+
+		Multiply
+		{
+			srcVar1 $PhongFresnelRange_0
+			srcVar2 $BBQ
+			resultVar "$PhongFresnelRanges[0]"
+		}
+		Multiply
+		{
+			srcVar1 $PhongFresnelRange_1
+			srcVar2 $BBQ
+			resultVar "$PhongFresnelRanges[1]"
+		}
+		Multiply
+		{
+			srcVar1 $PhongFresnelRange_2
+			srcVar2 $BBQ
+			resultVar "$PhongFresnelRanges[2]"
+		}
+	}
+}

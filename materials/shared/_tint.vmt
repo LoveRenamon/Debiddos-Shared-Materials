@@ -1,0 +1,53 @@
+"VertexLitGeneric"
+{
+// Purpose: sample of dynamic tint HDR Overbright based where the player/entity is looking
+  $lighting ".499"
+
+  $MinLighting ".432"
+  $MaxLighting ".897"
+
+  $LightBoost ".9"
+  $clr ".0"
+
+	Proxies
+	{
+    // drive $lighting
+    Pupil
+    {
+      TextureVar $basetexture
+      TextureFrameNumVar $frame
+      PupilCloseRate .08
+      PupilOpenRate .08
+    }
+    Subtract
+    {
+      srcVar1 $LightBoost
+      srcVar2 $lighting
+      resultVar $clr
+    }
+    // Clamp for limit and prevent to bright/dark
+    Clamp
+    {
+      min $MinLighting
+      max $MaxLighting
+      srcVar1 $clr
+      resultVar $clr
+    }
+    // Transfer the calc light from Pupil to $color
+    Equals
+    {
+      srcVar1 $clr
+      resultVar "$color[0]"
+    }
+    Equals
+    {
+      srcVar1 $clr
+      resultVar "$color[1]"
+    }
+    Equals
+    {
+      srcVar1 $clr
+      resultVar "$color[2]"
+    }
+	}
+}

@@ -52,7 +52,7 @@ $detailblendfactor ".4" // multiply the $detail by this value. like: how much th
 $rimlight "0" // rimlight enabled
 $rimlightboost "3" // multiply the rimlight by this value
 $rimlightexponent "5" // multiply the rimlight fresnel by this value
-$rimlightmask "1" // use $phongexponenttexture Alpha Channel as mask
+$rimmask "1" // use $phongexponenttexture Alpha Channel as mask
 
 $ambientocclusion "0" // this won't work in GMod (?) Need more research
 $ambientocclcolor " { 0 0 0 } " // default RGB color

@@ -6,6 +6,10 @@ luac.out
 *.zip
 *.tar.gz
 
+# not needed to push
+materials/shared/_detail.vmt
+materials/shared/dynamic_envmap.vmt
+
 # Image Files
 *.png
 *.tga

@@ -1,0 +1,55 @@
+"VertexLitGeneric"
+{
+	$model "1" // this texture is made for models, and not menu
+	$nodecal "0" // allow decals by default
+	$nocull "0" // render just the face frontside, set one to also render the "inside" of the mesh
+	$normalmapalphaenvmapmask "1" // use $bumpmap Alpha channel as $envmaskmap
+	$allowdiffusemodulation "1" // allow $color $color2 tint
+	$blendtintbybasealpha "0" // use $basetexture Alpha channel as $color2 mask
+	$blendtintcoloroverbase "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
+	$surfaceprop "metal" // control the decal and sound on hit; Buggy in gmod since 2018
+
+	$basetexture "shared/generic_red255" // Diffuse or Albedo texture
+	$bumpmap "dev/flat_normal" // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
+	$phongexponenttexture "" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for "$rimlightmask 1"
+	//$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
+	//$lightwarptexture "shared/lightwarp_surfacetoonitself" // is like an diffuse color ramp
+
+	$color2 " [ .78 .78 .78 ] " // used to tint the Albedo, " { 255 255 255 } " default
+
+	$phong "0" // enable phong, set zero to disable all phong and rimlight at same time
+	$phongboost ".8" // multiply phong by this value
+	$phongalbedotint "1" // use the $basetexture's RGB as tint value per textel
+	$phongtint " { 83 85 122 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
+	$phongalbedoboost "1.08" // for SFM, multiply the tint channel by this value
+	//$phongexponent "4" // for override the default $phongexponenttexture's Red Channel
+	//$phongexponent2 "5" // for CS:GO compatibles, used in specific light sources
+	$phongexponentfactor "1.08" // multiply the $phongexponenttexture red channel by this value
+	$phongfresnelranges " [ .0025 3 2 ] " // XYZ fresnel values, you can use any float values
+
+	$detail "shared/generic_blue255" // here the magic, we boost the $basetexture with $detail
+	// Mental Notes: if you use on one model's vmt, all other materials of the same mdl file should use, or your model will become brighter than expected at $body and $model qc parameters.
+	$detailscale "1" // do not scale and use the original size
+	$detailblendmode "1" // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
+	$detailblendfactor ".1" // multiply the $detail by this value. like: how much the effect is in use.
+
+	$rimlight "0" // rimlight enabled
+	$rimmask "0" // use $phongexponenttexture Alpha Channel as mask
+	$rimlightboost "2.1" // multiply the rimlight by this value
+	$rimlightexponent "1.1" // multiply the rimlight fresnel by this value
+
+	$envmap "env_cubemap" // choose the env_cubemap texture
+	$envmaptint " [ 1 .8 .8 ] " // tune the intensity effect
+	$envmapfresnel "1" // fresnel is multiplied by this value
+	$envmapcontrast ".8" // color*color control
+
+	$SelfIllum "0"
+
+	$EmissiveBlendEnabled "1"
+	$EmissiveBlendTexture "shared/generic_red" // our effect
+	$EmissiveBlendBaseTexture "dev/null" // a BW image pattern (where should be emissive) (I8 format)
+	$EmissiveBlendFlowTexture "dev/null" // a RGB image vector
+	$EmissiveBlendTint " [ .5 .5 .5 ] "
+	$EmissiveBlendStrength ".6"
+	$EmissiveBlendScrollVector " [ 0 0 ] "
+}

@@ -1,0 +1,234 @@
+// This will dynamically scale pupil with lighting that the entity can see.
+EyeRefract
+{
+	//$iris "/eye"
+	$CorneaTexture "Engine/eye-cornea"
+	//$lightwarptexture "shared/lightwarp_dod_snow"
+	$EnvMap "Engine/eye-reflection-cubemap-"
+	$EyeballRadius "1"
+	$AmbientOcclusion "1"
+	$AmbientOcclColor " [ 1 .91 .99 ] "
+	$AmbientOcclTexture "shared/eye_ao"
+	$Dilation ".5"
+	$Glossiness ".8"
+	$EyeOrigin " [ 0 0 0 ] "
+	$ParallaxStrength ".25"
+	$CorneaBumpStrength "1"
+	$HalfLambert "1"
+	$NoDecal "1"
+	$ClampS "1"
+	$ClampT "1"
+	$NoMip "0"
+
+	$RayTraceSphere "0"
+	$SphereTexkillCombo "0"
+
+	$lighting ".5"
+
+	$taylor "1.0"
+	$const1 "2.2"
+	$const2 "1.32"
+	$const3 ".088"
+	$const4 "-.0176"
+	$expConst ".0"
+	$exp ".0"
+	$temp ".0"
+
+	$five ".5"
+	$four ".4"
+	$one ".01"
+	$co1 "1.2"
+	$co2 ".2357"
+	$co3 "3.6"
+	$quad1 ".0"
+	$quad2 ".0"
+
+	Proxies {
+
+		Pupil {
+			TextureVar $iris
+			TextureFrameNumVar $irisframe
+			PupilCloseRate ".1"
+			PupilOpenRate ".1"
+		}
+
+
+		// Transfer the catched light to Pupil size
+		Equals {
+			srcVar1 $lighting
+			resultVar $Dilation
+		}
+
+		// Clamp to more size control
+		Clamp
+		{
+			min .01
+			max .99
+			srcVar1 $Dilation
+			resultVar $Dilation
+		}
+
+		//		Start Gamma Correction (2.2) //
+
+		// can't raise to fractional values, so use approximations
+		// 1 + 2.2(x-1) + 1.32(x-1)^2 + 0.088(x-1)^3 - 0.0176(x-1)^4, 0.4 < x < 1
+		// 3.6(0.5x)^2 - 0.01, 0.2357 < x < 0.4
+		// 0.5(1.2x)^2, 0 < x < 0.2357
+
+		Subtract {
+			srcVar1 $lighting
+			srcVar2 $taylor
+			resultVar $expConst
+		}
+		Equals {
+			srcVar1 $expConst
+			resultVar $exp
+		}
+
+
+		Multiply {
+			srcVar1 $const1
+			srcVar2 $exp
+			resultVar $temp
+		}
+		Add {
+			srcVar1 $taylor
+			srcVar2 $temp
+			resultVar $taylor
+		}
+
+
+		Multiply {
+			srcVar1 $exp
+			srcVar2 $expConst
+			resultVar $exp
+		}
+		Multiply {
+			srcVar1 $const2
+			srcVar2 $exp
+			resultVar $temp
+		}
+		Add {
+			srcVar1 $taylor
+			srcVar2 $temp
+			resultVar $taylor
+		}
+
+
+		Multiply {
+			srcVar1 $exp
+			srcVar2 $expConst
+			resultVar $exp
+		}
+		Multiply {
+			srcVar1 $const3
+			srcVar2 $exp
+			resultVar $temp
+		}
+		Add {
+			srcVar1 $taylor
+			srcVar2 $temp
+			resultVar $taylor
+		}
+
+
+		Multiply {
+			srcVar1 $exp
+			srcVar2 $expConst
+			resultVar $exp
+		}
+		Multiply {
+			srcVar1 $const4
+			srcVar2 $exp
+			resultVar $temp
+		}
+		Add {
+			srcVar1 $taylor
+			srcVar2 $temp
+			resultVar $taylor
+		}
+
+
+		Multiply {
+			srcVar1 $lighting
+			srcVar2 $co1
+			resultVar $temp
+		}
+		Multiply {
+			srcVar1 $temp
+			srcVar2 $temp
+			resultVar $temp
+		}
+		Multiply {
+			srcVar1 $temp
+			srcVar2 $five
+			resultVar $quad1
+		}
+
+
+		Multiply {
+			srcVar1 $lighting
+			srcVar2 $five
+			resultVar $temp
+		}
+		Multiply {
+			srcVar1 $temp
+			srcVar2 $temp
+			resultVar $temp
+		}
+		Multiply {
+			srcVar1 $temp
+			srcVar2 $co3
+			resultVar $temp
+		}
+		Subtract {
+			srcVar1 $temp
+			srcVar2 $one
+			resultVar $quad2
+		}
+
+
+		LessOrEqual {
+			LessEqualVar $quad1
+			greaterVar $quad2
+			srcVar1 $lighting
+			srcVar2 $co2
+			resultVar $temp
+		}
+		LessOrEqual {
+			LessEqualVar $temp
+			greaterVar $taylor
+			srcVar1 $lighting
+			srcVar2 $four
+			resultVar $temp
+		}
+		Equals {
+			srcVar1 $temp
+			resultVar $lighting
+		}
+
+		//		End Gamma Correction		//
+
+
+
+		// scale cubemap intensity with adjusted lighting value
+		//Equals {
+		// srcVar1 $lighting
+		// resultVar "$envmaptint[0]"
+		//}
+		//Equals {
+		// srcVar1 $lighting
+		// resultVar "$envmaptint[1]"
+		//}
+		//Equals {
+		// srcVar1 $lighting
+		// resultVar "$envmaptint[2]"
+		//}
+
+		// Garry's Mod only works as is
+		Equals {
+			srcVar1 $lighting
+			resultVar $Glosiness
+		}
+	}
+}

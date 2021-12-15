@@ -17,6 +17,8 @@
     "*.bak",
     "*.psd",
     ".git*",
+    "*.md",
+    "lua/matproxy/LightAmount.lua",
     "*/*/Digimon_Masters_GlowEffect.vmt",
     "*/*/pbr.vmt",
     "*/*/glow_line.vtf",

@@ -54,5 +54,5 @@ $detailblendfactor ".4" // multiply the $detail by this value. like: how much th
 $rimlight "1" // rimlight enabled
 $rimlightboost "2" // multiply the rimlight by this value
 $rimlightexponent "7" // multiply the rimlight fresnel by this value
-$rimlightmask "1" // use $phongexponenttexture Alpha Channel as mask
+$rimmask "1" // use $phongexponenttexture Alpha Channel as mask
 }

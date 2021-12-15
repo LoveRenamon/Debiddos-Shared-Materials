@@ -65,7 +65,7 @@ $detailblendfactor ".476" // multiply the $detail by this value. like: how much 
 $rimlight "1" // rimlight enabled
 $rimlightboost "2" // multiply the rimlight by this value
 $rimlightexponent "7" // multiply the rimlight fresnel by this value
-$rimlightmask "1" // use $phongexponenttexture Alpha Channel as mask
+$rimmask "1" // use $phongexponenttexture Alpha Channel as mask
 
 // Envmap / Reflections, recommended use a mask
 //$envmap "env_cubemap" // The Envirovment texture. "env_cubemap" for auto. "shared/envmap_x-dive" for the make static
