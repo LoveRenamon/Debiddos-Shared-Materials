@@ -19,7 +19,7 @@
 	$phongdisablehalflambert "1" // force disable halflambert, use with $halflambert 0
 
 	$basetexture "dev/null" // Diffuse or Albedo texture
-	$bumpmap "dev/flat_normal" // Diffuse or Albedo texture
+	$bumpmap "dev/flat_normal" // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
 	$phongexponenttexture "shared/lightwarp_white" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for $rimlightmask 1
 	$lightwarptexture "shared/lightwarp_toon" // is like an diffuse color ramp
 
