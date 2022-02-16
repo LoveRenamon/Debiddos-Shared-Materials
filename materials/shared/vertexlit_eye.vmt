@@ -1,13 +1,13 @@
-// First made for KOS-MOS Ver.4
-// This is a sample patch for VertexLitGeneric mimic EyeRefract, but static
 "VertexLitGeneric"
 {
+	// First made for KOS-MOS Ver.4
+	// This is a sample patch for VertexLitGeneric mimic EyeRefract, but static
 	// textura do olho deve ser usada a mesma para $basetexture e $detail
 	$basetexture "shared/generic_base"
 	$detail "shared/generic_base"
 
   $bumpmap "dev/flat_normal" // necessário para ativar Phong
-  $lightwarptexture "shared/lightwarp_skin" // mude de acordo com o ramp necessário
+  $lightwarptexture "shared/lightwarp_skin" // mude de acordo com o ramp necessário (l4d2 cause black eyes)
 	$blendtintcoloroverbase "0"
 	$color2 " [ 1 1 1 ] " // se o olho tiver uma cor muito clara como "ciano", use para fazer pequenos ajustes
 

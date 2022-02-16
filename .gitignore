@@ -8,6 +8,8 @@ luac.out
 
 # not needed to push
 materials/shared/_detail.vmt
+materials/shared/_detail_v1.vmt
+materials/shared/_detail_v2.vmt
 materials/shared/dynamic_envmap.vmt
 
 # Image Files

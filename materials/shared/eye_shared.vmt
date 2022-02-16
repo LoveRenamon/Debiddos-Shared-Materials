@@ -7,9 +7,11 @@ EyeRefract
 	$EnvMap "Engine/eye-reflection-cubemap-"
 	$EyeballRadius "1"
 	$AmbientOcclusion "1"
-	$AmbientOcclColor " [ 1 .91 .99 ] "
+	$AmbientOcclColor " [ .33 .33 .33 ] "
 	$AmbientOcclTexture "shared/eye_ao"
 	$Dilation ".5"
+	$MinGlosiness ".4"
+	$MaxGlosiness "1"
 	$Glossiness ".8"
 	$EyeOrigin " [ 0 0 0 ] "
 	$ParallaxStrength ".25"
@@ -18,7 +20,11 @@ EyeRefract
 	$NoDecal "1"
 	$ClampS "1"
 	$ClampT "1"
+	$ClampU "0"
 	$NoMip "0"
+
+	$irisU " [ 0 1 0 0 ] "
+	$irisV " [ 0 0 1 0 ] "
 
 	$RayTraceSphere "0"
 	$SphereTexkillCombo "0"
@@ -60,8 +66,7 @@ EyeRefract
 		}
 
 		// Clamp to more size control
-		Clamp
-		{
+		Clamp {
 			min .01
 			max .99
 			srcVar1 $Dilation
@@ -226,8 +231,15 @@ EyeRefract
 		//}
 
 		// Garry's Mod only works as is
-		Equals {
-			srcVar1 $lighting
+		//Equals {
+		//	srcVar1 $lighting
+		//	resultVar $Glosiness
+		//}
+		// or
+		Clamp {
+			min $MinGlosiness
+			max $MaxGlosiness
+			srcVar1 $Glosiness
 			resultVar $Glosiness
 		}
 	}

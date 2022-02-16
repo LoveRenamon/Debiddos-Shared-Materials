@@ -1,7 +1,7 @@
 "VertexLitGeneric"
 {
 // Purpose: Sample for increase the Blood amount based on number of melee hits
-	$Detail "models/infected/hunter/hunter_01_detail.vtf"
+	$Detail "models/infected/hunter/hunter_01_detail"
 	$DetailScale "1.5"
 	$DetailBlendFactor ".0001"
 	$DetailBlendMode "0"

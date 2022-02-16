@@ -1,10 +1,11 @@
 "VertexLitGeneric"
 {
-// Purpose: Sample for BBQ tank hits
-	$PhongFresnelRange_0 ".128"
-	$PhongFresnelRange_1 ".667"
-	$PhongFresnelRange_2 "5"
-	$PhongFresnelRanges " [ 0 .5 1 ] "
+	// Purpose: Sample for BBQ that modify fresnel when the entity burn
+	$PhongFresnelRange_0 ".0" // Fresnel at front view (0º)
+	$PhongFresnelRange_1 ".5" // Fresnel at 3/4 view (45º)
+	$PhongFresnelRange_2 "1.0" // fresnel at back view/rimlight (180º)
+
+	$PhongFresnelRanges " [ .0 .5 1 ] " // the default 3D vector that will be driven by the above values
 
 	$BBQAmount ".0"
 	$BBQMult "1.01"
