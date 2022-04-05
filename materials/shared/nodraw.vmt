@@ -1,4 +1,10 @@
-// Turn off something
+//////////////////////////////////////////////////////////////////////////////////
+//  Turn off something
+// most useful when you need swap materials for something complete invisible
+// this materials is the most cheap way to draw a material, bypassing most parts of the buffer
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "UnlitGeneric"
 {
 $basetexture "dev/null"

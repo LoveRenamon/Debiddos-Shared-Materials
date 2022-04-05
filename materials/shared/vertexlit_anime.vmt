@@ -1,58 +1,127 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Generic preset for Anime characters
+//   By edit this file affect most of my Anime-like characters
 // A ideia de materiais como esse são de flexibilizar e fácil edição entre multiplas texturas, use-a como "patch"
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
-$model "1" // this texture is made for models, and not menu
-$nodecal "0" // allow decals by default
-$nocull "0" // render just the face frontside, set one to also render the "inside" of the mesh
-$additive "0" // like $translucent but ignore light
-$translucent "0" // the true gradient
-$alphatest "0" // disable the use of $basetexture alpha channel as transparency by default
-$allowalphatocoverage "0" // Control AntiAliasing for alphatest
-//$alphatestreference "0.01" // threshold to when $alphatest is usable. Almost incompatible with everything
-$basealphaenvmapmask "0" //  use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
-$normalmapalphaenvmapmask "0" // use $bumpmap Alpha channel as $envmaskmap
-$basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask
-$basemapalphaphongmask "0" // use $basetexture alpha channel as phong mask
-$allowdiffusemodulation "1" // allow $color $color2 tint
-$blendtintbybasealpha "0" // use $basetexture Alpha channel as $color2 mask
-$blendtintcoloroverbase "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
-$halflambert "0" // halflambert shading
-$phongdisablehalflambert "1" // force disable halflambert, use with $halflambert 0
-$surfaceprop "flesh" // control the decal and sound on hit; Buggy in gmod since 2018
+  $model       "1" // this texture is made for models, and not menu
+  $nodecal     "0" // allow decals by default
+  $nocull      "0" // render just the face frontside, set one to also render the "inside" of the mesh
+  $alpha       "0" // drive the entire material opacity
+  $alphatest   "0" // disable the use of $basetexture alpha channel as transparency by default
+  $translucent "0" // the true gradient
+  $additive    "0" // like $translucent but ignore light
 
-// Enable / Disable tilling
-$ClampS "1" // Clamp S/X texture coordinates by default
-$ClampT "1" // Clamp T/Y texture coordinates by default
-$ClampU "0" // Clamp U/Z texture coordinates by default
+  $allowalphatocoverage "0"    // Control AntiAliasing for alphatest
+  //$alphatestreference ".01"  // threshold to when $alphatest is usable. Almost incompatible with everything
 
-$basetexture "shared/generic_base" // Diffuse or Albedo texture
-$bumpmap "shared/generic_normalmap" // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
-$phongexponenttexture "shared/generic_phong" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for "$rimlightmask 1"
-//$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
-$lightwarptexture "shared/lightwarp_anime_skin" // is like an diffuse color ramp
+  $basealphaenvmapmask       "0" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
+  $normalmapalphaenvmapmask  "0" // use $bumpmap Alpha channel as $envmaskmap
+  $basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask
+  $basemapalphaphongmask     "0" // use $basetexture alpha channel as phong mask
 
-//$color " [ .75 .75 .75 ] " // used to tint the Albedo, " { 255 255 255 } " default
-//$color2 " [ .75 .75 .75 ] " // used to tint the Albedo, " { 255 255 255 } " default
+  // $color and $color2 toggle
+  $allowdiffusemodulation  "1"
 
-$phong "1" // enable phong, set zero to disable all phong and rimlight at same time
-$forcephong "1" // force phong enabled even on lowend cards
-$phongboost ".8" // multiply phong by this value
-$phongalbedotint "1" // use the $basetexture's RGB as tint value per textel
-//$phongtint " { 83 85 122 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
-$phongalbedoboost "1.08" // for SFM, multiply the tint channel by this value
-//$phongexponent "4" // for override the default $phongexponenttexture's Red Channel
-//$phongexponent2 "5" // for CS:GO compatibles, used in specific light sources
-$phongexponentfactor ".8" // multiply the $phongexponenttexture red channel by this value
-$phongfresnelranges " [ .0001 .4 1 ] " // XYZ fresnel values, you can use any float values
+  $blendtintbybasealpha    "0" // use $basetexture Alpha channel as $color2 mask
+  $blendtintcoloroverbase  "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
+  $halflambert             "0" // halflambert shading
+  $phongdisablehalflambert "1" // force disable halflambert, use with $halflambert 0
 
-//$detail "shared/generic_base" // here the magic, we boost the $basetexture with $detail
-// Mental Notes: if you use on one model's vmt, all other materials of the same mdl file should use, or your model will become brighter than expected at $body and $model qc parameters.
-$detailscale "1" // do not scale and use the original size
-$detailblendmode "0" // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
-$detailblendfactor ".4" // multiply the $detail by this value. like: how much the effect is in use.
+  $surfaceprop "flesh" // control the decal and sound on hit; Buggy in gmod since 2018
 
-$rimlight "1" // rimlight enabled
-$rimlightboost "2" // multiply the rimlight by this value
-$rimlightexponent "7" // multiply the rimlight fresnel by this value
-$rimmask "1" // use $phongexponenttexture Alpha Channel as mask
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Enable / Disable tilling
+  //////////////////////////////////////////////////////////////////////////////////
+  $ClampS "1" // Clamp S/X texture coordinates by default
+  $ClampT "1" // Clamp T/Y texture coordinates by default
+  $ClampU "0" // Clamp U/Z texture coordinates by default
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Textures
+  //  the basic is $BaseTexture
+  // all other parameters are for optimizations and use a single material
+  // and a trade-off of optimizations by use more memory
+  //////////////////////////////////////////////////////////////////////////////////
+  $basetexture "shared/generic_base"                        // Diffuse or Albedo texture
+  $bumpmap "shared/generic_normalmap"                       // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
+  $phongexponenttexture "shared/generic_phong"              // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for "$rimlightmask 1"
+  //$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
+  $lightwarptexture "shared/lightwarp_anime_skin"           // is like an diffuse color ramp
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Color modulation
+  //
+  // $color is unsupported by models unless is Left 4 Dead or Left 4 Dead 2
+  // they can use $color and $color2 at same time to do different things,
+  // it's awesome for NPR and HDR tonemap
+  //
+  // I strong reccomend use vectors to write colors because is more precisse and will be
+  // color corrected by the tonemap system automatically when needed
+  //////////////////////////////////////////////////////////////////////////////////
+  //$color  " [ .75 .75 .75 ] " // used to tint the Albedo, " { 255 255 255 } " default
+  //$color2 " [ .75 .75 .75 ] " // used to tint the Albedo, " { 255 255 255 } " default
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Phong
+  //  Phong is a old specular method it's good use just a small amount for a dry skin
+  //  it computes by a exponent that is driven by a additive $phongboot and exponencial $phongexponent
+  //  the fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
+  //////////////////////////////////////////////////////////////////////////////////
+  $phong "1" // enable phong, set zero to disable all phong and rimlight at same time
+  $forcephong "1" // force phong enabled even on lowend cards
+  $phongboost ".8" // multiply phong by this value
+  $phongalbedotint "1" // use the $basetexture's RGB as tint value per textel
+  //$phongtint " { 83 85 122 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
+  $phongalbedoboost "1.08" // for SFM, multiply the tint channel by this value
+  //$phongexponent "4" // for override the default $phongexponenttexture's Red Channel
+  //$phongexponent2 "5" // for CS:GO compatibles, used in specific light sources
+  $phongexponentfactor ".8" // multiply the $phongexponenttexture red channel by this value
+  $phongfresnelranges " [ .0001 .4 1 ] " // XYZ fresnel values, you can use any float values
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Rim Light
+  //////////////////////////////////////////////////////////////////////////////////
+  $rimlight "1"         // rimlight enabled
+  $rimmask  "1"         // use $phongexponenttexture Alpha Channel as mask
+  $rimlightboost "2"    // multiply the rimlight by this value
+  $rimlightexponent "7" // multiply the rimlight fresnel by this value
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Env Map
+  // Envmap / Reflections, is recommended use a mask
+  //////////////////////////////////////////////////////////////////////////////////
+  //$envmap "env_cubemap"                 // The Envirovment texture. "env_cubemap" for auto. Change to make static.
+  //$envmapcontrast "0"                   // how much is multply by color*color . 0 is the "natural" value
+  $envmapfresnel "1"                      // Multiply Fresnel Envirovment by this value
+  //$envmaplightscale "1"                 // determine how much is tinted by an light source and Cubemap
+  $noenvmapmip "1"                        // disable MipMap for Cubemaps
+  $envmaptint " [ 1 1 1 ] "               // {RGB} or [vector] values to tune EnvMap
+  //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values (not compatible with $bumpmap)
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Detail Texture
+  //
+  //  Mental Notes:
+  //    Use with caution
+  //   Source2013: If you use on one model's vmt, all other materials of the same mdl file should use,
+  // or your model will become brighter than expected at $body and $model qc parameters.
+  //
+  // Mental Notes:
+  // if you use on one model's vmt, all other materials of the same mdl file should use, or your model will become brighter than expected at $body and $model qc parameters.
+  //////////////////////////////////////////////////////////////////////////////////
+  //$detail "dev/flat_null" // here the magic, we boost the $basetexture with $detail
+  $detailscale       "1"    // do not scale and use the original size
+  $detailblendmode   "0"    // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
+  $detailblendfactor ".4"   // multiply the $detail by this value. like: how much the effect is in use.
 }

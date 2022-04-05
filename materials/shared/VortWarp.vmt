@@ -1,9 +1,14 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Its the minimun parameters to actually make VortWarp shder work
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "VortWarp"
 {
-$unlit "0"
-$basetexture "shared/generic_base"
-$flowmap "shadertest/cloud"
-$selfillummap "shadertest/lump"
-$selfillumtint " [ .05 .01 .001 ] "
-$warpparam "1"
+	$unlit "0"
+	$basetexture "shared/generic_base"
+	$flowmap "shadertest/cloud"
+	$selfillummap "shadertest/lump"
+	$selfillumtint " [ .05 .01 .001 ] "
+	$warpparam "1"
 }

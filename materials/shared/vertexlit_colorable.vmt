@@ -1,55 +1,59 @@
-// Use this material as "patch" to be editable or pointed directly to use as is
+//////////////////////////////////////////////////////////////////////////////////
+// Use this material as "patch" to be editable or pointed directly to use as is//
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
-$model "1" // say that this texture is used by models
-$nodecal "1" // disable decals
-$nocull "0" // render just the face frontside
-$alphatest "0" // disable alphatest
-$allowalphatocoverage "1" // disable alpha over
-$allowdiffusemodulation "1" // allow color modulation by $color $color2
-$blendtintbybasealpha "1" // blend the $color or $color2 based in the $basetexture alpha chanel
-$blendtintcoloroverbase "1" // how much is tinted (float 0 to 1)
-$vertexcolor "0" // enable $vertexcolor texture flag
-$vertexalpha "0" // enable $vertexalpha texture flag
-$nolod "1" // disable Level of Detail texture scaling to reduce VRAM usage. Good for LowRes Textures
-$ClampS "1" // enable/disable ClampS texture coordinades
-$ClampT "1" // enable/disable ClampT texture coordinades
-$ClampU "1" // enable/disable ClampT texture coordinades
-$no_fullbright "1" // disable the fullbright
-$nomip "1" // ignore the MipMap texture to reduce VRAM usage. Good for LowRes Textures
-//$ignorez "0" // ignore distance buffer
-$receiveflashlight "1" // allow flashlight in UnlitGeneric
-$singlepassflashlight "1" // for UnlitGeneric, calculate just one time the flashlight to improve performace
+  $model "1" // say that this texture is used by models
+  $nodecal "1" // disable decals
+  $nocull "0" // render just the face frontside
+  $alphatest "0" // disable alphatest
+  $allowalphatocoverage "1" // disable alpha over
+  $allowdiffusemodulation "1" // allow color modulation by $color $color2
+  $blendtintbybasealpha "1" // blend the $color or $color2 based in the $basetexture alpha chanel
+  $blendtintcoloroverbase "1" // how much is tinted (float 0 to 1)
+  $vertexcolor "0" // enable $vertexcolor texture flag
+  $vertexalpha "0" // enable $vertexalpha texture flag
+  $nolod "1" // disable Level of Detail texture scaling to reduce VRAM usage. Good for LowRes Textures
+  $ClampS "1" // enable/disable ClampS texture coordinades
+  $ClampT "1" // enable/disable ClampT texture coordinades
+  $ClampU "1" // enable/disable ClampT texture coordinades
+  $no_fullbright "1" // disable the fullbright
+  $nomip "1" // ignore the MipMap texture to reduce VRAM usage. Good for LowRes Textures
+  //$ignorez "0" // ignore distance buffer
+  $receiveflashlight "1" // allow flashlight in UnlitGeneric
+  $singlepassflashlight "1" // for UnlitGeneric, calculate just one time the flashlight to improve performace
 
-$basetexture "shared/generic_base" // this texture just a dummy to avoid console errors
-$lightwarptexture "shared/lightwarp_kofas" // is like an diffuse color ramp
-$translucent "1" // light is translucent to this texture
-$distancealpha "0" // (?)
+  $basetexture "shared/generic_base" // this texture just a dummy to avoid console errors
+  $lightwarptexture "shared/lightwarp_kofas" // is like an diffuse color ramp
+  $translucent "1" // light is translucent to this texture
+  $distancealpha "0" // (?)
 
-$color " { 255 239 0 } " // default color (for props)
-$color2 " { 255 239 0 } " // default color2 (for models)
+  $color " { 255 239 0 } " // default color (for props)
+  $color2 " { 255 239 0 } " // default color2 (for models)
 
-// tf2 related, so i need more research
-$softedges "0" 
-$edgesoftnessstart ".5"
-$edgesoftnessend "1.46"
-$scaleedgesoftnessbasedonscreenres "0"
+  // tf2 related, so i need more research
+  $softedges "0"
+  $edgesoftnessstart ".5"
+  $edgesoftnessend "1.46"
+  $scaleedgesoftnessbasedonscreenres "0"
 
-$glow "0"
-$glowcolor " [ 1 1 1 ] "
-$glowalpha ".4"
-$glowstart ".1"
-$glowend ".5"
-$glowx ".98"
-$glowy ".98"
+  $glow "0"
+  $glowcolor " [ 1 1 1 ] "
+  $glowalpha ".4"
+  $glowstart ".1"
+  $glowend ".5"
+  $glowx ".98"
+  $glowy ".98"
 
-//  Proxies allow control the player selected color over the default variable
-"Proxies"
-	{
-	"PlayerColor"
-		{
-		resultvar $color2
-		default 1 .93 0
-		}
-	}
+  //  Proxies allow control the player selected color over the default variable
+  "Proxies"
+  {
+    "PlayerColor"
+    {
+      resultvar $color2
+      default 1 .93 0
+    }
+  }
 }

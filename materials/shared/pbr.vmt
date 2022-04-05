@@ -1,34 +1,38 @@
+//////////////////////////////////////////////////////////////////////////////////
 // A ideia de materiais como esse são de flexibilizar e fácil edição entre multiplas texturas, use-a como "patch"
-// Currently not supported by GMod and wont work with x86_64 build (need a shader dll)
+// Currently not supported by GMod and wont work with x86_64 build (need a custom shader dll)
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "PBR"
 {
-$model "1" // this texture is made for models, and not menu
-$nodecal "0" // allow decals by default
-$nocull "0" // render just the face frontside, set one to also render the "inside" of the mesh
-$alphatest "0" // disable the use of $basetexture alpha channel as transparency by default
-$allowalphatocoverage "1" // Enable AntiAliasing for alphatest
-//$alphatestreference "0.01" // threshold to when alpha is usable. Almost incompatible with everything
-$translucent "0" // Setting this to "1" enables alpha blending
+	$model "1" // this texture is made for models, and not menu
+	$nodecal "0" // allow decals by default
+	$nocull "0" // render just the face frontside, set one to also render the "inside" of the mesh
+	$alphatest "0" // disable the use of $basetexture alpha channel as transparency by default
+	$allowalphatocoverage "1" // Enable AntiAliasing for alphatest
+	//$alphatestreference "0.01" // threshold to when alpha is usable. Almost incompatible with everything
+	$translucent "0" // Setting this to "1" enables alpha blending
 
-$allowdiffusemodulation "1" // allow $color2 tint
-$blendtintbybasealpha "0" // use $basetexture Alpha channel as $color2 mask
-$blendtintcoloroverbase "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
+	$allowdiffusemodulation "1" // allow $color2 tint
+	$blendtintbybasealpha "0" // use $basetexture Alpha channel as $color2 mask
+	$blendtintcoloroverbase "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
 
-$surfaceprop "flesh" // control the decal and sound on hit; Buggy in gmod since 2018
+	$surfaceprop "flesh" // control the decal and sound on hit; Buggy in gmod since 2018
 
-$basetexture "shared/generic_base" // Albedo texture (Diffuse when $speculartexture exist)
-$bumpmap "shared/generic_normalmap" // New Bump/Normal map
-//$normaltexture "shared/generic_normalmap" // older Bump/Normal map
-$mraotexture "shared/generic_base" // MRO channels = RGB channels || Red Metalness +  Green Roughness + Blue Occlusion
-$speculartexture "shared/generic_base" // Specular texture. metalness channel is ignored and $basetexture is treated as diffuse
-$emissiontexture "" // self illumination texture.
+	$basetexture "shared/generic_base" // Albedo texture (Diffuse when $speculartexture exist)
+	$bumpmap "shared/generic_normalmap" // New Bump/Normal map
+	//$normaltexture "shared/generic_normalmap" // older Bump/Normal map
+	$mraotexture "shared/generic_base" // MRO channels = RGB channels || Red Metalness +  Green Roughness + Blue Occlusion
+	$speculartexture "shared/generic_base" // Specular texture. metalness channel is ignored and $basetexture is treated as diffuse
+	$emissiontexture "" // self illumination texture.
 
-$parallax "0" // 1 to enable parallax mapping.
-$parallaxdepth ".9" // <float> - Height of the depth map.
-$parallaxcenter ".50" // <float> - Center point of the depth map.
+	$parallax "0" // 1 to enable parallax mapping.
+	$parallaxdepth ".9" // <float> - Height of the depth map.
+	$parallaxcenter ".50" // <float> - Center point of the depth map.
 
-//$basetexturetransform "center 0.5 0.5 scale 0.1025 0.1025 rotate 0 translate 0 0" //
-//$envmap "env_cubemap" // Defaults "env_cubemap", but you can choose another
-//$useEnvAmbient "1" // Makes it use the lowest mip level of the cubemap for ambient light instead of the ambient cubes
-//$color2 " { 255 255 255 } " // used to tint the Albedo, " { 255 255 255 } " default
+	//$basetexturetransform "center 0.5 0.5 scale 0.1025 0.1025 rotate 0 translate 0 0" //
+	//$envmap "env_cubemap" // Defaults "env_cubemap", but you can choose another
+	//$useEnvAmbient "1" // Makes it use the lowest mip level of the cubemap for ambient light instead of the ambient cubes
+	//$color2 " { 255 255 255 } " // used to tint the Albedo, " { 255 255 255 } " default
 }

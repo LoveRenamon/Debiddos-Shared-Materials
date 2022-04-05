@@ -1,19 +1,30 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Trying to setup a metal effect with Phong and EnvMap simultanusly (WIP)
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
-	$model "1" // this texture is made for models, and not menu
-	$nodecal "0" // allow decals by default
-	$nocull "0" // render just the face frontside, set one to also render the "inside" of the mesh
+	$model "1"                    // this texture is made for models, and not menu
+	$nodecal "0"                  // allow decals by default
+	$nocull "0"                   // render just the face frontside, set one to also render the "inside" of the mesh
 	$normalmapalphaenvmapmask "1" // use $bumpmap Alpha channel as $envmaskmap
-	$allowdiffusemodulation "1" // allow $color $color2 tint
-	$blendtintbybasealpha "0" // use $basetexture Alpha channel as $color2 mask
-	$blendtintcoloroverbase "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
-	$surfaceprop "metal" // control the decal and sound on hit; Buggy in gmod since 2018
+	$allowdiffusemodulation "1"   // allow $color $color2 tint
+	$blendtintbybasealpha "0"     // use $basetexture Alpha channel as $color2 mask
+	$blendtintcoloroverbase "0"   // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
+	$surfaceprop "metal"          // control the decal and sound on hit; Buggy in gmod since 2018
 
-	$basetexture "shared/generic_red255" // Diffuse or Albedo texture
-	$bumpmap "dev/flat_normal" // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
-	$phongexponenttexture "" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for "$rimlightmask 1"
+	//////////////////////////////////////////////////////////////////////////////////
+	// Textures
+	//  the basic is $BaseTexture
+	// all other parameters are for optimizations and use a single material
+	// and a trade-off of optimizations by use more memory
+	//////////////////////////////////////////////////////////////////////////////////
+	$basetexture "shared/generic_red255"                      // Diffuse or Albedo texture
+	$bumpmap "dev/flat_normal"                                // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
+	$phongexponenttexture ""                                  // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for "$rimlightmask 1"
 	//$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
-	//$lightwarptexture "shared/lightwarp_surfacetoonitself" // is like an diffuse color ramp
+	//$lightwarptexture "shared/lightwarp_surfacetoonitself"  // is like an diffuse color ramp
 
 	$color2 " [ .78 .78 .78 ] " // used to tint the Albedo, " { 255 255 255 } " default
 

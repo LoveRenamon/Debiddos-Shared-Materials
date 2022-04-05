@@ -1,41 +1,90 @@
 --Debiddo bootstrap
-DebiddosSharedMaterials = true
-DebiddoNAME = {}
-DebiddoCATEGORY = {}
-DebiddoID = {}
-DebiddoWORKSHOPID = {}
+DebiddoSharedMaterials = true
 
+--[[
+		The ideia behind everything here is use a table to be indexed at end of all lua files that match, being called a single time, but... I'm still figuring how to do it on LUA with GLUA libs
+		Also the GMod community like the official Discord server are mostly dick people with behaviour of a "self-disorder complex" that look to entertain theirselves.
+		It may looks rude, but is what you read at their daily messages
+--]]
+--DebiddoNAME = {}
+--DebiddoCATEGORY = {}
+DebiddoID = {}
+--DebiddoWORKSHOPID = {}
+
+--[[
+		Allow edit NPCs base HP that use out CVar
+--]]
 CreateConVar( "sv_debiddo_npc_base_health", "100", FCVAR_GAMEDLL, "Changes the base health for the newler HL2 based NPCs by Debiddo\nUsually Citizens have: <base>*0.8\nCombine NPCs have <base>*1.1\n", "1", "2147483648" )
 local sv_debiddo_npc_base_health = GetConVar( "sv_debiddo_npc_base_health" )
 
-function DebiddoPM( DebiddoNAME, DebiddoID )
-	list.Set( "PlayerOptionsModel", DebiddoNAME, "models/debiddo/"..DebiddoID.."/pm.mdl" )
-	player_manager.AddValidModel( DebiddoNAME, "models/debiddo/"..DebiddoID.."/pm.mdl" )
-	player_manager.AddValidHands( DebiddoNAME, "models/debiddo/"..DebiddoID.."/c_arms.mdl", 0, 0 )
+--[[
+		To add Player Models under "models/debiddo" that have a specific file names to each one
+--]]
+function DebiddoPM( NAME, ID )
+	list.Set( "PlayerOptionsModel", NAME, "models/debiddo/"..ID.."/pm.mdl" )
+	player_manager.AddValidModel( NAME, "models/debiddo/"..ID.."/pm.mdl" )
+	player_manager.AddValidHands( NAME, "models/debiddo/"..ID.."/c_arms.mdl", 0, 0 )
 end
 
-function DebiddoHL2NPC( t, class )
+--[[
+		To add NPCs by a list sheet
+--]]
+local function DebiddoHL2NPC( t, class )
 	list.Set( "NPC", class or t.Class, t )
 end
 
-function DebiddoNPC( DebiddoNAME, DebiddoID, DebiddoCATEGORY )
+
+--[[
+		This add both HL1's Citizen and Combine based NPCs into a single preset
+--]]
+function DebiddoNPC( NAME, ID, CATEGORY )
 	DebiddoHL2NPC( {
-		Name = DebiddoNAME.." (Friendly)",
+		Name = NAME.." (Friendly)",
 		Class = "npc_citizen",
 		KeyValues = { citizentype = CT_REBEL, SquadName = "Rebel" },
-		Model = "models/debiddo/"..DebiddoID.."/npc.mdl",
-		Weapons = { "weapon_stunstick", "weapon_crowbar", "weapon_pistol", "weapon_357", "weapon_smg1", "weapon_ar2", "weapon_shotgun", "weapon_rpg" },
-		Health = (sv_debiddo_npc_base_health:GetInt() * 0.8),
-		Category = DebiddoCATEGORY
-	}, "npc_"..DebiddoID.."_f" )
+		Model = "models/debiddo/"..ID.."/npc.mdl",
+		Weapons = {
+			"weapon_crowbar",
+			"weapon_stunstick",
+			"weapon_pistol",
+			"weapon_357",
+			"weapon_smg1",
+			"weapon_ar2",
+			"weapon_shotgun",
+			"weapon_rpg"
+		},
+		Health = ( sv_debiddo_npc_base_health:GetInt() * 0.88 ),
+		Category = CATEGORY
+	}, "npc_"..ID.."_f" )
 	DebiddoHL2NPC( {
-		Name = DebiddoNAME.." (Hostile)",
+		Name = NAME.." (Hostile)",
 		Class = "npc_combine_s",
-		KeyValues = { SquadName = "overwatch"},
-		Model = "models/debiddo/"..DebiddoID.."/npc_c.mdl",
-		Weapons = { "weapon_stunstick", "weapon_pistol", "weapon_357", "weapon_smg1", "weapon_ar2", "weapon_shotgun" },
-		Health = (sv_debiddo_npc_base_health:GetInt() * 1.1),
+		KeyValues = {
+			SquadName = "overwatch"
+		},
+		Model = "models/debiddo/"..ID.."/npc_c.mdl",
+		Weapons = {
+			"weapon_stunstick",
+			"weapon_pistol",
+			"weapon_357",
+			"weapon_smg1",
+			"weapon_ar2",
+			"weapon_shotgun"
+		},
+		Health = ( sv_debiddo_npc_base_health:GetInt() * 1.1 ),
 		Numgrenades = "4",
-		Category = DebiddoCATEGORY
-	}, "npc_"..DebiddoID.."_h" )
+		Category = CATEGORY
+	}, "npc_"..ID.."_h" )
+end
+
+
+--[[
+		This add both Player Model and NPC into a single call
+--]]
+function DebiddoAdd( NAME, ID, WORKSHOPID, CATEGORY )
+
+	if SERVER then resource.AddWorkshop( WORKSHOPID ) end
+	DebiddoPM( NAME, ID )
+	DebiddoNPC( NAME, ID, CATEGORY )
+
 end

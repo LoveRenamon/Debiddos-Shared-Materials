@@ -1,25 +1,43 @@
+//////////////////////////////////////////////////////////////////////////////////
 // Use this material as "patch" to be editable or pointed directly to use as is
-// Work in Progress
+// Work in Progress vmt to mimic the Effects from Digimon Masters Super Ultimates Digimons
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
-$model "1" // say that this material is used by models
-$nodecal "0" // decals is enabled by default
-$nocull "0" // render just the face frontside
-$alphatest "0" // alphatest is disabled by default
-$allowalphatocoverage "0" // disable alpha bellow this point
-$nolod "0" // disable Level of Detail texture scaling to reduce VRAM usage. Good for LowRes Textures
-$ClampS "0" // enable/disable ClampS texture coordinades
-$ClampT "0" // enable/disable ClampT texture coordinades
-$ClampU "0" // enable/disable ClampT texture coordinades
-$no_fullbright "1" // disable the full bright
-$AmbientOcclusion "1" // A fake Ambient Occlusion
-$basetexture "dev/null"
+	$Model "1"                // say that this material is used by models
+	$Alpha "1"                // alpha for the entire material, zero means invisible
+	$AlphaTest "0"            // alphatest is disabled by default
+	$AllowAlphaToCoverage "0" // disable alpha bellow this point
+	$NoCull "0"               // render just the face frontside
+	$NoDecal "0"              // decals is enabled by default
+	$NoLoD "0"                // disable Level of Detail texture scaling to reduce VRAM usage. Good for LowRes Textures
+	$No_FullBright "1"        // disable the full bright
+	$AmbientOcclusion "1"     // A fake Ambient Occlusion
 
-$EmissiveBlendEnabled "1"
-$EmissiveBlendTexture "shared/glow_line" // our effect
-$EmissiveBlendBaseTexture "dev/null" // a BW image pattern (where should be emissive) (I8 format)
-$EmissiveBlendFlowTexture "dev/null" // a RGB image vector
-$EmissiveBlendTint " [ 1 1 1 ] "
-$EmissiveBlendStrength ".8"
-$EmissiveBlendScrollVector " [ 0 .0337 ] "
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Enable / Disable tilling
+	//////////////////////////////////////////////////////////////////////////////////
+	$ClampS "0" // ClampS/X texture coordinades
+	$ClampT "0" // ClampT/Y texture coordinades
+	$ClampU "0" // ClampU/Z texture coordinades
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Textures
+	//  the basic is $EmissiveBlendTexture
+	// all other parameters are complements t archive some effect
+	// they decend from VortWarp shader that is included on VertexLitGeneric
+	// everything here can be driven by Proxies and archive enve more effects
+	//////////////////////////////////////////////////////////////////////////////////
+	$BaseTexture "dev/null"   // base texture here is a dummy texture, your model texture
+	$EmissiveBlendEnabled "1"                  // Boolean On/Off
+	$EmissiveBlendTexture "shared/glow_line"   // our effect in a flat 2D texture
+	$EmissiveBlendBaseTexture "dev/null"       // a BW image pattern (where should be emissive) (I8 format reccomended)
+	$EmissiveBlendFlowTexture "dev/null"       // a RGB image vector
+	$EmissiveBlendTint " [ 1 1 1 ] "           // boost the color instensity by RGB vector tint (works equal as $EnvMapTint)
+	$EmissiveBlendStrength ".8"                // how much the effect is in place (Min:0 | Max: 1)
+	$EmissiveBlendScrollVector " [ 0 .0337 ] " // to animate, X and Y values to set the speed in units per second
 }

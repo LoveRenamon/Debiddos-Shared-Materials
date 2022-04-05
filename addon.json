@@ -9,16 +9,18 @@
   ],
   "ignore":
   [
-    "*.txt",
-    "*.jpg",
-    "*.png",
-    "*.tga",
-    "*.dds",
     "*.bak",
-    "*.psd",
-    ".git*",
+    "*.dds",
+    "*.jpg",
+    "*.kra",
     "*.md",
+    "*.png",
+    "*.psd",
+    "*.tga",
+    "*.txt",
+    ".git*",
     "lua/matproxy/LightAmount.lua",
+    "lua/autorun/zx_0x6c6f61646572.lua",
     "materials/shared/_detail.vmt",
     "materials/shared/_detail_v1.vmt",
     "materials/shared/_detail_v2.vmt",
@@ -28,9 +30,7 @@
     "materials/shared/vertexlit_anime_heavy_l4d2.vmt",
     "materials/shared/soot.vtf",
     "materials/shared/burn.vtf",
-    "*/*/Digimon_Masters_GlowEffect.vmt",
     "*/*/pbr.vmt",
-    "*/*/glow_line.vtf",
     "*/*/eyes"
   ]
 }

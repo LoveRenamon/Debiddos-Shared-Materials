@@ -1,32 +1,68 @@
+////////////////////////////////////////////////////////////////////////////////////
+// First made for KOS-MOS Ver.4
+// This is a sample patch for VertexLitGeneric mimic EyeRefract, but static
+// to boost the colors, use same texture as $basetexture and $detail
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
-	// First made for KOS-MOS Ver.4
-	// This is a sample patch for VertexLitGeneric mimic EyeRefract, but static
-	// textura do olho deve ser usada a mesma para $basetexture e $detail
-	$basetexture "shared/generic_base"
-	$detail "shared/generic_base"
+  //////////////////////////////////////////////////////////////////////////////////
+  // Texture part
+  //////////////////////////////////////////////////////////////////////////////////
+  $basetexture "shared/generic_base" // use same texture to boost colors
+  $detail      "shared/generic_base" // use same texture to boost colors
 
-  $bumpmap "dev/flat_normal" // necessário para ativar Phong
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Phong + EnvMap
+  //////////////////////////////////////////////////////////////////////////////////
+  $normalmapalphaenvmapmask "1"
+  $bumpmap "dev/flat_normal" // necessary to enable Phong with EnvMap
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // control the illumination
+  //////////////////////////////////////////////////////////////////////////////////
   $lightwarptexture "shared/lightwarp_skin" // mude de acordo com o ramp necessário (l4d2 cause black eyes)
-	$blendtintcoloroverbase "0"
-	$color2 " [ 1 1 1 ] " // se o olho tiver uma cor muito clara como "ciano", use para fazer pequenos ajustes
+  $color2 " [ 1 1 1 ] "                     // se o olho tiver uma cor muito clara como "ciano", use para fazer pequenos ajustes
+  $blendtintcoloroverbase "0"
 
+
+  //////////////////////////////////////////////////////////////////////////////////
+  //  Phong
+  // there is no need to change most parameters,
+  // however, be sure to know what you're doing
+  //////////////////////////////////////////////////////////////////////////////////
   $phong "1"
-  $phongboost ".8" // Intensidade do highlight
-	$phongexponent "51" // força um highlight
-	$phongtint " [ 1 1 1 ] "
-  $phongdisablehalflambert "0"
-	$phongfresnelranges " [ .8 1.5 3.5 ] "
+  $phongboost ".8"         // Highlight Intensity
+  $phongexponent "51"      // Highlight Strenght
+  $phongtint " [ 1 1 1 ] " // Color of the Highlight
+  $phongfresnelranges " [ .8 1.5 3.5 ] " // no need to change it, really
 
-  $detailblendfactor ".3" // edite a intensidade das cores por aqui
-  $detailblendmode "0"
-  $detailscale "1"
 
-	$envmap "env_cubemap" // edite se necessário fazer os reflexos estáticos
-	$envmaptint " [ 1 1 1 ] " // module a intensidade dos reflexos se necessário
-	$envmapfresnel ".05"
-	$halflambert "1"
-	$surfaceprop "flesh"
-	$normalmapalphaenvmapmask "1"
-	$rimlight "0" // rimlight tem pouco efeito, melhor deixa-lo desativado
+  //////////////////////////////////////////////////////////////////////////////////
+  // NPR shading
+  //////////////////////////////////////////////////////////////////////////////////
+  $halflambert "1"             // for darker eyes, maybe you want disable Valve's NPR trick
+  $phongdisablehalflambert "0" // for darker eyes, maybe you want disable Valve's NPR trick
+
+  $detailblendfactor ".3" // Edit to boost colors
+  $detailblendmode "0"    // use the texture a decal
+  $detailscale "1"        // make the scale 1:1
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Env Map
+  // Envmap / Reflections / Specullar
+  //////////////////////////////////////////////////////////////////////////////////
+  $envmap "env_cubemap"     // Edit only if you wanna/have a static Env_CubeMap
+  $envmaptint " [ 1 1 1 ] " // Intensity Modulation for the Reflex/Specullar
+  $envmapfresnel ".05"
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Fail safe params
+  //////////////////////////////////////////////////////////////////////////////////
+  $rimlight "0"        // RimLight cast low effect, so its disabled by default
+  $surfaceprop "flesh"
 }

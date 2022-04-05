@@ -1,30 +1,52 @@
-"VertexlitGeneric" {
-$model "1"
-$nodecal "0"
-$nocull "0"
-$alphatest "0"
-$basealphaenvmapmask "0"
-$normalmapalphaenvmapmask "0"
-$blendtintbybasealpha "0"
-$allowalphatocoverage "0"
-$halflambert "1"
-$surfaceprop "flesh"
+//////////////////////////////////////////////////////////////////////////////////
+// Mouth
+//  a generic toon-like mouth material for models that doesn't have a mouth by default
+// and I have added flexes for them
+//
+// By: Davi (Debiddo) Gooz
+//////////////////////////////////////////////////////////////////////////////////
+	"VertexlitGeneric"
+{
+	$model "1"                 // the character is a model
+	$nodecal "0"               // allow decals on at inner mouth
+	$nocull "0"                // allow the model to cull
+	$alphatest "0"             // no, we dont need alpha
+	$translucent "0"           // no, we dont need translucent
+	$blendtintbybasealpha "0"  // we'll no blend tint by default
+	$allowalphatocoverage "0"  // there is no alpha, so there is no reason to use it
+	$halflambert "1"           // this will make sure the minimum light is 0.5 instaed 0
+	$basemapalphaphongmask "1" // $basetexture Alpha channel as phong mask, necessary to enable $phong
+	$surfaceprop "flesh"       // althrough is broken, we set it here in case gmod fix it someday
 
-$basetexture "shared/generic_mouth"
-$bumpmap ""
-$phongexponenttexture "shared/lightwarp_white"
-$phongwarptexture ""
-$lightwarptexture "shared/lightwarp_toon"
-$detail ""
+	//////////////////////////////////////////////////////////////////////////////////
+	//	The Basics
+	// maybe you wanna change the lightwarp to match you character lightwarp
+	//////////////////////////////////////////////////////////////////////////////////
+	$basetexture "shared/generic_mouth"       // the Albedo texture (The Surface Colors)
+	$lightwarptexture "shared/lightwarp_toon" // 1D ramp for NPR
 
-$phong "1"
-$phongboost "1.28"
-$phongalbedotint "0"
-$phongtint " { 222 190 180 } "
-$phongalbedoboost ".98"
-$phongexponent "92"
-$phongexponent2 "94"
-$phongexponentfactor "1.28"
+	//////////////////////////////////////////////////////////////////////////////////
+	// Ensue there is nothing at this parameters
+	//////////////////////////////////////////////////////////////////////////////////
+	$bumpmap ""
+	$phongexponenttexture ""
+	$phongwarptexture ""
+	$detail ""
 
-$rimlight "0"
+	//////////////////////////////////////////////////////////////////////////////////
+	// Phong setup
+	//////////////////////////////////////////////////////////////////////////////////
+	$phong "1"
+	$phongboost "1.28"
+	$phongalbedotint "0"
+	$phongtint " { 222 190 180 } "
+	$phongalbedoboost ".98"
+	$phongexponent "92"
+	$phongexponent2 "94"
+	$phongexponentfactor "1.28"
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Rimlight cast a weird color, so I'm disabling it
+	//////////////////////////////////////////////////////////////////////////////////
+	$rimlight "0"
 }

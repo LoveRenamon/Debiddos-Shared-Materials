@@ -35,7 +35,7 @@ O propósito de um repo como esse é que desenvolvedores e modders tenham uma bi
 
 
 ### EyeRefract Shader
-* [eye_shared](/materials/shared/eye_shared.vmt)
+  * [eye_shared](/materials/shared/eye_shared.vmt)
 
 
 ### UnLitGeneric Shader
