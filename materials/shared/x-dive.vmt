@@ -97,7 +97,7 @@
   // Emissive (Same as VortWarp Shader)
   //////////////////////////////////////////////////////////////////////////////////
   $BaseTexture "dev/null"   // base texture here is a dummy texture, your model texture
-  $EmissiveBlendEnabled "1"                  // Boolean On/Off
+  $EmissiveBlendEnabled "0"                  // Boolean On/Off
   $EmissiveBlendTexture "shared/glow_line"   // our effect in a flat 2D texture
   $EmissiveBlendBaseTexture "dev/null"       // a BW image pattern (where should be emissive) (I8 format reccomended)
   $EmissiveBlendFlowTexture "dev/null"       // a RGB image vector
@@ -107,7 +107,7 @@
 
 
   //////////////////////////////////////////////////////////////////////////////////
-  // $Detail to boost colors do trick
+  // $Detail trick to boost colors
   //////////////////////////////////////////////////////////////////////////////////
   //$detail "shared/generic_base" // here the magic, we boost the $basetexture with $detail
   $detailscale "1" // do not scale, and use the original size

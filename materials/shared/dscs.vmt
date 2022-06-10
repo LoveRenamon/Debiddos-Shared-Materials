@@ -16,9 +16,9 @@
   $allowalphatocoverage  "0"    // Control AntiAliasing for alphatest
   //$alphatestreference  ".01"  // threshold to when $alphatest is usable. Almost incompatible with everything
 
-  $basealphaenvmapmask         "1" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
+  $basealphaenvmapmask         "0" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present ||| BUG: gmod work in reverse logic. |||
   $normalmapalphaenvmapmask    "0" // use $bumpmap Alpha channel as $envmaskmap
-  $basemapluminancephongmask   "0" // use luminance of the $basetexture as phong mask (l4d and l4d2 only)
+  $basemapluminancephongmask   "0" // use luminance of the $basetexture as phong mask (not wok in gmod)
   $basemapalphaphongmask       "0" // use $basetexture alpha channel as phong mask
 
   // $color and $color2 toggle
