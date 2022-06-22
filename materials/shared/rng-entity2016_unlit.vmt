@@ -12,61 +12,62 @@
 // TRUE RNG : MODEL (2016) (Entity-Random based)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-$objnumber			"1.99" 	// MODIFY ONLY THIS IN THIS VMT ; Put the number of different "objects" you have minus 0.01 (If you have 5 objects, put 4.99)
-$objlimit				"1.49" 	// MODIFY ONLY THIS IN THIS VMT ; Put the number from above minus 0.5, if you have 3.99 above, put 3.49 here.
-$selected				"1000"
-$rand						"0"
-$stock					"1000"
-$one						"1"
-$zero						"0"
-$pf							"0.5"
-$fh							"500"
-$itemtocheck		"0"
-$itemtocheckr		"0"
+$objnumber     "1.99"   // MODIFY ONLY THIS IN THIS VMT ; Put the number of different "objects" you have minus 0.01 (If you have 5 objects, put 4.99)
+$objlimit      "1.49"   // MODIFY ONLY THIS IN THIS VMT ; Put the number from above minus 0.5, if you have 3.99 above, put 3.49 here.
+$selected      "1000"
+$rand          "0"
+$stock         "1000"
+$one           "1"
+$zero          "0"
+$pf            "0.5"
+$fh            "500"
+$itemtocheck   "0"
+$itemtocheckr  "0"
 
-Proxies
-{
-	// Getting a random Number
-	EntityRandom
-	{
-		scale 				"$objnumber"
-		resultVar 		"$rand"
-	}
-	// Storing the random number only once, resulting in "RNG per Map"
-	LessOrEqual
-	{
-		LessEqualVar 	"$stock"
-		greaterVar 		"$rand"
-		srcVar1 			"$stock"
-		srcVar2 			"$fh"
-		resultVar 		"$stock"
-	}
-	LessOrEqual 		// Correcting the draw
-	{
-		LessEqualVar 	"$stock"
-		greaterVar 		"$zero"
-		srcVar1 			"$stock"
-		srcVar2 			"$objlimit"
-		resultVar 		"$selected"
-	}
-	// (Also the 3 next proxies) : If $rand == $itemid, then $alpha = 1, otherwise $alpha = 0.
-	Subtract
-	{
-		srcVar1 		"$selected"
-		srcVar2 		"$itemid"
-		resultVar 	"$itemtocheck"
-	}
-	Abs
-	{
-		srcVar1 		"$itemtocheck"
-		resultVar 	"$itemtocheckr"
-	}
-	LessOrEqual
-	{
-		LessEqualVar 	"$one"
-		greaterVar 		"$zero"
-		srcVar1 			"$itemtocheckr"
-		srcVar2 			"$pf"
-		resultVar 		"$alpha"
-	}
+   Proxies
+   {
+      // Getting a random Number
+      EntityRandom
+      {
+         scale          "$objnumber"
+         resultVar      "$rand"
+      }
+      // Storing the random number only once, resulting in "RNG per Map"
+      LessOrEqual
+      {
+         LessEqualVar   "$stock"
+         greaterVar     "$rand"
+         srcVar1        "$stock"
+         srcVar2        "$fh"
+         resultVar      "$stock"
+      }
+      LessOrEqual       // Correcting the draw
+      {
+         LessEqualVar   "$stock"
+         greaterVar     "$zero"
+         srcVar1        "$stock"
+         srcVar2        "$objlimit"
+         resultVar      "$selected"
+      }
+      // (Also the 3 next proxies) : If $rand == $itemid, then $alpha = 1, otherwise $alpha = 0.
+      Subtract
+      {
+         srcVar1        "$selected"
+         srcVar2        "$itemid"
+         resultVar      "$itemtocheck"
+      }
+      Abs
+      {
+         srcVar1        "$itemtocheck"
+         resultVar      "$itemtocheckr"
+      }
+      LessOrEqual
+      {
+         LessEqualVar   "$one"
+         greaterVar     "$zero"
+         srcVar1        "$itemtocheckr"
+         srcVar2        "$pf"
+         resultVar      "$alpha"
+      }
+   }
 }

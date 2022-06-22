@@ -1,10 +1,11 @@
 "VertexLitGeneric"
 {
 // Purpose: Sample for Burning material
-  $Detail "models/survivors/survivor_burn"
+  $Detail "shared/soot"
 	$DetailScale "1.972"
 	$DetailBlendMode "0"
 	$DetailBlendFactor ".000"
+	$DetailFrame "0"
 
 	$BurnAmount ".0"
 	$BurnMult "1.1"
