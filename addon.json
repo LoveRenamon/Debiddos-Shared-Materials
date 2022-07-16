@@ -20,7 +20,6 @@
     "*.txt",
     ".git*",
     "lua/matproxy/LightAmount.lua",
-    "lua/autorun/zx_0x6c6f61646572.lua",
     "materials/shared/_detail.vmt",
     "materials/shared/_detail_v1.vmt",
     "materials/shared/_detail_v2.vmt",

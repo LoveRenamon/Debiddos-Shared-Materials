@@ -6,10 +6,12 @@ DebiddoSharedMaterials = true
 		Also the GMod community like the official Discord server are mostly dick people with behaviour of a "self-disorder complex" that look to entertain theirselves.
 		It may looks rude, but is what you read at their daily messages
 --]]
---DebiddoNAME = {}
---DebiddoCATEGORY = {}
-DebiddoID = {}
---DebiddoWORKSHOPID = {}
+DebiddoNAME       = {}
+DebiddoCATEGORY   = {}
+DebiddoID         = {}
+DebiddoWORKSHOPID = {}
+DebiddoWORKSHOPID = {}
+DebiddoPREFIX     = "models/debiddo/"
 
 --[[
 		Allow edit NPCs base HP that use out CVar
@@ -21,9 +23,9 @@ local sv_debiddo_npc_base_health = GetConVar( "sv_debiddo_npc_base_health" )
 		To add Player Models under "models/debiddo" that have a specific file names to each one
 --]]
 function DebiddoPM( NAME, ID )
-	list.Set( "PlayerOptionsModel", NAME, "models/debiddo/"..ID.."/pm.mdl" )
-	player_manager.AddValidModel( NAME, "models/debiddo/"..ID.."/pm.mdl" )
-	player_manager.AddValidHands( NAME, "models/debiddo/"..ID.."/c_arms.mdl", 0, 0 )
+	list.Set( "PlayerOptionsModel", NAME, DebiddoPREFIX..ID.."/pm.mdl" )
+	player_manager.AddValidModel( NAME, DebiddoPREFIX..ID.."/pm.mdl" )
+	player_manager.AddValidHands( NAME, DebiddoPREFIX..ID.."/c_arms.mdl", 0, 0 )
 end
 
 --[[
@@ -35,14 +37,14 @@ end
 
 
 --[[
-		This add both HL1's Citizen and Combine based NPCs into a single preset
+		This add both HL2's Citizen and Combine based NPCs into a single preset
 --]]
 function DebiddoNPC( NAME, ID, CATEGORY )
 	DebiddoHL2NPC( {
 		Name = NAME.." (Friendly)",
 		Class = "npc_citizen",
 		KeyValues = { citizentype = CT_REBEL, SquadName = "Rebel" },
-		Model = "models/debiddo/"..ID.."/npc.mdl",
+		Model = DebiddoPREFIX..ID.."/npc.mdl",
 		Weapons = {
 			"weapon_crowbar",
 			"weapon_stunstick",
@@ -62,7 +64,7 @@ function DebiddoNPC( NAME, ID, CATEGORY )
 		KeyValues = {
 			SquadName = "overwatch"
 		},
-		Model = "models/debiddo/"..ID.."/npc_c.mdl",
+		Model = DebiddoPREFIX..ID.."/npc_c.mdl",
 		Weapons = {
 			"weapon_stunstick",
 			"weapon_pistol",
