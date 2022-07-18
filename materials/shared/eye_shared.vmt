@@ -26,8 +26,8 @@
   //////////////////////////////////////////////////////////////////////////////////
   $Dilation ".5"     // The pupil size (Min: 0.2 | Max: 0.8)
   $Glossiness ".8"   // the base intensity for $EnvMap (same as set any $EnvMapTint grey color)
-  $MinGlosiness ".4" // Minimum allowed intensity for $EnvMap
-  $MaxGlosiness "1"  // Maximum allowed intensity for $EnvMap
+  $MinGlossiness ".4" // Minimum allowed intensity for $EnvMap
+  $MaxGlossiness "1"  // Maximum allowed intensity for $EnvMap
 
   $ParallaxStrength ".25"  // is a a displacement at $CorneaTexture Blue Channel
   $CorneaBumpStrength "1"  // This is the "BumpMap" / "NormalMap" intensity
@@ -243,14 +243,14 @@
     // Garry's Mod only works as is
     //Equals {
     //  srcVar1 $lighting
-    //  resultVar $Glosiness
+    //  resultVar $Glossiness
     //}
     // or
     Clamp {
-      min $MinGlosiness
-      max $MaxGlosiness
-      srcVar1 $Glosiness
-      resultVar $Glosiness
+      min $MinGlossiness
+      max $MaxGlossiness
+      srcVar1 $Glossiness
+      resultVar $Glossiness
     }
   }
 }
