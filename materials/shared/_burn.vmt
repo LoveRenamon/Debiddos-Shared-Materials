@@ -1,26 +1,26 @@
 "VertexLitGeneric"
 {
 // Purpose: Sample for Burning material
-  $Detail "shared/soot"
-	$DetailScale "1.972"
-	$DetailBlendMode "0"
-	$DetailBlendFactor ".000"
-	$DetailFrame "0"
+   $Detail "shared/soot"
+   $DetailScale "1.972"
+   $DetailBlendMode "0"
+   $DetailBlendFactor ".000"
+   $DetailFrame "0"
 
-	$BurnAmount ".0"
-	$BurnMult "1.1"
+   $BurnAmount ".0"
+   $BurnMult "1.1"
 
-	Proxies
-	{
-		BurnLevel
-		{
-			resultVar $BurnAmount
-		}
-		Multiply
-		{
-			srcVar1 $BurnAmount
-			srcVar2 $BurnMult
-			resultVar $DetailBlendFactor
-		}
-	}
+   Proxies
+   {
+      BurnLevel
+      {
+         resultVar $BurnAmount
+      }
+      Multiply
+      {
+         srcVar1 $BurnAmount
+         srcVar2 $BurnMult
+         resultVar $DetailBlendFactor
+      }
+   }
 }

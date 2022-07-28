@@ -1,25 +1,25 @@
 "VertexLitGeneric"
 {
 // Purpose: Sample for Boomed material
-  $Detail "models/survivors/survivor_it"
-	$DetailScale "2.337"
-	$DetailBlendMode "0"
-	$DetailBlendFactor ".000"
+   $Detail "models/survivors/survivor_it"
+   $DetailScale "2.337"
+   $DetailBlendMode "0"
+   $DetailBlendFactor ".000"
 
-	$ITAmount ".0"
-	$ITMult "1.1"
+   $ITAmount ".0"
+   $ITMult "1.1"
 
-	Proxies
-	{
-		IT
-		{
-			resultVar $ITAmount
-		}
-		Multiply
-		{
-			srcVar1 $ITAmount
-			srcVar2 $ITMult
-			resultVar $DetailBlendFactor
-		}
-	}
+   Proxies
+   {
+      IT
+      {
+         resultVar $ITAmount
+      }
+      Multiply
+      {
+         srcVar1 $ITAmount
+         srcVar2 $ITMult
+         resultVar $DetailBlendFactor
+      }
+   }
 }
