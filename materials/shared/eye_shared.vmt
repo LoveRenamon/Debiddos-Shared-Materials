@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// This will dynamically scale pupil with lighting that a entity can see.
+// This will dynamically scale pupil with lighting that a entity see.
 //
 // By: Davi (Debiddo) Gooz
 //////////////////////////////////////////////////////////////////////////////////
@@ -241,11 +241,10 @@
     //    End Gamma Correction    //
 
     // Garry's Mod only works as is
-    //Equals {
-    //  srcVar1 $lighting
-    //  resultVar $Glossiness
-    //}
-    // or
+    Equals {
+      srcVar1 $lighting
+      resultVar $Glossiness
+    }
     Clamp {
       min $MinGlossiness
       max $MaxGlossiness

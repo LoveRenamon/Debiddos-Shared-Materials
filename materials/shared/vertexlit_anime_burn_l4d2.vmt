@@ -167,10 +167,10 @@ VertexLitGeneric
 
 
   //////////////////////////////////////////////////////////////////////////////////
-  // IT effect
+  // Burn effect
   //////////////////////////////////////////////////////////////////////////////////
-  $detail "models/survivors/survivor_it"
-  $detailscale "2.222"
+  $detail "models/infected/common/l4d2/ci_burning"
+  $detailscale "1.972"
   $detailblendmode "0"
   $detailblendfactor ".000"
 
@@ -197,8 +197,9 @@ VertexLitGeneric
   //////////////////////////////////////////////////////////////////////////////////
   // Proxie Parameters
   //////////////////////////////////////////////////////////////////////////////////
-  // cache Bile effect
-  $ITAmount ".0"
+  // cache Burn effect
+  $BurnAmount ".0"
+  $BurnMult "1.1"
   
   // cache Light
   $Lighting ".5"
@@ -234,13 +235,15 @@ VertexLitGeneric
   //    Proxies are like code the VMT to have dynamic behaviours
   //////////////////////////////////////////////////////////////////////////////////
   Proxies {
-    IT {
-      resultVar $ITAmount
+    BurnLevel {
+      resultVar $BurnAmount
     }
-    Equals {
-      srcVar1   $ITAmount
-      resultVar $detailblendfactor
+    Multiply {
+      srcVar1 $BurnAmount
+      srcVar2 $BurnMult
+      resultVar $DetailBlendFactor
     }
+
     Pupil {
       TextureVar $lightwarptexture  // try get luminance from lightwarp
       TextureFrameNumVar $dummy     // as the name says just store this number for no reason
@@ -257,6 +260,7 @@ VertexLitGeneric
       srcVar2 $LightingHalf
       resultVar $clr
     }
+
     // We don't need Clamp anymore, EmissiveBlend is our "clamp", this is a safier method if $EmissiveBlendEnabled "0"
     Clamp {
       min $MinLighting
@@ -264,6 +268,8 @@ VertexLitGeneric
       srcVar1 $clr
       resultVar $clr
     }
+
+    // Transferer our modulated color to $color Render Pass
     Equals {
       srcVar1 $clr
       resultVar "$color[0]"
@@ -276,6 +282,7 @@ VertexLitGeneric
       srcVar1 $clr
       resultVar "$color[2]"
     }
+
     // Emissive is supposed to take a small, but important role by default
     Multiply {
       //srcVar1 $clr
@@ -284,7 +291,7 @@ VertexLitGeneric
       resultVar $EmissiveBlendStrength // Send the modulation to EmissiveBlendStrength
     }
 
-    // creatre quarter light to modulate EnvMapLight
+    // create a weaker light to modulate EnvMapLight
     Multiply {
       srcVar1 $Quarter
       srcVar2 $LightingHalf
@@ -316,6 +323,7 @@ VertexLitGeneric
       srcVar2 $EnvMapModulator
       resultVar $EnvMapResult
     }
+
     // Apply to $EnvMapTint
     Equals {
       srcVar1 $EnvMapResult

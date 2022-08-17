@@ -1,43 +1,207 @@
-"VertexLitGeneric"
+VertexLitGeneric
 {
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // WIP based on Ellies Heavy DMG system to BBQ + IT + BurnLevel + Health + Pupil proxies as standalone
-  //
-  // By: Davi (Debiddo) Gooz
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  $lightwarptexture "shared/lightwarp_honkai3rd"
-  $phongexponenttexture "shared/lightwarp_white"
-  $color2 " [ .95 .95 .95 ] " // " [ .76 .76 .76 ] "
-  $phong "1"
-  $nocull "1"
-  $phongboost ".5"
-  $phongalbedotint "1"
+//////////////////////////////////////////////////////////////////////////////////
+// Version 2
+// WIP based on Ellies Heavy DMG system to BBQ + IT + BurnLevel + Health + Pupil proxies as standalone
+// Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
+// Bille Effects and dynamic color modulation based where the entity is looking. 
+// The purpose is avoid overexposure for Anime-like characters
+//
+// Note: this works only for entities! static props will make the game crash!
+//
+//
+//
+// By: Davi (Debiddo) Gooz 
+// Steam: https://steamcommunity.com/id/Debiddo
+//////////////////////////////////////////////////////////////////////////////////
+// include this file with:
+////
+// path {
+//  include "materials/shared/vertexlit_anime_heavy_l4d2.vmt"
+//  insert {
+//    $BaseTexture "your_albedo_texture_here"
+//    $EmissiveBlendBaseTexture "your_albedo_texture_here_gain"
+//    // rest of your desired vmt parameters
+//  }
+// }
+//
+//////
+//
+// "Manual" here: https://github.com/LoveRenamon/Debiddos-Shared-Materials/blob/dev/materials/shared/vertexlit_anime_heavy_l4d2.vmt
+//////////////////////////////////////////////////////////////////////////////////
+
+  $basetexture "vgui/white"
+
+  // We don't really need a normal map, use if you wish to...
+  //$bumpmap "dev/flat_normal"
+  
+  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
   $basemapluminancephongmask "1"
-  $PhongFresnelRange_0 ".002"
-  $PhongFresnelRange_1 ".05"
-  $PhongFresnelRange_2 "7"
-  $phongfresnelranges " [ .3 .65 1.1 ] "
-  $PhongExponent "1"
-  $allowalphatocoverage "1"
-  $allowdiffusemodulation "1"
-  $blendtintcoloroverbase "0"
-  $halflambert "0"
-  $phongdisablehalflambert "1"
+
+  // Here the magick of a lightwarp that have some amount of red and make some fake skin scattering
+  $lightwarptexture "shared/lightwarp_honkai3rd_l4d2"
+  // Or this one which is the most common lightwarp used for anime characters over workshop
+  //$lightwarptexture "shared/lightwarp_anime"
+
+  
+//////////////////////////////////////////////////////////////////////////////////
+// Swtich values
+//////////////////////////////////////////////////////////////////////////////////
+
+  // set "1" to disable cull and render both sides or allow cull for performace and avoid Z-Fighting
+  $nocull "1"
+
+  // allow decals for damage effects by bullets, If you'r model is expensive and unoptimized, you will need to set "1"
   $nodecal "0"
-  $surfaceprop "flesh"
-  $rimlight "0"
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Enable / Disable tilling
+//  It will expose your made shitty UVMap
+//////////////////////////////////////////////////////////////////////////////////
+
+  $ClampS "1" // Clamp S/X texture coordinates by default
+  $ClampT "1" // Clamp T/Y texture coordinates by default
+  $ClampU "0" // Clamp U/Z texture coordinates by default
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Tweak diffuse
+//  Only have effect with $HalfLambert "0"
+//////////////////////////////////////////////////////////////////////////////////
+
+  //$diffuseexp ".2"       // create nice gradients
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Phong
+//  Phong is a old specular method it's good use just a small amount for a dry skin
+//  it computes by a exponent that is driven by a additive $phongboot and exponencial $phongexponent
+//  the fresnel is same as the every fresnel, that can be boosted by $PhongFresnelRanges
+//////////////////////////////////////////////////////////////////////////////////
+
+  $phong "1"      // We'll use phong specular render pass
+  $forcephong "1" // force phong for potato PCs
+
+  // engine default white texture to enable phong tint
+  $phongexponenttexture "vgui/white"
+  
+  // make phong weaker, required for most cases, use only one of th bellow recommended
+  //$phongboost ".02"  //   2% effect. almost invisible
+  //$phongboost ".2"   //  20% effect
+  $phongboost ".5"     //  50% effect, seens rasionable if the texture is too bright
+  //$phongboost "1.0"  // 100% effect, seens rasionable if you have a custom mask
+  
+  $phongalbedotint "1" // use the $BaseTexture's RGB as tint value per textel
+
+  // Phong Fresnel Ranges are like "intencity modulators" as:
+  // X direct view   (  0 radian angle)
+  // Y indirect view ( 45 radian angle)
+  // Z indirect view (180 radian angle)
+  // They're XYZ fresnel values, you can use any float values
+  // i.e: $PhongFresnelRanges " [ X Y Z ] "
+  $PhongFresnelRange_0 ".12"
+  $PhongFresnelRange_1 ".5"
+  $PhongFresnelRange_2 "1"
+  $PhongFresnelRanges " [ .12 .5 1 ] "      // my recommended values, don't go out of the Valve's defaults
+  //$PhongFresnelRanges " [ 1 .1 .1 ] "     // the most used values over the workshop
+  //$PhongFresnelRanges " [ .3 .65 1.1 ] "
+  //$PhongFresnelRanges " [ .002 .05 7 ] "
+  
+  // Phong Exponent
+  // for override the default $phongexponenttexture's Red Channel (255 for this sample file)
+  // Exponent means how hard the surface is, 0 means smoother and 255 means a irrealistic hard surface
+  // rasionable values are between 0 and 127
+  $PhongExponent "1"    // my recommended safe value, good for general HalfLambertian skin/surface
+  //$phongexponent "7"  // starts to go more sharper phong gradients, this is kinda better for leather, and harder micro surface
+  //$phongexponent "14" // you mand wanna use this one for things that are pseudo metalic or use a $bumpmap to spread the entire phong
+  //$phongexponent "40" // for metalic surfaces or have a $bumpmap which need this values
+  
+
+//////////////////////////////////////////////////////////////////////////////////
+// Alpha
+//////////////////////////////////////////////////////////////////////////////////
+
+  // set "1" to enable binary transparency
+  $alphatest "0"
+  
+  // Translucent SHOULD NOT be used along $alphatest
+  $translucent "0" // set "1" to enable gradient transparency, This will potentialy make a Z-Fighting if don't know when to use it
+
+  // for $alphatest be antialiased, allow "gradient" steps based on MSAA Amount
+  $allowalphatocoverage "1"
+
+  // YOU SHOULD NEVER USE THIS SHIT, DONT BE SO LAZY TO DISABLE THE COVERAGE EFFECT!!
+  //$alphatestreference ".7" // .7 is the default value
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Emissive Blend
+//////////////////////////////////////////////////////////////////////////////////
+
+  $EmissiveBlendEnabled "1"              // It was earlier disabled by default, but for this sample and onwards would be enabled by default
+  $EmissiveBlendBaseTexture "vgui/white" // The trick is use te $BaseTexture here
+  $EmissiveBlendTexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
+  $EmissiveBlendFlowTexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"
+  $EmissiveBlendTint " [ .11 .11 .11 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
+  $EmissiveStrength ".11"                // the strength of $EmissiveBlendTexture ( clamped between 0.000 ~ 1.000 )
+  $EmissiveBlendStrength ".11"           // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
+  $EmissiveBlendScrollVector " [ 0 0 ] " // X Y animation scroll speed
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Color Modulation
+//////////////////////////////////////////////////////////////////////////////////
+
+  // Allow color tint
+  $allowdiffusemodulation "1"
+
+  // Tint before apply the $BaseTexture
+  $blendtintcoloroverbase "0"
+
+  // this is a reference color to be applyed along the $color parameter
+  //$color2 " [ .973 .973 .975 ] "
+  
+  // we may have a too saturated color which allow use "greywish" color
+  $color2 " [ .89 .89 .89 ] "
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Rim Light
+//////////////////////////////////////////////////////////////////////////////////
+
+  // ShoutAFuckUp $RimLight, you don't have ANY visible effect in Left 4 Dead 2 due how light works for this game
+  $rimlight "0" 
   $rimlightboost "2.8"
   $rimlightexponent "7"
   $rimmask "0"
 
-  $clr ".0"
-  $lighting ".495"
+
+//////////////////////////////////////////////////////////////////////////////////
+// Env Map
+//  Envmap / Reflections, recommended use a mask
+//////////////////////////////////////////////////////////////////////////////////
+
+  //$envmap "env_cubemap"                 // The Envirovment texture. "env_cubemap" for auto. Change to make static.
+  //$envmapcontrast "0"                   // how much is multply by color*color . 0 is the "natural" value ( not compatible with $Phong "1" )
+  $envmapfresnel ".8"                     // Multiply Fresnel Envirovment by this value
+  $envmaptint " [ .4 .4 .4 ] "            // {RGB} or [vector] values to tune EnvMap
+  //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values ( not compatible with $BumpMap )
+  $EnvMapReference ".4"                   // EnvMap reference used for modulate $envmaptint
+
+
+  // just store a simpler variable for pupil light modulation
+  // it behave like a ramp smooth for dark/light ambients
+  // appear that .073 is our Open/Brighter magic number and 0.4 our Close/Darkener magic number
+  $PupilOpenRate  ".073" // referece values: 1.1 (fast) || .3 (slower)
+  $PupilCloseRate ".4"   // referece values: 1.1 (fast) || .3 (slower)
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  ___ ___   _   _    ___ ___ _____ ___ ___   ___   _   __  __   _   ___ ___   ______ ______  
-// | _ \ __| /_\ | |  |_ _/ __|_   _|_ _/ __| |   \ /_\ |  \/  | /_\ / __| __| |_  /  \_  /  \ 
+//  ___ ___   _   _    ___ ___ _____ ___ ___   ___   _   __  __   _   ___ ___   ______ ______
+// | _ \ __| /_\ | |  |_ _/ __|_   _|_ _/ __| |   \ /_\ |  \/  | /_\ / __| __| |_  /  \_  /  \
 // |   / _| / _ \| |__ | |\__ \ | |  | | (__  | |) / _ \| |\/| |/ _ \ (_ | _|   / / () / / () |
-// |_|_\___/_/ \_\____|___|___/ |_| |___\___| |___/_/ \_\_|  |_/_/ \_\___|___| /___\__/___\__/ 
+// |_|_\___/_/ \_\____|___|___/ |_| |___\___| |___/_/ \_\_|  |_/_/ \_\___|___| /___\__/___\__/
 //
 //
 //  ++++++++++++++++++++++++++++  HEAVY VERSION (V1) - NO ALPHA ++++++++++++++++++++++++++++
@@ -49,38 +213,38 @@
 //  These variables are defined by default here. Most of them will probably be changed by the user, but they are here as a safe net in case one is forgotten
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  $alpha       "1"               // This is if this VMT must show or not by default (0 = is invisible ; 1 = is visible (default))
+  $alpha       "1"            // This is if this VMT must show or not by default (0 = is invisible ; 1 = is visible (default))
   $detail      "shared/burn"  // This is the Bloodmap that will be used for this VMT or this is the Burn/Vomit map if $basetexture has the blood
   $detailscale "10"
 
   $frame0ifbelow    "100"  // Display frame 0 if the survivor is below that amount of health
-  $frame1ifbelow    "-1"  // Display frame 1 if the survivor is below that amount of health
-  $frame2ifbelow    "-1"  // Display frame 2 if the survivor is below that amount of health
-  $frame3ifbelow    "-1"  // Display frame 3 if the survivor is below that amount of health
-  $frame4ifbelow    "-1"  // Display frame 4 if the survivor is below that amount of health
-  $frame5ifbelow    "-1"  // Display frame 5 if the survivor is below that amount of health
-  $frame6ifbelow    "-1"  // Display frame 6 if the survivor is below that amount of health
-  $frame7ifbelow    "-1"  // Display frame 7 if the survivor is below that amount of health
-  $frame8ifbelow    "-1"  // Display frame 8 if the survivor is below that amount of health
+  $frame1ifbelow    "-1"   // Display frame 1 if the survivor is below that amount of health
+  $frame2ifbelow    "-1"   // Display frame 2 if the survivor is below that amount of health
+  $frame3ifbelow    "-1"   // Display frame 3 if the survivor is below that amount of health
+  $frame4ifbelow    "-1"   // Display frame 4 if the survivor is below that amount of health
+  $frame5ifbelow    "-1"   // Display frame 5 if the survivor is below that amount of health
+  $frame6ifbelow    "-1"   // Display frame 6 if the survivor is below that amount of health
+  $frame7ifbelow    "-1"   // Display frame 7 if the survivor is below that amount of health
+  $frame8ifbelow    "-1"   // Display frame 8 if the survivor is below that amount of health
 
   $frameIfDown    "0"  // Set the frame to display when the survivor is down (it can be one of the above)
 
   $canOnlyGetWorse    "0"  // Can the Realistic Damage disappear if the survivor uses a Medkit ? (0 = yes ; 1 = no)
 
   $randomBloodPosition  "1"  // Will the blood/vomit/scorch stains have a randomized position? (0 = no ; 1 = yes)
-  $randomBloodAngle    "1"  // Will the blood/vomit/scorch stains have a randomized angle ? (0 = no ; 1 = yes)
+  $randomBloodAngle     "1"  // Will the blood/vomit/scorch stains have a randomized angle ? (0 = no ; 1 = yes)
 
   $ScaleDET    "0.125"  // Scale of the blood/burn/vomit texture. The bigger it is, the smaller it will be. You can input [256 divided by your basetexture width] to make them match size.
   $CenterDET    "0.5"  // Center of rotation of the blood/burn/vomit texture, you should normally not change that
   $RotateDET    "0.0"  // Rotation of the blood/burn/vomit texture in degrees. Can be used if no RNG to position the texture precisely.
   $TranslationDET    "0.0"  // Translation of the blood/burn/vomit texture. 0.25 = 25%, shift, 0.5 = 50% shift, 0.75 = 75% shift, 1 = 100% shift, which is the same as 0% shift.
 
-  $MinLighting ".74"
-  $MaxLighting ".99"
+  $MinLighting ".74" // Min $lighting allowed
+  $MaxLighting ".99" // Max $lighting allowed
 
-  $LightingBoost "1.1" // Boost the character ilumination by this ammount (default: 1)
+  $LightingBoost "1.1" // Additive boost the character $lighting ilumination by this ammount (default: 1)
 
-  $BBQMod ".337" // multiplay BBQLevel to tune each phong fresnel channel
+  $BBQMod ".337" // Multiply BBQLevel to tune each phong fresnel channel
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The values in the next block are only useful if you want texture RNG (=/= blood RNG).
@@ -95,11 +259,11 @@
 
   $useBaseTextureInstead  "0"  // Must the code use $bastexture instead of $detail for the blood ? (1 = yes ; 0 = no). Change to 1 only if you have custom blood textures painted over the diffuse.
 
-  $useDetailAsBoomerVomit  "1"  // Must the code use $detail as boomer vomit? (1 = yes ; 0 = no). Must be set to 0 if $forceUseBoomerFireSpecial is set to 1. Can be used instead of the blood or with the blood effect if you have custom blood textures painted over the diffuse.
+  $useDetailAsBoomerVomit "1"  // Must the code use $detail as boomer vomit? (1 = yes ; 0 = no). Must be set to 0 if $forceUseBoomerFireSpecial is set to 1. Can be used instead of the blood or with the blood effect if you have custom blood textures painted over the diffuse.
   $useDetailAsFireDamage  "1"  // Must the code use $detail as fire damage? (1 = yes ; 0 = no). Can be used instead of the blood or with the blood effect if you have custom blood textures painted over the diffuse
 
   $fireEffectDecayTime  "33"  // Time in seconds it takes for the fire effect to disappear. Useful only if the previous value is set to 1
-  $forceNoDecayIfMax  "1"  // If the maximum burn amount is reach, should the code stop making it gradually disappear ? (0 = no ; 1 = yes) (if it wears off it can't be triggered again until next map)
+  $forceNoDecayIfMax    "1"   // If the maximum burn amount is reach, should the code stop making it gradually disappear ? (0 = no ; 1 = yes) (if it wears off it can't be triggered again until next map)
 
   $bileFrame    "1"  // Frame of the $detail where the bile effect is. If you use the Realistic Bloodmap resources mod, do not change (default = 1)
   $bothFrame    "2"  // Frame of the $detail where both the bile effect and fire effect is. If you use the Realistic Bloodmap resources mod, do not change (default = 2)
@@ -115,17 +279,31 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   $detailblendmode "0"  // $detail blend mode. Should normally be set to 0. Do not change it unless you know what you're doing.
-  $shinyblood "1"       // Gives a better look to the blood
-
+  $shinyblood "0"       // Gives a better look to the blood
+  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DO NOT MODIFY ANYTHING BELOW THIS
+// DO NOT MODIFY ANYTHING BELOW THIS
+// DO NOT MODIFY ANYTHING BELOW THIS
+// DO NOT MODIFY ANYTHING BELOW THIS
+// DO NOT MODIFY ANYTHING BELOW THIS
+// DO NOT MODIFY ANYTHING BELOW THIS
+// DO NOT MODIFY ANYTHING BELOW THIS
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// DO NOT MODIFY ANYTHING BELOW THIS
-// DO NOT MODIFY ANYTHING BELOW THIS
-// DO NOT MODIFY ANYTHING BELOW THIS
-// DO NOT MODIFY ANYTHING BELOW THIS
-// DO NOT MODIFY ANYTHING BELOW THIS
-// DO NOT MODIFY ANYTHING BELOW THIS
-// DO NOT MODIFY ANYTHING BELOW THIS
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// The next values should not be changed, they're part of Debiddo's injection blocks
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  $LightingHalf ".0"
+  $LightingQuarter ".0"
+  $LightingWarped ".0"
+  $EnvMapModulator ".0"
+  $EnvMapResult ".0"
+  $clr ".0"
+  $dummy ".0"
+  $lighting ".5"
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   $detailtexturetransform  "center .5 .5 scale 1 1 rotate 0 translate 0 0"   // Initiatlisation of the detail position variable (engine)
@@ -145,6 +323,8 @@
 
   $moo   ".01"
   $mo    "-1"
+  $Quarter ".25"
+  $Half ".5"
   $zero  "0"
   $one   "1.0"
   $onn   "1.98"
@@ -162,17 +342,17 @@
 // Variables for BLOCK 1 - Debug feature showcase (initialisation)
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  $showcaseRamp "0"  // Used to store a ramp to create a looping number
-  $showcaseRampInv "0"  // Used to store the opposite of a ramp to create a looping number
-  $showcaseRampOffset  "0"  // Used to offset a ramp
-  $showcaseRampTemp  "0"  // Used to store the result of the ramp plus an offset
+  $showcaseRamp "0"        // Used to store a ramp to create a looping number
+  $showcaseRampInv "0"     // Used to store the opposite of a ramp to create a looping number
+  $showcaseRampOffset  "0" // Used to offset a ramp
+  $showcaseRampTemp  "0"   // Used to store the result of the ramp plus an offset
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Variables for BLOCK 2 - Blood effect manipulation
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  $rand "0.0"        // Used to store a random number to shift and rotate the blood effect accordingly
-  $randFixed "0.0"  // Used to store a random number only once. Must be initiated to 0.
+  $rand ".0"       // Used to store a random number to shift and rotate the blood effect accordingly
+  $randFixed ".0"  // Used to store a random number only once. Must be initiated to 0.
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Variables for BLOCK 3 - Retrieve data
@@ -185,66 +365,66 @@
   $scale    "100"
 
   $healthCurrent  "100"  // This is used to store the % of health the survivor currently has (note that the "health" is 100 if the survivor is down)
-  $worstHealth  "100"  // This is used to store the worst health the survivor has had during the map. Useful if $canOnlyGetWorse is set to 1
+  $worstHealth    "100"  // This is used to store the worst health the survivor has had during the map. Useful if $canOnlyGetWorse is set to 1
   $healthPercent  "100"  // This is a temporary variable used to make comparisons to find the correct frame to display (either $healthCurrent or $worstHealth is injected into)
 
   $hasTakenDamage  "0"  // This is used to store if the survivor has ever been below 100 health (0 = no ; 1 = yes)
 
-  $noInjectWorstHealth  0  // This is used to prevent the injection of the health level if it is 0
-  $worstHealthToInject  0  // This is used as temporary storage
-  $mustHeal    0  // This is used to know if the survivor still must heal after being down
+  $noInjectWorstHealth  "0"  // This is used to prevent the injection of the health level if it is 0
+  $worstHealthToInject  "0"  // This is used as temporary storage
+  $mustHeal             "0"  // This is used to know if the survivor still must heal after being down
 
-  $mapRestartTPK    0  // This is used to know if the map restarted after a TPK on the first map of the campaign
+  $mapRestartTPK        "0"  // This is used to know if the map restarted after a TPK on the first map of the campaign
 
 //-------------------------- Speed related
 
-  $ismoving    "0"  // This is used to store if the entity is moving (0.0000 = no, 0.0001+ = yes)
+  $ismoving     "0"  // This is used to store if the entity is moving (0.0000 = no, 0.0001+ = yes)
   $playerSpeed  "0"  // This is used to store the player speed itself (and not the entity or survivor speed)
 
 //-------------------------- Position related
 
-  $pos       "[0 0 0]"  // Used to store the position of the player when he spawns
+  $pos " [ 0 0 0 ] "  // Used to store the position of the player when he spawns
 
-  $posX      .0  // The X coordinate position of the player
-  $posXStored    .0  // The X position of the player stored when he first spawned
+  $posX       ".0"  // The X coordinate position of the player
+  $posXStored ".0"  // The X position of the player stored when he first spawned
 
-  $posY      .0  // Ditto Y coordinate
-  $posYStored    .0
+  $posY       ".0"  // Ditto Y coordinate
+  $posYStored ".0"
 
-  $posZ      .0  // Ditto Z coordinate
-  $posZStored    .0
+  $posZ       ".0" // Ditto Z coordinate
+  $posZStored ".0"
 
-  $entityorigin    "[0 0 0]"  // Engine variable that tells the material origin when the corresponding Proxy sets it
+  $entityorigin " [ 0 0 0 ] "  // Engine variable that tells the material origin when the corresponding Proxy sets it
 
-  $posXDELTA  .0  // Used to store the difference between the current and starting position (X coordinate)
-  $posYDELTA  .0  // Ditto Y coordinate
-  $posZDELTA  .0  // Ditto Z coordinate
-  $posTOLERANCE  600.0  // [CRITICAL] : If the player is this units away from spawn, he'll be considered out of spawn
-  $isNearTheStart  "0"  // Used to determine if the player is near the place where the survivor spawned
+  $posXDELTA  ".0"        // Used to store the difference between the current and starting position (X coordinate)
+  $posYDELTA  ".0"        // Ditto Y coordinate
+  $posZDELTA  ".0"        // Ditto Z coordinate
+  $posTOLERANCE  "600.0"  // [CRITICAL] : If the player is this units away from spawn, he'll be considered out of spawn
+  $isNearTheStart  "0"    // Used to determine if the player is near the place where the survivor spawned
 
 //-------------------------- Fire related
 
-  $burnRaw  "0.0"  // This is used to store the raw amount of "burn" (BBQLevel) of the survivor or infected
-  $burnAmount  "0.0"  // This is used to store the real amount of burn (between 0 = no burn to 1 = max burn)
-  $worstBurnAmount  "0.0"  // This is used to store the worst burn amount ever reached and force a loop to restart
-  $BBQ ".0" // store the BBQ math to pong fresnel
+  $burnRaw         ".0"  // This is used to store the raw amount of "burn" (BBQLevel) of the survivor or infected
+  $burnAmount      ".0"  // This is used to store the real amount of burn (between 0 = no burn to 1 = max burn)
+  $worstBurnAmount ".0"  // This is used to store the worst burn amount ever reached and force a loop to restart
+  $BBQ             ".0"  // store the BBQ math to pong fresnel
 
   $forceMaxSoot  "0"  // [SPECIAL] : if is equal to 2, force the biggest possible burn effect no matter what
 
-  $fireDecayConverted  "0.0"  // The "converted" value from user specified seconds to decimal
-  $decayRamp   "0.0"          // This is used to store an ever increasing value (decay of the burn effect)
-  $decayRampInv "0.0"        // This is used to store the opposite of this ever increasing value
-  $decayRampTemp "0.0"      // Although its name, this is used to pass the final result of the decay ramp and offsetting to the later code, for it to (maybe) be subtracted from the fire
-  $decayRampOffset "0.0"    // Used to offset the decay ramp
+  $fireDecayConverted  ".0"  // The "converted" value from user specified seconds to decimal
+  $decayRamp           ".0"  // This is used to store an ever increasing value (decay of the burn effect)
+  $decayRampInv        ".0"  // This is used to store the opposite of this ever increasing value
+  $decayRampTemp       ".0"  // Although its name, this is used to pass the final result of the decay ramp and offsetting to the later code, for it to (maybe) be subtracted from the fire
+  $decayRampOffset     ".0"  // Used to offset the decay ramp
 
 //-------------------------- Vomit (Boomer) related
 
-  $bileRaw    "0.0"  // This is used to store the raw amount of vomit on the survivor (it goes back to 0 on its own when the vomits wears off)
-  $bileAmount  "0.0"  // This is used to store the amount of boomer bile to work with (clamped variable)
+  $bileRaw     ".0"  // This is used to store the raw amount of vomit on the survivor (it goes back to 0 on its own when the vomits wears off)
+  $bileAmount  ".0"  // This is used to store the amount of boomer bile to work with (clamped variable)
 
 //-------------------------- Time related
 
-  $serverTime    "0.0"  // This is used to know if the server just started
+  $serverTime  ".0"  // This is used to know if the server just started
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Variable for BLOCK 4 - Get Frame to display
@@ -262,26 +442,26 @@
 // Variable for BLOCK 6 - Injector Detailblendfactor
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  $dbfToInject  "0.0"  // This is used to store the starting hypothesis for what $detailblendfactor will be
+  $dbfToInject  ".0"  // This is used to store the starting hypothesis for what $detailblendfactor will be
 
   $burnOrBile  "0"  // If this is above 0, either the burn of vomit effects are active and therefore a frame change can occur
 
-  $dbfDecayToSubtract  "0.0"  // This is used to store the number to subtract from the burn amount the burn effect is set to decay
-  $dbfAfterDecay    "0.0"  // This is used to store the result of the subtracting operation just mentionned
-  $dbfAfterDecayClamp  "0.0"  // Ditto but after clamping of the value
+  $dbfDecayToSubtract  ".0"  // This is used to store the number to subtract from the burn amount the burn effect is set to decay
+  $dbfAfterDecay    ".0"  // This is used to store the result of the subtracting operation just mentionned
+  $dbfAfterDecayClamp  ".0"  // Ditto but after clamping of the value
 
   $forceUseBoomerFireSpecial  "0"  // Although its name, this just equals 1 if both effects are in use, if not it equals 0 (the code checks it)
-  $boomerMaxPriority    "0.0"  // This stores if the Boomer effect must have absolute priority
+  $boomerMaxPriority    ".0"  // This stores if the Boomer effect must have absolute priority
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Variable for BLOCK 7 - Injector Frame and Detailframe
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  $frameIsEntity  "0"    // This is used to make comparisons (temp value)
-  $frametoinjectTemp    "0"  // This is used to make comparisons (temp value)
-  $detailframetoinjectTemp   "0"  // This is used to make comparisons (temp value)
+  $frameIsEntity           "0"  // This is used to make comparisons (temp value)
+  $frametoinjectTemp       "0"  // This is used to make comparisons (temp value)
+  $detailframetoinjectTemp "0"  // This is used to make comparisons (temp value)
 
-  $frametoinject  "0"  // This is used to store the frame we need to display
+  $frametoinject        "0"  // This is used to store the frame we need to display
   $detailframetoinject  "0"  // This is used to store the detailframe we need to display
 
   $bileFrameSelected  "0"  // This is used to store the correct $detailframe to display if bile effect is active (the vomit alone or vomit+burn effect)
@@ -291,8 +471,8 @@
 // PROXIES
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Proxies  // Do not delete this line
-{
+  Proxies
+  {
 
 // #######################################################################################################
 // BLOCK 1 : SHOWCASE GALLERY - Debug feature that allow modders to see all the textures scrolling
@@ -301,34 +481,34 @@ Proxies  // Do not delete this line
 // Generates a looping number between 0 and the value defined in  $scrollShowcase
 // ========================================================================================================================
 
-  LinearRamp    // Generates an every increasing value and stores it into $showcaseRamp
-  {
-    rate     "$one"
-    resultVar     "$showcaseRamp"
-  }
+    LinearRamp    // Generates an every increasing value and stores it into $showcaseRamp
+    {
+      rate      $one
+      resultVar $showcaseRamp
+    }
 
-  Multiply      // Gets the opposite of $showcaseRamp and stores it into $showcaseRampInv
-  {
-    srcVar1    "$mo"
-    srcVar2     "$showcaseRamp"
-    resultVar     "$showcaseRampInv"
-  }
+    Multiply      // Gets the opposite of $showcaseRamp and stores it into $showcaseRampInv
+    {
+      srcVar1   $mo
+      srcVar2   $showcaseRamp
+      resultVar $showcaseRampInv
+    }
 
-  LessOrEqual    // If the final result of the Ramp is over $scrollShowcase, the Ramp Offset is set to the opposite of itself
-        {
-                LessEqualVar   "$showcaseRampOffset"
-              greaterVar   "$showcaseRampInv"
-               srcVar1     "$showcaseRampTemp"
-                 srcVar2     "$scrollShowcase"
-               resultVar     "$showcaseRampOffset"
-         }
+    LessOrEqual    // If the final result of the Ramp is over $scrollShowcase, the Ramp Offset is set to the opposite of itself
+    {
+      LessEqualVar $showcaseRampOffset
+      greaterVar   $showcaseRampInv
+      srcVar1      $showcaseRampTemp
+      srcVar2      $scrollShowcase
+      resultVar    $showcaseRampOffset
+     }
 
-  Add      // Adding the Ramp and its Offset. If the Offset is equal to minus the ramp, it creates a looping number
-        {
-    srcVar1    "$showcaseRamp"
-    srcVar2     "$showcaseRampOffset"
-    resultVar     "$showcaseRampTemp"  // This value is later used in the injection step (frame&detail) in BLOCK 10
-          }
+    Add            // Adding the Ramp and its Offset. If the Offset is equal to minus the ramp, it creates a looping number
+    {
+      srcVar1   $showcaseRamp
+      srcVar2   $showcaseRampOffset
+      resultVar $showcaseRampTemp  // This value is later used in the injection step (frame&detail) in BLOCK 10
+    }
 
 // #######################################################################################################
 // BLOCK 2 : RANDOM BLOOD ANGLE & POSITION - If toggled by the user, modifies the angle and position of the $detail to give RNG blood
@@ -337,49 +517,48 @@ Proxies  // Do not delete this line
 // Gets a random number between 0 and 359, only once, then injects it into the translation and rotate variables if the user activated the effect
 // ========================================================================================================================
 
-  EntityRandom    // Stores a random number from 0 to 359 (359 is needed to have all the possible rotation angles)
-  {
-    scale     359
-    resultVar     "$rand"
-  }
+    EntityRandom    // Stores a random number from 0 to 359 (359 is needed to have all the possible rotation angles)
+    {
+      scale     "359"
+      resultVar $rand
+    }
 
-  LessOrEqual    // Ensures that the number is stored only once by putting it in $randFixed only if it has (still) its initial value of 0
-  {
-    LessEqualVar   "$rand"
-    greaterVar   "$randFixed"
-    srcVar1    "$randFixed"
-    srcVar2    "$zero"
-    resultVar    "$randFixed"
-  }
+    LessOrEqual    // Ensures that the number is stored only once by putting it in $randFixed only if it has (still) its initial value of 0
+    {
+      LessEqualVar $rand
+      greaterVar   $randFixed
+      srcVar1      $randFixed
+      srcVar2      $zero
+      resultVar    $randFixed
+    }
 
-  LessOrEqual    // If $randomBloodPosition is higher than 0, injects the random number into the Translation variable
-  {
-    LessEqualVar   "$TranslationDET"
-    greaterVar   "$randFixed"
-    srcVar1    "$randomBloodPosition"
-    srcVar2    "$zero"
-    resultVar    "$TranslationDET"
-
+    LessOrEqual    // If $randomBloodPosition is higher than 0, injects the random number into the Translation variable
+    {
+      LessEqualVar $TranslationDET
+      greaterVar   $randFixed
+      srcVar1      $randomBloodPosition
+      srcVar2      $zero
+      resultVar    $TranslationDET
     // N.b. the only thing that matters for the translation is the decimal part of the random number.
-  }
+    }
 
-  LessOrEqual    // If $randomBloodAngle is higher than 0, injects the random number into the Rotation variable
-  {
-    LessEqualVar   "$TranslationDET"
-    greaterVar   "$randFixed"
-    srcVar1    "$randomBloodAngle"
-    srcVar2    "$zero"
-    resultVar    "$RotateDET"
-  }
+    LessOrEqual    // If $randomBloodAngle is higher than 0, injects the random number into the Rotation variable
+    {
+      LessEqualVar $TranslationDET
+      greaterVar   $randFixed
+      srcVar1      $randomBloodAngle
+      srcVar2      $zero
+      resultVar    $RotateDET
+    }
 
-  TextureTransform    // Injects the values (either user defined and/or randomized) into $detailtexturetransform (engine variable)
-  {
-    centerVar    "$CenterDET"
-    scaleVar    "$ScaleDET"
-    rotateVar    "$RotateDET"
-    translateVar  "$TranslationDET"
-    resultVar    "$detailtexturetransform"  // This is a FINAL INJECTION, the value is not used afterwards.
-  }
+    TextureTransform    // Injects the values (either user defined and/or randomized) into $detailtexturetransform (engine variable)
+    {
+      centerVar    $CenterDET
+      scaleVar     $ScaleDET
+      rotateVar    $RotateDET
+      translateVar $TranslationDET
+      resultVar    $detailtexturetransform  // This is a FINAL INJECTION, the value is not used afterwards.
+    }
 
 // #######################################################################################################
 // BLOCK 3 : PARAMETERS IMPORT - This block imports parameters from within the game
@@ -388,179 +567,178 @@ Proxies  // Do not delete this line
 // This blocks generates a sine wave, that goes from -1 to 2 to -1 in 2 seconds
 // ========================================================================================================================
 
-  Sine      // Sine wave, that goes from -1 to 2 to -1 in 2 seconds
-  {
-    sineperiod  "$two"
-    sinemin    "$mo"
-    sinemax    "$two"
-    resultVar    "$sine"
-  }
+    Sine      // Sine wave, that goes from -1 to 2 to -1 in 2 seconds
+    {
+      sineperiod $two
+      sinemin    $mo
+      sinemax    $two
+      resultVar  $sine
+    }
     // N.b. This is used at various places in the code to create buffers while checking if conditions are met only once per second instead of all the time
 
 // ========================================================================================================================
 // This blocks gets the current position of the player
 // ========================================================================================================================
 
-          PlayerPosition    // Stores the player position in a matrix
-          {
-                  scale                      1
-                  resultVar                 "$pos"
-          }
+    PlayerPosition    // Stores the player position in a matrix
+    {
+      scale     "1"
+      resultVar $pos
+    }
 
-          Clamp      // Sends the first row of the position matrix into a $poxX variable
-          {
-    srcVar1    "$zero"
-    min    "$pos[0]"
-    max    "$pos[0]"
-    resultVar    "$posX"
-          }
+    Clamp      // Sends the first row of the position matrix into a $poxX variable
+    {
+      srcVar1   $zero
+      min      "$pos[0]"
+      max      "$pos[0]"
+      resultVar $posX
+    }
 
-          Clamp      // Sends the first row of the position matrix into a $poxY variable
-          {
-    srcVar1    "$zero"
-    min    "$pos[1]"
-    max    "$pos[1]"
-    resultVar    "$posY"
-          }
+    Clamp      // Sends the first row of the position matrix into a $poxY variable
+    {
+      srcVar1    $zero
+      min       "$pos[1]"
+      max       "$pos[1]"
+      resultVar  $posY
+    }
 
-          Clamp      // Sends the first row of the position matrix into a $poxZ variable
-          {
-    srcVar1    "$zero"
-    min    "$pos[2]"
-    max    "$pos[2]"
-    resultVar    "$posZ"
-          }
-
-
-  Abs      // Makes sure the position is positive
-  {
-    srcVar1    "$posX"
-    resultVar    "$posX"
-  }
-
-  Abs      // Makes sure the position is positive
-  {
-    srcVar1    "$posY"
-    resultVar    "$posY"
-  }
-
-  Abs      // Makes sure the position is positive
-  {
-    srcVar1    "$posZ"
-    resultVar    "$posZ"
-  }
+    Clamp      // Sends the first row of the position matrix into a $poxZ variable
+    {
+      srcVar1   $zero
+      min      "$pos[2]"
+      max      "$pos[2]"
+      resultVar $posZ
+    }
 
 
-  LessOrEqual    // Stores the X coordinate only once when the player spawns
-  {
-    LessEqualVar   "$posX"
-    greaterVar   "$posXStored"
-    srcVar1    "$posXStored"
-    srcVar2    "$zero"
-    resultVar    "$posXStored"
-  }
+    Abs      // Makes sure the position is positive
+    {
+      srcVar1   $posX
+      resultVar $posX
+    }
+
+    Abs      // Makes sure the position is positive
+    {
+      srcVar1   $posY
+      resultVar $posY
+    }
+
+    Abs      // Makes sure the position is positive
+    {
+      srcVar1   $posZ
+      resultVar $posZ
+    }
 
 
-  LessOrEqual    // Stores the Y coordinate only once when the player spawns
-  {
-    LessEqualVar   "$posY"
-    greaterVar   "$posYStored"
-    srcVar1    "$posYStored"
-    srcVar2    "$zero"
-    resultVar    "$posYStored"
-  }
+    LessOrEqual    // Stores the X coordinate only once when the player spawns
+    {
+      LessEqualVar $posX
+      greaterVar   $posXStored
+      srcVar1      $posXStored
+      srcVar2      $zero
+      resultVar    $posXStored
+    }
 
 
-  LessOrEqual    // Stores the Z coordinate only once when the player spawns
-  {
-    LessEqualVar   "$posZ"
-    greaterVar   "$posZStored"
-    srcVar1    "$posZStored"
-    srcVar2    "$zero"
-    resultVar    "$posZStored"
-  }
+    LessOrEqual    // Stores the Y coordinate only once when the player spawns
+    {
+      LessEqualVar $posY
+      greaterVar   $posYStored
+      srcVar1      $posYStored
+      srcVar2      $zero
+      resultVar    $posYStored
+    }
+
+
+    LessOrEqual    // Stores the Z coordinate only once when the player spawns
+    {
+      LessEqualVar $posZ
+      greaterVar   $posZStored
+      srcVar1      $posZStored
+      srcVar2      $zero
+      resultVar    $posZStored
+    }
 
 
 // ========================================================================================================================
 // This blocks gets the difference between the origin and current position of the player and check if it's at least $posTOLERANCE units away in any direction
 // ========================================================================================================================
 
-  Subtract      // Getting the position difference on X axis
-  {
-    srcVar1    "$posXStored"
-    srcVar2    "$posX"
-    resultVar    "$posXDELTA"
-  }
+    Subtract      // Getting the position difference on X axis
+    {
+      srcVar1   $posXStored
+      srcVar2   $posX
+      resultVar $posXDELTA
+    }
 
-  Subtract      // Getting the position difference on Y axis
-  {
-    srcVar1    "$posYStored"
-    srcVar2    "$posY"
-    resultVar    "$posYDELTA"
-  }
+    Subtract      // Getting the position difference on Y axis
+    {
+      srcVar1   $posYStored
+      srcVar2   $posY
+      resultVar $posYDELTA
+    }
 
-  Subtract      // Getting the position difference on Z axis
-  {
-    srcVar1    "$posZStored"
-    srcVar2    "$posZ"
-    resultVar    "$posZDELTA"
-  }
+    Subtract      // Getting the position difference on Z axis
+    {
+      srcVar1   $posZStored
+      srcVar2   $posZ
+      resultVar $posZDELTA
+    }
 
-          Abs      // Making the difference positive for the comparison below
-          {
-    srcVar1    "$posXDELTA"
-    resultVar    "$posXDELTA"
-          }
+    Abs      // Making the difference positive for the comparison below
+    {
+      srcVar1   $posXDELTA
+      resultVar $posXDELTA
+    }
 
-          Abs      // Making the difference positive for the comparison below
-          {
-    srcVar1    "$posYDELTA"
-    resultVar    "$posYDELTA"
-          }
+    Abs      // Making the difference positive for the comparison below
+    {
+      srcVar1   $posYDELTA
+      resultVar $posYDELTA
+    }
 
-          Abs      // Making the difference positive for the comparison below
-          {
-    srcVar1    "$posZDELTA"
-    resultVar    "$posZDELTA"
-          }
+    Abs      // Making the difference positive for the comparison below
+    {
+      srcVar1   $posZDELTA
+      resultVar $posZDELTA
+    }
 
-  LessOrEqual    // If the difference between the values (X axis) is less than $posTOLERANCE, we are near the start
-  {
-    LessEqualVar   "$one"
-    greaterVar   "$zero"
-    srcVar1    "$posXDELTA"
-    srcVar2    "$posTOLERANCE"
-    resultVar    "$isNearTheStart"
-  }
+    LessOrEqual    // If the difference between the values (X axis) is less than $posTOLERANCE, we are near the start
+    {
+      LessEqualVar $one
+      greaterVar   $zero
+      srcVar1      $posXDELTA
+      srcVar2      $posTOLERANCE
+      resultVar    $isNearTheStart
+    }
 
-  LessOrEqual    // Ditto check for Y axis. If the position isn't near, it flags $isNearTheStart to 0
-  {
-    LessEqualVar   "$isNearTheStart"
-    greaterVar   "$zero"
-    srcVar1    "$posYDELTA"
-    srcVar2    "$posTOLERANCE"
-    resultVar    "$isNearTheStart"
-  }
+    LessOrEqual    // Ditto check for Y axis. If the position isn't near, it flags $isNearTheStart to 0
+    {
+      LessEqualVar $isNearTheStart
+      greaterVar   $zero
+      srcVar1      $posYDELTA
+      srcVar2      $posTOLERANCE
+      resultVar    $isNearTheStart
+    }
 
-  LessOrEqual    // Ditto check for Y axis. If the position isn't near, it flags $isNearTheStart to 1
-  {
-    LessEqualVar   "$isNearTheStart"
-    greaterVar   "$zero"
-    srcVar1    "$posZDELTA"
-    srcVar2    "$posTOLERANCE"
-    resultVar    "$isNearTheStart"
-  }
+    LessOrEqual    // Ditto check for Y axis. If the position isn't near, it flags $isNearTheStart to 1
+    {
+      LessEqualVar $isNearTheStart
+      greaterVar   $zero
+      srcVar1      $posZDELTA
+      srcVar2      $posTOLERANCE
+      resultVar    $isNearTheStart
+    }
 
 // ========================================================================================================================
 // This blocks gets the % of health the survivor currently has (in $healthCurrent) and scales it to match 100 (default is between 0 and 1)
 // ========================================================================================================================
 
-  Health
-  {
-    scale     "$scale"
-    resultVar     "$healthCurrent"    // This is used immediadly after to calculate the worst health
-              // This is also used later in the code to make various comparisons
-  }
+    Health
+    {
+      scale     $scale
+      resultVar $healthCurrent    // This is used immediadly after to calculate the worst health
+    }                             // This is also used later in the code to make various comparisons
 
   // N.b. This gets the value of the "real" health the survivor has. The decaying health (after eating pain pills or adrenaline) doesn't count.
   // N.b. This goes to 400 when the survivor is down but is automatically clamped to 100. Therefore, when the survivor goes goes, its "health" goes to 100
@@ -570,55 +748,55 @@ Proxies  // Do not delete this line
 // This blocks gets a timing value related to the server active time
 // ========================================================================================================================
 
-  CurrentTime
-  {
-    resultVar     "$serverTime"
-  }
+    CurrentTime
+    {
+      resultVar $serverTime
+    }
 
 // ========================================================================================================================
 // This blocks gets the worst health level the survivor has ever had since the beginning of the map
 // ========================================================================================================================
 
-  LessOrEqual    // If the health is 0.00, it should not be injected, because it's a "fake" health given by the FPS arms or the dead corpse
-  {
-    LessEqualVar   "$one"
-    greaterVar   "$zero"
-    srcVar1    "$healthCurrent"
-    srcVar2    "$zero"
-    resultVar    "$noInjectWorstHealth"
-  }
+    LessOrEqual    // If the health is 0.00, it should not be injected, because it's a "fake" health given by the FPS arms or the dead corpse
+    {
+      LessEqualVar $one
+      greaterVar   $zero
+      srcVar1      $healthCurrent
+      srcVar2      $zero
+      resultVar    $noInjectWorstHealth
+    }
 
-  LessOrEqual    // Stores the current health in $worstHealthToInject only if it's worse than the worst health ever
-  {
-    LessEqualVar   "$healthCurrent"
-    greaterVar   "$worstHealth"
-    srcVar1    "$healthCurrent"
-    srcVar2    "$worstHealth"
-    resultVar    "$worstHealthToInject"
-  }
+    LessOrEqual    // Stores the current health in $worstHealthToInject only if it's worse than the worst health ever
+    {
+      LessEqualVar $healthCurrent
+      greaterVar   $worstHealth
+      srcVar1      $healthCurrent
+      srcVar2      $worstHealth
+      resultVar    $worstHealthToInject
+    }
 
-  LessOrEqual    // Actually does the final storage only if $noInjectWorstHealth is equal to 0
-  {
-    LessEqualVar   "$worstHealthToInject"
-    greaterVar   "$worstHealth"
-    srcVar1    "$noInjectWorstHealth"
-    srcVar2    "$zero"
-    resultVar    "$worstHealth"
-  }
+    LessOrEqual    // Actually does the final storage only if $noInjectWorstHealth is equal to 0
+    {
+      LessEqualVar $worstHealthToInject
+      greaterVar   $worstHealth
+      srcVar1      $noInjectWorstHealth
+      srcVar2      $zero
+      resultVar    $worstHealth
+    }
 
 // ========================================================================================================================
 // This blocks gets the speed the entity (survivor) and the player currently have
 // ========================================================================================================================
 
-  EntitySpeed    // This gets the speed of the surviror and stores it into $ismoving
-  {
-    resultVar    "$ismoving"     // This is later used to determine if the survivor is down or not in BLOCK #
-  }
+    EntitySpeed    // This gets the speed of the surviror and stores it into $ismoving
+    {
+      resultVar    $ismoving     // This is later used to determine if the survivor is down or not in BLOCK #
+    }
 
-  PlayerSpeed    // This gets the speed of the player and stores it into $playerSpeed
-  {
-    resultVar    "$playerSpeed"    // This is later used to determine if the player is down or not in BLOCK #
-  }
+    PlayerSpeed    // This gets the speed of the player and stores it into $playerSpeed
+    {
+      resultVar    $playerSpeed    // This is later used to determine if the player is down or not in BLOCK #
+    }
 
 
   // N.b. The speed itself doesn't matter in this code. The only thing that matters is the survivor is moving, so if its speed is above 0
@@ -627,179 +805,178 @@ Proxies  // Do not delete this line
 // This blocks gets the amount of burn damage the survivor has taken (between 0 and 1)
 // ========================================================================================================================
 
-  BBQLevel    // This gets a value that starts at 1 and gradually goes down to 0 the more time the survivor spend in fire
-  {
-    resultVar    "$burnRaw"
-  }
+    BBQLevel    // This gets a value that starts at 1 and gradually goes down to 0 the more time the survivor spend in fire
+    {
+      resultVar $burnRaw
+    }
 
-  Subtract      // This inverts the value of $burnRaw to get $burnAmount. If we didn't do so, the effect would go in reverse ($burnAmount = 1 - $burnRaw)
-  {
-    srcVar1    "$one"
-    srcVar2    "$burnRaw"
-    resultVar    "$burnAmount"    // This is later used to set the burn amount in BLOCK #
-  }
+    Subtract      // This inverts the value of $burnRaw to get $burnAmount. If we didn't do so, the effect would go in reverse ($burnAmount = 1 - $burnRaw)
+    {
+      srcVar1   $one
+      srcVar2   $burnRaw
+      resultVar $burnAmount // This is later used to set the burn amount in BLOCK #
+    }
 
-  Multiply
-  {
-    srcVar1    "$burnAmount"
-    srcVar2    "$useDetailAsFireDamage"
-    resultVar    "$burnAmount"
-  }
+    Multiply
+    {
+      srcVar1   $burnAmount
+      srcVar2   $useDetailAsFireDamage
+      resultVar $burnAmount
+    }
 
 // ========================================================================================================================
 // This blocks gets the amount of vomit (boomer) on the survivor (between 0 and 1).
 // ========================================================================================================================
 
-  IT      // This gets a value between 0 and 1 that is the amount of vomit. It starts at 1 then decreases to 0 in engine when the effect wears off
-  {
-    resultVar    "$bileRaw"
-  }
+    IT      // This gets a value between 0 and 1 that is the amount of vomit. It starts at 1 then decreases to 0 in engine when the effect wears off
+    {
+      resultVar $bileRaw
+    }
 
-  LessOrEqual    // This stores $bileRaw into a new $bileAmount but forces it to be 1 if $forceMaxSoot is equal to 2 (over 1.98)
-        {      // $forceMaxSoot is equal to 2 when $burnAmount is equal to 1 AND when the user set $forceNoDecayIfMax to 1
+    LessOrEqual    // This stores $bileRaw into a new $bileAmount but forces it to be 1 if $forceMaxSoot is equal to 2 (over 1.98)
+    {              // $forceMaxSoot is equal to 2 when $burnAmount is equal to 1 AND when the user set $forceNoDecayIfMax to 1
+      LessEqualVar $bileRaw
+      greaterVar   $one
+      srcVar1      $forceMaxSoot
+      srcVar2      $onn
+      resultVar    $bileAmount
+    }
 
-                LessEqualVar   "$bileRaw"
-              greaterVar   "$one"
-               srcVar1     "$forceMaxSoot"
-                 srcVar2     "$onn"
-               resultVar     "$bileAmount"
-         }
-
-  Clamp      // As a safety measure, the $bileAmount is limited from 0 to 1. This prevents glitches when this value is later injected into $detailblendfactor
-  {
-    min    "0"
-    max    "1"
-    srcVar1    "$bileAmount"
-    resultVar    "$bileAmount"
-  }
+    Clamp      // As a safety measure, the $bileAmount is limited from 0 to 1. This prevents glitches when this value is later injected into $detailblendfactor
+    {
+      min       "0"
+      max       "1"
+      srcVar1   $bileAmount
+      resultVar $bileAmount
+    }
 
 
 // ========================================================================================================================
 // This blocks tries to guess if the player has taken damage already
 // ========================================================================================================================
 
-  LessOrEqual    // If the survivor health is bigger than 100, the $hasTakenDamage is reset to zero
-  {
-    LessEqualVar   "$hasTakenDamage"
-    greaterVar   "$zero"
-    srcVar1    "$healthCurrent"
-    srcVar2    "$oh"
-    resultVar    "$hasTakenDamage"
-  }
+    LessOrEqual    // If the survivor health is bigger than 100, the $hasTakenDamage is reset to zero
+    {
+      LessEqualVar $hasTakenDamage
+      greaterVar   $zero
+      srcVar1      $healthCurrent
+      srcVar2      $oh
+      resultVar    $hasTakenDamage
+    }
         // N.b. this should normally not occur, but as some L4D2 custom servers allow HP above 100.
 
-  LessOrEqual    // If the worst health the survivor had is lower than 100, the survivor has taken damage (pretty straightforward)
-  {
-    LessEqualVar   "$hasTakenDamage"
-    greaterVar   "$one"
-    srcVar1    "$oh"
-    srcVar2    "$worstHealth"
-    resultVar    "$hasTakenDamage"  // This value is used later in BLOCK 5 to check if the survivor is down
-  }
+    LessOrEqual    // If the worst health the survivor had is lower than 100, the survivor has taken damage (pretty straightforward)
+    {
+      LessEqualVar $hasTakenDamage
+      greaterVar   $one
+      srcVar1      $oh
+      srcVar2      $worstHealth
+      resultVar    $hasTakenDamage  // This value is used later in BLOCK 5 to check if the survivor is down
+    }
 
 // ========================================================================================================================
 // This blocks returns a value ($decayRampTemp) that corresponds to the amount of burn factor ($detailblendfactor) to inject
 // ========================================================================================================================
 
-  Divide      // This converts the fire decay rate (user defined) into a float between 0 and 1 to be used as the rate for the linear ramp
-  {
-    srcVar1    "$one"
-    srcVar2     "$fireEffectDecayTime"
-    resultVar     "$fireDecayConverted"
-  }
+    Divide      // This converts the fire decay rate (user defined) into a float between 0 and 1 to be used as the rate for the linear ramp
+    {
+      srcVar1   $one
+      srcVar2   $fireEffectDecayTime
+      resultVar $fireDecayConverted
+    }
 
-  LinearRamp    // This stores an ever increasing value in $decayRamp at a user defined (converted, see last proxy) rate
-  {
-    rate     "$fireDecayConverted"
-    resultVar     "$decayRamp"
-  }
+    LinearRamp    // This stores an ever increasing value in $decayRamp at a user defined (converted, see last proxy) rate
+    {
+      rate      $fireDecayConverted
+      resultVar $decayRamp
+    }
 
-  Multiply      // This gets the opposite of said ever increasing ramp
-  {
-    srcVar1    "$mo"
-    srcVar2     "$decayRamp"
-    resultVar     "$decayRampInv"
-  }
+    Multiply      // This gets the opposite of said ever increasing ramp
+    {
+      srcVar1   $mo
+      srcVar2   $decayRamp
+      resultVar $decayRampInv
+    }
         // If the amount of burn is higher than the worst it ever was, it means the survivor is burning  (see next section for $worstBurnAmount). In this
         // case, we inject $decayRampInv into $decayRampOffset. The ramp offset will therefore be equal to its opposite, making it restart at 0
-  LessOrEqual
-        {
-                LessEqualVar   "$decayRampOffset"
-              greaterVar   "$decayRampInv"
-               srcVar1     "$burnAmount"
-                 srcVar2     "$worstBurnAmount"
-               resultVar     "$decayRampOffset"
-         }
+    LessOrEqual
+    {
+      LessEqualVar $decayRampOffset
+      greaterVar   $decayRampInv
+      srcVar1      $burnAmount
+      srcVar2      $worstBurnAmount
+      resultVar    $decayRampOffset
+    }
         // Double condition (if $forceNoDecayIfMax = 1 && $burnAmount = 1 ; $forceMaxSoot = 2).
-  Add      // If both the $burnAmount is equal to 1 (its maximum) and user defined $forceNoDecayIfMax is set to 2, we need to force the max burn effect (soot) in any case
-        {
-    srcVar1    "$forceNoDecayIfMax"
-    srcVar2     "$burnAmount"
-    resultVar     "$forceMaxSoot"
-          }
+    Add      // If both the $burnAmount is equal to 1 (its maximum) and user defined $forceNoDecayIfMax is set to 2, we need to force the max burn effect (soot) in any case
+    {
+      srcVar1   $forceNoDecayIfMax
+      srcVar2   $burnAmount
+      resultVar $forceMaxSoot
+    }
 
-  LessOrEqual    // If we have to force the maximum burn effect because $forceMaxSoot = 2 (>1.98), then $decayRampOffset must always stay its $decayRampInv
-        {
-                LessEqualVar   "$decayRampOffset"
-              greaterVar   "$decayRampInv"
-               srcVar1     "$forceMaxSoot"
-                 srcVar2     "$onn"
-               resultVar     "$decayRampOffset"
-         }
+    LessOrEqual    // If we have to force the maximum burn effect because $forceMaxSoot = 2 (>1.98), then $decayRampOffset must always stay its $decayRampInv
+    {
+      LessEqualVar $decayRampOffset
+      greaterVar   $decayRampInv
+      srcVar1      $forceMaxSoot
+      srcVar2      $onn
+      resultVar    $decayRampOffset
+    }
 
-  Add      // This offsets the ramp
-        {
-    srcVar1    "$decayRamp"
-    srcVar2     "$decayRampOffset"
-    resultVar     "$decayRampTemp"  // This final result will be subtracted to the $detailblendfactor in BLOCK 6 at the injection stage
-          }
+    Add      // This offsets the ramp
+    {
+      srcVar1   $decayRamp
+      srcVar2   $decayRampOffset
+      resultVar $decayRampTemp  // This final result will be subtracted to the $detailblendfactor in BLOCK 6 at the injection stage
+    }
 
 // ========================================================================================================================
 // This blocks stores the worst (raw) burn amount the survivor ever had
 // ========================================================================================================================
 
   // This MUST be below the $decayRampTemp because if it's above, $worstBurnAmount and $burnAmount will always be equal and the condition
-  // in the first LessOrEqual proxy in the previous small block will always return the same value
-
-  LessOrEqual
-        {
-                LessEqualVar   "$worstBurnAmount"
-              greaterVar   "$burnAmount"
-               srcVar1     "$burnAmount"
-                 srcVar2     "$worstBurnAmount"
-               resultVar     "$worstBurnAmount"
-         }
+    // in the first LessOrEqual proxy in the previous small block will always return the same value
+  
+    LessOrEqual
+    {
+      LessEqualVar $worstBurnAmount
+      greaterVar   $burnAmount
+      srcVar1      $burnAmount
+      srcVar2      $worstBurnAmount
+      resultVar    $worstBurnAmount
+    }
 
 // ========================================================================================================================
 // This blocks checks if the map reloaded after a TPK
 // ========================================================================================================================
 
-  LessOrEqual    // TPK at first map if we are now at 100 HP....
-  {
-    LessEqualVar   "$one"
-    greaterVar   "$zero"
-    srcVar1    "$oh"
-    srcVar2    "$healthCurrent"
-    resultVar    "$mapRestartTPK"
-  }
+    LessOrEqual    // TPK at first map if we are now at 100 HP....
+    {
+      LessEqualVar $one
+      greaterVar   $zero
+      srcVar1      $oh
+      srcVar2      $healthCurrent
+      resultVar    $mapRestartTPK
+    }
 
-  LessOrEqual    // ... near the start of the map...
-  {
-    LessEqualVar   "$zero"
-    greaterVar   "$mapRestartTPK"
-    srcVar1    "$isNearTheStart"
-    srcVar2    "$zero"
-    resultVar    "$mapRestartTPK"
-  }
+    LessOrEqual    // ... near the start of the map...
+    {
+      LessEqualVar  $zero
+      greaterVar    $mapRestartTPK
+      srcVar1       $isNearTheStart
+      srcVar2       $zero
+      resultVar     $mapRestartTPK
+    }
 
-  LessOrEqual    // ... after 100 seconds have already passed
-  {
-    LessEqualVar   "$zero"
-    greaterVar   "$mapRestartTPK"
-    srcVar1    "$serverTime"
-    srcVar2    "$oh"
-    resultVar    "$mapRestartTPK"
-  }
+    LessOrEqual    // ... after 100 seconds have already passed
+    {
+      LessEqualVar $zero
+      greaterVar   $mapRestartTPK
+      srcVar1      $serverTime
+      srcVar2      $oh
+      resultVar    $mapRestartTPK
+    }
 
 // #######################################################################################################
 // BLOCK 4 : IDENTIFY THE FRAME TO INJECT - This block aims to get the correct $frame (or $detailframe) to inject.
@@ -810,33 +987,33 @@ Proxies  // Do not delete this line
 
         // Before doing any comparison, reset the $worstHealth to 100 if we are in a $mapRestartTPK scenario
         // This fixes the glitch that occurs when there's a map restart on the first map after a TPK (total party kill)
-  LessOrEqual
-  {
-    LessEqualVar   "$worstHealth"
-    greaterVar   "$oh"
-    srcVar1    "$mapRestartTPK"
-    srcVar2    "$zero"
-    resultVar    "$worstHealth"
-  }
+    LessOrEqual
+    {
+      LessEqualVar $worstHealth
+      greaterVar   $oh
+      srcVar1      $mapRestartTPK
+      srcVar2      $zero
+      resultVar    $worstHealth
+    }
 
-  LessOrEqual
-  {
-    LessEqualVar   "$hasTakenDamage"
-    greaterVar   "$zero"
-    srcVar1    "$mapRestartTPK"
-    srcVar2    "$zero"
-    resultVar    "$hasTakenDamage"
-  }
+    LessOrEqual
+    {
+      LessEqualVar $hasTakenDamage
+      greaterVar   $zero
+      srcVar1      $mapRestartTPK
+      srcVar2      $zero
+      resultVar    $hasTakenDamage
+    }
 
 
-  LessOrEqual    // If the user set $canOnlyGetWorse to 1 (above 0, we will use $worstHealth and otherwise the real current health)
-  {
-    LessEqualVar   "$healthCurrent"
-    greaterVar   "$worstHealth"
-    srcVar1    "$canOnlyGetWorse"  // This is user defined
-    srcVar2    "$zero"
-    resultVar    "$healthPercent"    // This value is used immediatly after and only to identify the frame for the injection
-  }
+    LessOrEqual    // If the user set $canOnlyGetWorse to 1 (above 0, we will use $worstHealth and otherwise the real current health)
+    {
+      LessEqualVar $healthCurrent
+      greaterVar   $worstHealth
+      srcVar1      $canOnlyGetWorse  // This is user defined
+      srcVar2      $zero
+      resultVar    $healthPercent    // This value is used immediatly after and only to identify the frame for the injection
+    }
 
 // ========================================================================================================================
 // This block goes one by one through all the user defined $frameXifbelow and compares it to $healthPercent, updaring $frametodisplay each time accordingly
@@ -847,86 +1024,86 @@ Proxies  // Do not delete this line
   // is equal or smaller to the value of $frame1ifbelow, but this time by a 1 since since it's the frame it is currently looking at. When the condition will not be
   // met because the health is too big, the $frametodisplay will stay the same and will have the correct frame value
 
-  LessOrEqual    // If $healthPercent < or = $frame0ifbelow, $frametodisplay = 0
-  {
-    LessEqualVar   "$zero"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame0ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame0ifbelow, $frametodisplay = 0
+    {
+      LessEqualVar $zero
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame0ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame1ifbelow, $frametodisplay = 1
-  {
-    LessEqualVar   "$one"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame1ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame1ifbelow, $frametodisplay = 1
+    {
+      LessEqualVar $one
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame1ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame2ifbelow, $frametodisplay = 2
-  {
-    LessEqualVar   "$two"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame2ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame2ifbelow, $frametodisplay = 2
+    {
+      LessEqualVar $two
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame2ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame3ifbelow, $frametodisplay = 3
-  {
-    LessEqualVar   "$three"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame3ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame3ifbelow, $frametodisplay = 3
+    {
+      LessEqualVar $three
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame3ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame4ifbelow, $frametodisplay = 4
-  {
-    LessEqualVar   "$four"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame4ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame4ifbelow, $frametodisplay = 4
+    {
+      LessEqualVar $four
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame4ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame5ifbelow, $frametodisplay = 5
-  {
-    LessEqualVar   "$five"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame5ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame5ifbelow, $frametodisplay = 5
+    {
+      LessEqualVar $five
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame5ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame6ifbelow, $frametodisplay = 6
-  {
-    LessEqualVar   "$six"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame6ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame6ifbelow, $frametodisplay = 6
+    {
+      LessEqualVar $six
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame6ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame7ifbelow, $frametodisplay = 7
-  {
-    LessEqualVar   "$seven"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame7ifbelow"
-    resultVar    "$frametodisplay"
-  }
+    LessOrEqual    // If $healthPercent < or = $frame7ifbelow, $frametodisplay = 7
+    {
+      LessEqualVar $seven
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame7ifbelow
+      resultVar    $frametodisplay
+    }
 
-  LessOrEqual    // If $healthPercent < or = $frame7ifbelow, $frametodisplay = 8
-  {
-    LessEqualVar   "$eight"
-    greaterVar   "$frametodisplay"
-    srcVar1    "$healthPercent"
-    srcVar2    "$frame8ifbelow"
-    resultVar    "$frametodisplay"    // This final result is CRITICAL and will serve as the base value for the injection in BLOCK 7
-  }
+    LessOrEqual    // If $healthPercent < or = $frame7ifbelow, $frametodisplay = 8
+    {
+      LessEqualVar $eight
+      greaterVar   $frametodisplay
+      srcVar1      $healthPercent
+      srcVar2      $frame8ifbelow
+      resultVar    $frametodisplay    // This final result is CRITICAL and will serve as the base value for the injection in BLOCK 7
+    }
 
 // #######################################################################################################
 // BLOCK 5 : IDENTIFY IF THE SURVIVOR IS DOWN - this block tries to guess if the survivor is down and returns the value in $isdown (1 = it is down)
@@ -937,14 +1114,14 @@ Proxies  // Do not delete this line
 
   // The block starts with the value of $isdown as it was last time the code was run through, then passes it into a bunch of checks that have a certain priority order
 
-  LessOrEqual    // The first check is if the PLAYER speed is above 0 (even if the player is not playing the survivor that has the code on it). If it is, the survivor $isdown value is set to 0
-  {
-    LessEqualVar   "$isdown"
-    greaterVar   "$zero"
-    srcVar1    "$playerSpeed"
-    srcVar2    "$zero"
-    resultVar    "$isdown"
-  }
+    LessOrEqual    // The first check is if the PLAYER speed is above 0 (even if the player is not playing the survivor that has the code on it). If it is, the survivor $isdown value is set to 0
+    {
+      LessEqualVar $isdown
+      greaterVar   $zero
+      srcVar1      $playerSpeed
+      srcVar2      $zero
+      resultVar    $isdown
+    }
         // N.b. this condition seems strange, because it is actually "if the PLAYER moves, his TEAMMATE is not down". It is true, but this is only useful to start the value that
         // will later be modified. Has this been at the end of this block (or after the injection of $hasTakenDamage), it would have caused problems.
         // The reason why this is is that if the player plays the survivor that has the code, $ismoving will never be above 1 because each time the game goes into 3rd person
@@ -955,46 +1132,45 @@ Proxies  // Do not delete this line
 // Check if the survivor has healed since he went down
 // ========================================================================================================================
 
-  LessOrEqual    // When the survivor goes down, it sets a flag that he should heal
-  {
-    LessEqualVar   "$mustHeal"
-    greaterVar   "$one"
-    srcVar1    "$isdown"
-    srcVar2    "$zero"
-    resultVar    "$mustHeal"
-  }
+    LessOrEqual    // When the survivor goes down, it sets a flag that he should heal
+    {
+      LessEqualVar $mustHeal
+      greaterVar   $one
+      srcVar1      $isdown
+      srcVar2      $zero
+      resultVar    $mustHeal
+    }
 
-  LessOrEqual    // The survivor "heals" when he can move again
-  {
-    LessEqualVar   "$mustHeal"
-    greaterVar   "$zero"
-    srcVar1    "$ismoving"
-    srcVar2    "$zero"
-    resultVar    "$mustHeal"
-  }
+    LessOrEqual    // The survivor "heals" when he can move again
+    {
+      LessEqualVar $mustHeal
+      greaterVar   $zero
+      srcVar1      $ismoving
+      srcVar2      $zero
+      resultVar    $mustHeal
+    }
 
-  LessOrEqual    // If the survivor must heal, he is down
-  {
-    LessEqualVar   "$isdown"
-    greaterVar   "$one"
-    srcVar1    "$mustHeal"
-    srcVar2    "$zero"
-    resultVar    "$isdown"
-  }
+    LessOrEqual    // If the survivor must heal, he is down
+    {
+      LessEqualVar $isdown
+      greaterVar   $one
+      srcVar1      $mustHeal
+      srcVar2      $zero
+      resultVar    $isdown
+    }
 
 // ========================================================================================================================
 // Check if the ENTITY has taken damage so far or if it is still at 100% health
 // ========================================================================================================================
 
-  LessOrEqual    // This checks if the current health of the survivor is above 100. If it is not, it injects the result of $hasTakenDamage (see end of BLOCK 3)
-  {      // This is the only way to inject a 1 into $isdown.
-
-    LessEqualVar   "$hasTakenDamage"
-    greaterVar   "$isdown"
-    srcVar1    "$oh"
-    srcVar2    "$healthCurrent"
-    resultVar    "$isdown"
-  }
+    LessOrEqual    // This checks if the current health of the survivor is above 100. If it is not, it injects the result of $hasTakenDamage (see end of BLOCK 3)
+    {              // This is the only way to inject a 1 into $isdown.
+      LessEqualVar $hasTakenDamage
+      greaterVar   $isdown
+      srcVar1      $oh
+      srcVar2      $healthCurrent
+      resultVar    $isdown
+    }
 
   // The above proxy fixes the problem that occurs because when a surviror is down, it actually starts his "downed" phase with 100 HP
   // To fix this issue, we can use the fact that it's impossible for a surviror to go back to 100 HP once he has lower than this amount
@@ -1007,27 +1183,27 @@ Proxies  // Do not delete this line
 // Check if the survivors had a TPK
 // ========================================================================================================================
 
-  LessOrEqual    // If the map restarts after a TPK, it means it restarted and the survivors are not dead
-  {
-    LessEqualVar   "$isdown"
-    greaterVar   "$zero"
-    srcVar1    "$mapRestartTPK"
-    srcVar2    "$zero"
-    resultVar    "$isdown"
-  }
+    LessOrEqual    // If the map restarts after a TPK, it means it restarted and the survivors are not dead
+    {
+      LessEqualVar $isdown
+      greaterVar   $zero
+      srcVar1      $mapRestartTPK
+      srcVar2      $zero
+      resultVar    $isdown
+    }
 
 // ========================================================================================================================
 // Check if the ENTITY is moving or not
 // ========================================================================================================================
 
-  LessOrEqual    // The last check is if the downed survivor ENTITY speed is above 0. If it is, the survivor the code is applied to is moving, and it is thus not down.
-  {
-    LessEqualVar   "$isdown"
-    greaterVar   "$zero"
-    srcVar1    "$ismoving"
-    srcVar2    "$zero"
-    resultVar    "$isdown"
-  }
+    LessOrEqual    // The last check is if the downed survivor ENTITY speed is above 0. If it is, the survivor the code is applied to is moving, and it is thus not down.
+    {
+      LessEqualVar $isdown
+      greaterVar   $zero
+      srcVar1      $ismoving
+      srcVar2      $zero
+      resultVar    $isdown
+    }
 
 // #######################################################################################################
 // BLOCK 6 : INJECTOR FOR $DETAILBLENDFACTOR - This block injects the correct value into $detailblendfactor (useful only if boomer or fire effect)
@@ -1041,39 +1217,39 @@ Proxies  // Do not delete this line
 // Gets the value of the Boomer Bile
 // ========================================================================================================================
 
-  LessOrEqual    // This injects the value of the bile ($bileAmount) found in BLOCK 3 if the user defined variable $useDetailAsBoomerVomit is set to 1
-        {
-                LessEqualVar   "$zero"
-              greaterVar   "$bileAmount"
-               srcVar1     "$useDetailAsBoomerVomit"
-                 srcVar2     "$zero"
-               resultVar     "$dbfToInject"
-         }
+    LessOrEqual    // This injects the value of the bile ($bileAmount) found in BLOCK 3 if the user defined variable $useDetailAsBoomerVomit is set to 1
+    {
+      LessEqualVar $zero
+      greaterVar   $bileAmount
+      srcVar1      $useDetailAsBoomerVomit
+      srcVar2      $zero
+      resultVar    $dbfToInject
+    }
 
 // ========================================================================================================================
 // Gets the value of the Fire Damage (and overrides Boomer value)
 // ========================================================================================================================
 
-  LessOrEqual    // This injects the value of burn ($burnAmount) found in BLOCK 3 if the user defined variable $useDetailAsFireDamage is set to 1
-        {
-                LessEqualVar   "$dbfToInject"
-              greaterVar   "$burnAmount"
-               srcVar1     "$useDetailAsFireDamage"
-                 srcVar2     "$zero"
-               resultVar     "$dbfToInject"
-         }
+    LessOrEqual    // This injects the value of burn ($burnAmount) found in BLOCK 3 if the user defined variable $useDetailAsFireDamage is set to 1
+    {
+      LessEqualVar $dbfToInject
+      greaterVar   $burnAmount
+      srcVar1      $useDetailAsFireDamage
+      srcVar2      $zero
+      resultVar    $dbfToInject
+    }
         // N.b. if both $useDetailAsFireDamage and $useDetailAsBoomerVomit are set to 1, fire damage will therefore take priority at this point
 
 // ========================================================================================================================
 // Gets the if either or both of the Fire and Boomer effects are chosen by the user (0 = none ; 1 = one ; 2 = both)
 // ========================================================================================================================
 
-  Add
-  {
-    srcVar1    "$useDetailAsFireDamage"
-    srcVar2    "$useDetailAsBoomerVomit"
-    resultVar    "$burnOrBile"
-  }
+    Add
+    {
+      srcVar1    $useDetailAsFireDamage
+      srcVar2    $useDetailAsBoomerVomit
+      resultVar  $burnOrBile
+    }
 
 // ========================================================================================================================
 //  This blocks gets the value of $dbfAfterDecay that equals what we could possibly inject into detail blend factor (checks which effect must have priority)
@@ -1081,66 +1257,66 @@ Proxies  // Do not delete this line
 
         // If the user chose to not use boomer effect, the offset for the detail blend factor ($dbfDecayToSubtract) use to make
         // the fire damage vanish after some time is set to the $decayRampTemp found in BLOCK 3. Else it is set to 0
-  LessOrEqual
-        {
-                LessEqualVar   "$zero"
-              greaterVar   "$decayRampTemp"    // N.b. this is where the code gets this value from BLOCK 3
-               srcVar1     "$useDetailAsFireDamage"
-                 srcVar2     "$zero"
-               resultVar     "$dbfDecayToSubtract"
-         }
+    LessOrEqual
+    {
+      LessEqualVar $zero
+      greaterVar   $decayRampTemp    // N.b. this is where the code gets this value from BLOCK 3
+      srcVar1      $useDetailAsFireDamage
+      srcVar2      $zero
+      resultVar    $dbfDecayToSubtract
+    }
 
-  Subtract      // If $dbfDecayToSubtract is higher than 0, this makes the detail blend factor smaller to simulate a decaying effect
-  {
-    srcVar1    "$dbfToInject"
-    srcVar2    "$dbfDecayToSubtract"
-    resultVar    "$dbfAfterDecay"
-  }
+    Subtract      // If $dbfDecayToSubtract is higher than 0, this makes the detail blend factor smaller to simulate a decaying effect
+    {
+      srcVar1    $dbfToInject
+      srcVar2    $dbfDecayToSubtract
+      resultVar  $dbfAfterDecay
+    }
 
-  Multiply      // This checks if both Vomit and Fire effects are active (if yes, $forceUseBoomerFireSpecial = 1)
-  {
-    srcVar1    "$useDetailAsFireDamage"
-    srcVar2     "$useDetailAsBoomerVomit"
-    resultVar     "$forceUseBoomerFireSpecial"
-  }
+    Multiply      // This checks if both Vomit and Fire effects are active (if yes, $forceUseBoomerFireSpecial = 1)
+    {
+      srcVar1   $useDetailAsFireDamage
+      srcVar2   $useDetailAsBoomerVomit
+      resultVar $forceUseBoomerFireSpecial
+    }
 
-  Multiply      // If the survivor has vomit on him ($bileRaw > 0, and Boomer vomit is in use, Boomer vomit must have the highest priority)
-  {
-    srcVar1    "$bileRaw"
-    srcVar2     "$useDetailAsBoomerVomit"
-    resultVar     "$boomerMaxPriority"
-  }
+    Multiply      // If the survivor has vomit on him ($bileRaw > 0, and Boomer vomit is in use, Boomer vomit must have the highest priority)
+    {
+      srcVar1   $bileRaw
+      srcVar2   $useDetailAsBoomerVomit
+      resultVar $boomerMaxPriority
+    }
 
-  LessOrEqual    // If the Boomer vomit has max priority, the $dbfAfterDecay the code just calulated is dumped in favor of the Vomit amount
-        {
-                LessEqualVar   "$dbfAfterDecay"
-              greaterVar   "$bileamount"
-               srcVar1     "$boomerMaxPriority"
-                 srcVar2     "$zero"
-               resultVar     "$dbfAfterDecay"
-         }
+    LessOrEqual    // If the Boomer vomit has max priority, the $dbfAfterDecay the code just calulated is dumped in favor of the Vomit amount
+    {
+      LessEqualVar $dbfAfterDecay
+      greaterVar   $bileamount
+      srcVar1      $boomerMaxPriority
+      srcVar2      $zero
+      resultVar    $dbfAfterDecay
+    }
 
-  LessOrEqual    // Prevents the $dbfAfterDecay to be under 0 to avoid visual glitches
-        {
-                LessEqualVar   "$zero"
-              greaterVar   "$dbfAfterDecay"
-               srcVar1     "$dbfAfterDecay"
-                 srcVar2     "$zero"
-               resultVar     "$dbfAfterDecayClamp"
-         }
+    LessOrEqual    // Prevents the $dbfAfterDecay to be under 0 to avoid visual glitches
+    {
+      LessEqualVar $zero
+      greaterVar   $dbfAfterDecay
+      srcVar1      $dbfAfterDecay
+      srcVar2      $zero
+      resultVar    $dbfAfterDecayClamp
+    }
 
 // ========================================================================================================================
 //  Injection for $detailblendfactor
 // ========================================================================================================================
 
-  LessOrEqual    // As long as either the burn or vomit effect are active, we will update the $detailblendfactor
-        {
-                LessEqualVar   "$detailblendfactor"
-              greaterVar   "$dbfAfterDecayClamp"
-               srcVar1     "$burnOrBile"
-                 srcVar2     "$zero"
-               resultVar     "$detailblendfactor"    /// THIS IS THE [FINAL INJECTION] OF $DETAILBLENDFACTOR
-         }
+    LessOrEqual    // As long as either the burn or vomit effect are active, we will update the $detailblendfactor
+    {
+      LessEqualVar $detailblendfactor
+      greaterVar   $dbfAfterDecayClamp
+      srcVar1      $burnOrBile
+      srcVar2      $zero
+      resultVar    $detailblendfactor    /// THIS IS THE [FINAL INJECTION] OF $DETAILBLENDFACTOR
+    }
 
 // #######################################################################################################
 // BLOCK 7 : INJECTOR FOR $FRAME and $DETAILFRAME - This block injects $frametodisplay found at BLOCK 4 after a series of checks
@@ -1156,14 +1332,14 @@ Proxies  // Do not delete this line
 
         // If the survivor is down ($isdown > 0), we actually do not take the value of $frametodisplay as a starting point but the user defined $frameIfDown
         // This allows the use of a special frame (or a frame to appear) when the survivor is down. It therefore needs to override the result of BLOCK 4
-  LessOrEqual    // This does not check yet if the survivor is down. It just gets the correct value to work with
-  {
-    LessEqualVar   "$frametodisplay"
-    greaterVar   "$frameIfDown"
-    srcVar1    "$isdown"
-    srcVar2    "$zero"
-    resultVar    "$frameIsEntity"  // This is the result and is used as a base (transition variable) for the checks
-  }          // Note that this check applies both to $frame and $detailframe as only the next check dissociates them
+    LessOrEqual    // This does not check yet if the survivor is down. It just gets the correct value to work with
+    {
+      LessEqualVar $frametodisplay
+      greaterVar   $frameIfDown
+      srcVar1      $isdown
+      srcVar2      $zero
+      resultVar    $frameIsEntity  // This is the result and is used as a base (transition variable) for the checks
+    }          // Note that this check applies both to $frame and $detailframe as only the next check dissociates them
 
 
 
@@ -1180,23 +1356,23 @@ Proxies  // Do not delete this line
         // If the survivor is not an entity, it abandons the value of $frameIsEntity and therefore, $frame will stay the same
         // To know if the object is an entity, it uses the random number generated in BLOCK 3, because only entities can
         // generate random numbers. Therefore, if $rand = 0, it means it's not an entity because it cannot draw random
-  LessOrEqual
-  {
-    LessEqualVar   "$frame"
-    greaterVar   "$frameIsEntity"
-    srcVar1    "$rand"
-    srcVar2    "$zero"
-    resultVar    "$frametoinjectTemp"  // This is the result and is used as a transition variable for the next checks
-  }
+    LessOrEqual
+    {
+      LessEqualVar $frame
+      greaterVar   $frameIsEntity
+      srcVar1      $rand
+      srcVar2      $zero
+      resultVar    $frametoinjectTemp  // This is the result and is used as a transition variable for the next checks
+    }
 
-  LessOrEqual    // Ditto for $detailframe
-  {
-    LessEqualVar   "$detailframe"
-    greaterVar   "$frameIsEntity"
-    srcVar1    "$rand"
-    srcVar2    "$zero"
-    resultVar    "$detailframetoinjectTemp"  // This is the result and is used as a transition variable for the next checks
-  }
+    LessOrEqual    // Ditto for $detailframe
+    {
+      LessEqualVar $detailframe
+      greaterVar   $frameIsEntity
+      srcVar1      $rand
+      srcVar2      $zero
+      resultVar    $detailframetoinjectTemp  // This is the result and is used as a transition variable for the next checks
+    }
 
   // N.b. This block is useful to force the $frame to stay the same after the survivor straight up dies. The "corpse" of the survivor is not an entity
   // and if this block did not exist, the corpse would always use the $rand value 0, therefore causing problems when it comes to RNG.
@@ -1205,23 +1381,23 @@ Proxies  // Do not delete this line
 // Check 2 (Is the survivor down ?)
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  LessOrEqual    // If the survivor is down, it abandons the value (yet $frametoinjectTemp) and takes $frame instead
-  {
-    LessEqualVar   "$frametoinjectTemp"
-    greaterVar   "$frameIfDown"
-    srcVar1    "$isdown"
-    srcVar2    "$zero"
-    resultVar    "$frametoinject"   // This is then sent a little bit down the code just before block 8
-  }
+    LessOrEqual    // If the survivor is down, it abandons the value (yet $frametoinjectTemp) and takes $frame instead
+    {
+      LessEqualVar $frametoinjectTemp
+      greaterVar   $frameIfDown
+      srcVar1      $isdown
+      srcVar2      $zero
+      resultVar    $frametoinject   // This is then sent a little bit down the code just before block 8
+    }
 
-  LessOrEqual
-  {
-    LessEqualVar   "$detailframetoinjectTemp"
-    greaterVar   "$frameIfDown"
-    srcVar1    "$isdown"
-    srcVar2    "$zero"
-    resultVar    "$detailframetoinject"
-  }
+    LessOrEqual
+    {
+      LessEqualVar $detailframetoinjectTemp
+      greaterVar   $frameIfDown
+      srcVar1      $isdown
+      srcVar2      $zero
+      resultVar    $detailframetoinject
+    }
 
   // N.b. This block is useful to prevent problems caused by the fact that if the survivor is down and near death, its HP will actually go
   // from 100 to 0 when he's down. If this didn't exist, the survivor would magically "heal" when he's down with only 1/4 of its life
@@ -1233,46 +1409,46 @@ Proxies  // Do not delete this line
 
         // The $detailframe is injected a first time if $useBaseTextureInstead (user defined) is equal to 0 if it is equal to 1  it means that the
         // $basetexture is used for the blood, and therefore, the $detail is now for the vomit/fire, and we don't want to inject yet if it's the case
-  LessOrEqual
-  {
-    LessEqualVar   "$detailframetoinject"
-    greaterVar   "$detailframe"
-    srcVar1    "$useBaseTextureInstead"
-    srcVar2    "$zero"
-    resultVar    "$detailframe"  // FIRST INJECTION OF $DETAILFRAME HERE
-  }
+    LessOrEqual
+    {
+      LessEqualVar $detailframetoinject
+      greaterVar   $detailframe
+      srcVar1      $useBaseTextureInstead
+      srcVar2      $zero
+      resultVar    $detailframe  // FIRST INJECTION OF $DETAILFRAME HERE
+    }
 
-  LessOrEqual    // This gets the correct bile frame to inject. If $forceMaxSoot (force max burn effect) is set to 2, the frame is frame 3 that has both fire+vomit
-        {
-                LessEqualVar   "$bileFrame"
-              greaterVar   "$bothFrame"
-               srcVar1     "$forceMaxSoot"
-                 srcVar2     "$onn"
-               resultVar     "$bileFrameSelected"
-         }
+    LessOrEqual    // This gets the correct bile frame to inject. If $forceMaxSoot (force max burn effect) is set to 2, the frame is frame 3 that has both fire+vomit
+    {
+      LessEqualVar $bileFrame
+      greaterVar   $bothFrame
+      srcVar1      $forceMaxSoot
+      srcVar2      $onn
+      resultVar    $bileFrameSelected
+    }
 
-  LessOrEqual    // This injects the boomer bile frame if boomer frame has max priority
-        {
-                LessEqualVar   "$zero"    // [For future upgrades] : This is where a custom decaying scroch damage frame thing could be injected
-              greaterVar   "$bileFrameSelected"
-               srcVar1     "$boomerMaxPriority"
-                 srcVar2     "$zero"
-               resultVar     "$detailframe"  // SECOND (FINAL) INJECTION OF $DETAILFRAME HERE
-         }
+    LessOrEqual    // This injects the boomer bile frame if boomer frame has max priority
+    {
+      LessEqualVar $zero    // [For future upgrades] : This is where a custom decaying scroch damage frame thing could be injected
+      greaterVar   $bileFrameSelected
+      srcVar1      $boomerMaxPriority
+      srcVar2      $zero
+      resultVar    $detailframe  // SECOND (FINAL) INJECTION OF $DETAILFRAME HERE
+    }
 
 // ========================================================================================================================
 // This block does all the needed checks to see if we need to commit the injection of a frame ($frameIsEntity at this point) or if we need not to
 // ========================================================================================================================
 
         // If $useBaseTextureInstead (user defined) is above 1, we need to inject the frame because the blood as $basetexture is
-  LessOrEqual    // is use. If it's 0, the $basetexture has no reason to change besides RNG
-  {
-    LessEqualVar   "$frame"
-    greaterVar   "$frametoinject"
-    srcVar1    "$useBaseTextureInstead"
-    srcVar2    "$zero"
-    resultVar    "$frame"    // FINAL INJECTION OF $FRAME HERE BEFORE RNG AT BLOCK 9
-  }
+    LessOrEqual    // is use. If it's 0, the $basetexture has no reason to change besides RNG
+    {
+      LessEqualVar $frame
+      greaterVar   $frametoinject
+      srcVar1      $useBaseTextureInstead
+      srcVar2      $zero
+      resultVar    $frame    // FINAL INJECTION OF $FRAME HERE BEFORE RNG AT BLOCK 9
+    }
 
 // #######################################################################################################
 // BLOCK 10 : GALLERY
@@ -1280,20 +1456,19 @@ Proxies  // Do not delete this line
 
     LessOrEqual    // Maximal priority and override for the debug feature that shows all the different levels of blood
     {
-      LessEqualVar   "$detailframe"
-      greaterVar   "$showcaseRampTemp"
-      srcVar1     "$scrollShowcase"
-      srcVar2     "$zero"
-      resultVar     "$detailframe"  // GALLERY DEBUG FEATURE INJECTION
+      LessEqualVar $detailframe
+      greaterVar   $showcaseRampTemp
+      srcVar1      $scrollShowcase
+      srcVar2      $zero
+      resultVar    $detailframe  // GALLERY DEBUG FEATURE INJECTION
     }
-
 
 // #######################################################################################################
 // Debiddo's BBQLevel injection to toast fresnel by amount of Burn recycle some vars
 // #######################################################################################################
 
     Multiply {
-      srcVar1 $burnRaw
+      srcVar1 $burnRaw // we use again the $burnRaw to get
       srcVar2 $BBQMod
       resultVar $BBQ
     }
@@ -1319,22 +1494,34 @@ Proxies  // Do not delete this line
 // Debiddo's Pupil injection to dynamic tune HDR
 // #######################################################################################################
     Pupil {
-      TextureVar $basetexture
-      TextureFrameNumVar $frame
-      PupilCloseRate 1.1
-      PupilOpenRate 1.1
+      TextureVar $basetexture       // try get luminance from lightwarp
+      TextureFrameNumVar $dummy     // as the name says just store this number for no reason
+      PupilCloseRate $PupilOpenRate
+      PupilOpenRate $PupilCloseRate
+    }
+    Multiply {
+      srcVar1 $Half
+      srcVar2 $Lighting
+      resultVar $LightingHalf
     }
     Subtract {
       srcVar1 $LightingBoost
-      srcVar2 $lighting
+      srcVar2 $LightingHalf
       resultVar $clr
     }
+    // We don't need Clamp, EmissiveBlend is our "clamp", this is a safier method if $EmissiveBlendEnabled "0"
     Clamp {
       min $MinLighting
       max $MaxLighting
       srcVar1 $clr
       resultVar $clr
     }
+    //WarpMinMax { // Note: WarpMinMax don't exist in L4D2
+    //  minVal $MinLighting
+    //  maxVal $MaxLighting
+    //  srcVar1 $clr
+    //  resultVar $clr
+    //}
     // Transfer the cached light from Pupil to $color
     Equals {
       srcVar1 $clr
@@ -1348,5 +1535,64 @@ Proxies  // Do not delete this line
       srcVar1 $clr
       resultVar "$color[2]"
     }
+
+// #######################################################################################################
+// Debiddo's EmissiveBlend injection to dynamic tune HDR
+// #######################################################################################################
+    // Emissive is supposed to take a small, but important role by default
+    Multiply {
+      srcVar1 $Lighting                // Uses Raw value from $Lighting
+      srcVar2 $EmissiveStrength        // Our base Strength for Emissive effect
+      resultVar $EmissiveBlendStrength // Send the modulation to EmissiveBlendStrength
+    }
+
+    // creatre quarter light to modulate EnvMapLight
+    Multiply {
+      srcVar1 $Quarter
+      srcVar2 $LightingHalf
+      resultVar $LightingQuarter
+    }
+    // Normalize 0 .. 1
+    Clamp {
+      min "0"
+      max "1"
+      srcVar1 $LightingQuarter
+      resultVar $LightingQuarter
+    }
+    //WrapMinMax { // Note: WarpMinMax don't exist in L4D2
+    //  minVal $zero
+    //  maxVal $one
+    //  srcVar1 $Lighting
+    //  resultVar $LightingWarped
+    //}
+    // EnvMap here is lying for when required
+    Multiply {
+      srcVar1 $LightingQuarter   // Re uses quarter-lighting
+      srcVar2 $EnvMapReference   // Our base Strength for EnvMap effect
+      resultVar $EnvMapModulator // Send the modulation to $EnvMapModulator
+    }
+    // We need store into a separated resultVar or we may get problems at material stack
+    Subtract {
+      srcVar1 $EnvMapReference
+      srcVar2 $EnvMapModulator
+      resultVar $EnvMapResult
+    }
+    // Apply to $EnvMapTint
+    Equals {
+      srcVar1 $EnvMapResult
+      resultVar "$envmaptint[0]"
+    }
+    Equals {
+      srcVar1 $EnvMapResult
+      resultVar "$envmaptint[1]"
+    }
+    Equals {
+      srcVar1 $EnvMapResult
+      resultVar "$envmaptint[2]"
+    }
+
+// #######################################################################################################
+// End Proxies
+// #######################################################################################################
   }
 }
