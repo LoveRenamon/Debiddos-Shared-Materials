@@ -1,7 +1,7 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 2
+// Version 3.1
 // WIP based on Ellies Heavy DMG system to BBQ + IT + BurnLevel + Health + Pupil proxies as standalone
 // Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
 // Bille Effects and dynamic color modulation based where the entity is looking. 
@@ -188,6 +188,9 @@ VertexLitGeneric
   $envmaptint " [ .4 .4 .4 ] "            // {RGB} or [vector] values to tune EnvMap
   //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values ( not compatible with $BumpMap )
   $EnvMapReference ".4"                   // EnvMap reference used for modulate $envmaptint
+  $EnvMapReference_0 ".4"                 // EnvMap reference used for modulate $envmaptint Red   Channel
+  $EnvMapReference_1 ".4"                 // EnvMap reference used for modulate $envmaptint Green Channel
+  $EnvMapReference_2 ".4"                 // EnvMap reference used for modulate $envmaptint Blue  Channel
 
 
   // just store a simpler variable for pupil light modulation
@@ -299,7 +302,6 @@ VertexLitGeneric
   $LightingQuarter ".0"
   $LightingWarped ".0"
   $EnvMapModulator ".0"
-  $EnvMapResult ".0"
   $clr ".0"
   $dummy ".0"
   $lighting ".5"
@@ -1472,6 +1474,7 @@ VertexLitGeneric
       srcVar2 $BBQMod
       resultVar $BBQ
     }
+
     // this will make fresnel go lower while the survivor is being burned
     // TODO: add back the old Ellie's "wet" system behaviour
     Multiply {
@@ -1493,12 +1496,14 @@ VertexLitGeneric
 // #######################################################################################################
 // Debiddo's Pupil injection to dynamic tune HDR
 // #######################################################################################################
+
     Pupil {
       TextureVar $basetexture       // try get luminance from lightwarp
       TextureFrameNumVar $dummy     // as the name says just store this number for no reason
       PupilCloseRate $PupilOpenRate
       PupilOpenRate $PupilCloseRate
     }
+
     Multiply {
       srcVar1 $Half
       srcVar2 $Lighting
@@ -1509,6 +1514,7 @@ VertexLitGeneric
       srcVar2 $LightingHalf
       resultVar $clr
     }
+
     // We don't need Clamp, EmissiveBlend is our "clamp", this is a safier method if $EmissiveBlendEnabled "0"
     Clamp {
       min $MinLighting
@@ -1522,6 +1528,7 @@ VertexLitGeneric
     //  srcVar1 $clr
     //  resultVar $clr
     //}
+
     // Transfer the cached light from Pupil to $color
     Equals {
       srcVar1 $clr
@@ -1539,6 +1546,7 @@ VertexLitGeneric
 // #######################################################################################################
 // Debiddo's EmissiveBlend injection to dynamic tune HDR
 // #######################################################################################################
+
     // Emissive is supposed to take a small, but important role by default
     Multiply {
       srcVar1 $Lighting                // Uses Raw value from $Lighting
@@ -1552,6 +1560,7 @@ VertexLitGeneric
       srcVar2 $LightingHalf
       resultVar $LightingQuarter
     }
+
     // Normalize 0 .. 1
     Clamp {
       min "0"
@@ -1565,29 +1574,28 @@ VertexLitGeneric
     //  srcVar1 $Lighting
     //  resultVar $LightingWarped
     //}
+
     // EnvMap here is lying for when required
     Multiply {
-      srcVar1 $LightingQuarter   // Re uses quarter-lighting
+      srcVar1 $LightingQuarter   // Re uses half-lighting
       srcVar2 $EnvMapReference   // Our base Strength for EnvMap effect
       resultVar $EnvMapModulator // Send the modulation to $EnvMapModulator
     }
-    // We need store into a separated resultVar or we may get problems at material stack
-    Subtract {
-      srcVar1 $EnvMapReference
-      srcVar2 $EnvMapModulator
-      resultVar $EnvMapResult
-    }
+
     // Apply to $EnvMapTint
-    Equals {
-      srcVar1 $EnvMapResult
+    Subtract {
+      srcVar1 $EnvMapReference_0
+      srcVar2 $EnvMapModulator
       resultVar "$envmaptint[0]"
     }
-    Equals {
-      srcVar1 $EnvMapResult
+    Subtract {
+      srcVar1 $EnvMapReference_1
+      srcVar2 $EnvMapModulator
       resultVar "$envmaptint[1]"
     }
-    Equals {
-      srcVar1 $EnvMapResult
+    Subtract {
+      srcVar1 $EnvMapReference_2
+      srcVar2 $EnvMapModulator
       resultVar "$envmaptint[2]"
     }
 

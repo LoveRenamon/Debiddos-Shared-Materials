@@ -1,7 +1,7 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 3
+// Version 3.1
 // Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
 // Bille Effects and dynamic color modulation based where the entity is looking. 
 // The purpose is avoid overexposure for Anime-like characters
@@ -66,7 +66,8 @@ VertexLitGeneric
   // Tweak diffuse
   //  Only have effect with $HalfLambert "0"
   //////////////////////////////////////////////////////////////////////////////////
-  //$diffuseexp ".2"       // create nice gradients
+  $halflambert "0"
+  $diffuseexp  ""       // create nice gradients
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +79,7 @@ VertexLitGeneric
 
   $phong "1"      // We'll use phong specular render pass
   $forcephong "1" // force phong for potato PCs
+  $phongdisablehalflambert "1" // make phong be lambertian
 
   // engine default white texture to enable phong tint
   $phongexponenttexture "vgui/white"
@@ -96,6 +98,9 @@ VertexLitGeneric
   // Z indirect view (180 radian angle)
   // They're XYZ fresnel values, you can use any float values
   // i.e: $phongfresnelranges " [ X Y Z ] "
+  $PhongFresnelRange_0 ".12" //   0º fresnel value
+  $PhongFresnelRange_1 ".5"  //  45º fresnel value
+  $PhongFresnelRange_2 ".99" // 180º fresnel value
   $phongfresnelranges " [ .12 .5 1 ] "      // my recommended values, don't go out of the Valve's defaults
   //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the workshop
   //$phongfresnelranges " [ .3 .65 1.1 ] "
@@ -144,9 +149,9 @@ VertexLitGeneric
   $EmissiveBlendBaseTexture "vgui/white" // The trick is use te $BaseTexture here
   $EmissiveBlendTexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
   $EmissiveBlendFlowTexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"
-  $EmissiveBlendTint " [ .11 .11 .11 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
-  $EmissiveStrength ".11"                // the strength of $EmissiveBlendTexture ( clamped between 0.000 ~ 1.000 )
-  $EmissiveBlendStrength ".11"           // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
+  $EmissiveBlendTint " [ .44 .44 .44 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
+  $EmissiveStrength ".20"                // the strength of $EmissiveBlendTexture ( clamped between 0.000 ~ 1.000 )
+  $EmissiveBlendStrength ".4"            // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
   $EmissiveBlendScrollVector " [ 0 0 ] " // X Y animation scroll speed
 
 
@@ -163,7 +168,10 @@ VertexLitGeneric
   //$color2 " [ .973 .973 .975 ] "
   
   // we may have a too saturated color which allow use "greywish" color
-  $color2 " [ .89 .89 .89 ] "
+  $color2 " [ .8479 .8479 .8479 ] "
+  
+  // This Parameter will be overwritten by proxies
+  $color " [ .973 .973 .973 ] "
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +180,7 @@ VertexLitGeneric
   $detail "models/survivors/survivor_it"
   $detailscale "2.222"
   $detailblendmode "0"
-  $detailblendfactor ".000"
+  $detailblendfactor ".000" // DEBUG: HLMV ONLY!
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -189,9 +197,12 @@ VertexLitGeneric
   //$envmap "env_cubemap"                 // The Envirovment texture. "env_cubemap" for auto. Change to make static.
   //$envmapcontrast "0"                   // how much is multply by color*color . 0 is the "natural" value ( not compatible with $Phong "1" )
   $envmapfresnel ".8"                     // Multiply Fresnel Envirovment by this value
-  $envmaptint " [ .4 .4 .4 ] "            // {RGB} or [vector] values to tune EnvMap
+  $envmaptint " [ .9 .9 .9 ] "            // {RGB} or [vector] values to tune EnvMap
   //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values ( not compatible with $BumpMap )
-  $EnvMapReference ".4"                   // EnvMap reference used for modulate $envmaptint
+  $EnvMapReference ".99"                  // EnvMap reference used for modulate $envmaptint
+  $EnvMapReference_0 ".4"                 // EnvMap reference used for modulate $envmaptint Red   Channel
+  $EnvMapReference_1 ".4"                 // EnvMap reference used for modulate $envmaptint Green Channel
+  $EnvMapReference_2 ".4"                 // EnvMap reference used for modulate $envmaptint Blue  Channel
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +210,11 @@ VertexLitGeneric
   //////////////////////////////////////////////////////////////////////////////////
   // cache Bile effect
   $ITAmount ".0"
+
+  // cache BBQ for "wetness" based on fresnel
+  $BBQAmount ".0"
+  $BBQMult ".99"
+  $BBQ ".0"
   
   // cache Light
   $Lighting ".5"
@@ -226,8 +242,8 @@ VertexLitGeneric
   $LightingHalf ".0"
   $LightingQuarter ".0"
   $LightingWarped ".0"
+  $MinEmissive ".0"
   $EnvMapModulator ".0"
-  $EnvMapResult ".0"
 
   //////////////////////////////////////////////////////////////////////////////////
   // Proxies
@@ -241,12 +257,14 @@ VertexLitGeneric
       srcVar1   $ITAmount
       resultVar $detailblendfactor
     }
+
     Pupil {
       TextureVar $lightwarptexture  // try get luminance from lightwarp
       TextureFrameNumVar $dummy     // as the name says just store this number for no reason
       PupilCloseRate $PupilOpenRate
       PupilOpenRate $PupilCloseRate
     }
+
     Multiply {
       srcVar1 $Half
       srcVar2 $Lighting
@@ -257,13 +275,15 @@ VertexLitGeneric
       srcVar2 $LightingHalf
       resultVar $clr
     }
-    // We don't need Clamp anymore, EmissiveBlend is our "clamp", this is a safier method if $EmissiveBlendEnabled "0"
+
+    // We don't need Clamp, since EmissiveBlend is our "clamp", this is a safier method if $EmissiveBlendEnabled "0"
     Clamp {
       min $MinLighting
       max $MaxLighting
       srcVar1 $clr
       resultVar $clr
     }
+
     Equals {
       srcVar1 $clr
       resultVar "$color[0]"
@@ -276,12 +296,24 @@ VertexLitGeneric
       srcVar1 $clr
       resultVar "$color[2]"
     }
+
     // Emissive is supposed to take a small, but important role by default
+    Multiply {
+      srcVar1 $EmissiveStrength
+      srcVar2 $EmissiveStrength
+      resultVar $MinEmissive
+    }
     Multiply {
       //srcVar1 $clr
       srcVar1 $Lighting                // Uses Raw value from $Lighting
       srcVar2 $EmissiveStrength        // Our base Strength for Emissive effect
       resultVar $EmissiveBlendStrength // Send the modulation to EmissiveBlendStrength
+    }
+    Clamp {
+      min $MinEmissive
+      max $MaxLighting
+      srcVar1 $EmissiveBlendStrength
+      resultVar $EmissiveBlendStrength
     }
 
     // creatre quarter light to modulate EnvMapLight
@@ -290,6 +322,7 @@ VertexLitGeneric
       srcVar2 $LightingHalf
       resultVar $LightingQuarter
     }
+
     // Normalize 0 .. 1
     Clamp {
       min $zero
@@ -304,30 +337,55 @@ VertexLitGeneric
     //  srcVar1 $Lighting
     //  resultVar $LightingWarped
     //}
+
     // EnvMap here is lying for when required
     Multiply {
       srcVar1 $LightingQuarter   // Re uses half-lighting
       srcVar2 $EnvMapReference   // Our base Strength for EnvMap effect
       resultVar $EnvMapModulator // Send the modulation to $EnvMapModulator
     }
-    // We need store into a separated resultVar or we may get problems at material stack
-    Subtract {
-      srcVar1 $EnvMapReference
-      srcVar2 $EnvMapModulator
-      resultVar $EnvMapResult
-    }
+
     // Apply to $EnvMapTint
-    Equals {
-      srcVar1 $EnvMapResult
+    Subtract {
+      srcVar1 $EnvMapReference_0
+      srcVar2 $EnvMapModulator
       resultVar "$envmaptint[0]"
     }
-    Equals {
-      srcVar1 $EnvMapResult
+    Subtract {
+      srcVar1 $EnvMapReference_1
+      srcVar2 $EnvMapModulator
       resultVar "$envmaptint[1]"
     }
-    Equals {
-      srcVar1 $EnvMapResult
+    Subtract {
+      srcVar1 $EnvMapReference_2
+      srcVar2 $EnvMapModulator
       resultVar "$envmaptint[2]"
+    }
+
+    // Add dynamic BBQ behaviour
+    BBQLevel {
+      resultVar $BBQAmount
+    }
+    Multiply {
+      srcVar1 $BBQAmount
+      srcVar2 $BBQMult
+      resultVar $BBQ
+    }
+
+    Multiply {
+      srcVar1 $PhongFresnelRange_0
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[0]"
+    }
+    Multiply {
+      srcVar1 $PhongFresnelRange_1
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[1]"
+    }
+    Multiply {
+      srcVar1 $PhongFresnelRange_2
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[2]"
     }
   }
 }
