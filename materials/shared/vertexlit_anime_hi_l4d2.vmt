@@ -1,10 +1,10 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 3.1
+// Version 3.2
 // Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
-// Bille Effects and dynamic color modulation based where the entity is looking. 
-// The purpose is avoid overexposure for Anime-like characters
+// Dynamic color modulation based where the entity is looking. 
+// The purpose is avoid overexposure for Anime-like characters and let $detail be used for cool effects over albedo
 //
 // Note: this works only for entities! static props will make the game crash!
 // Note: this is made to be hi quality colors, for "Burn" use vertexlit_anime_burn_l4d2.vmt and for "_IT" (Bile) Effect see vertexlit_anime_l4d2.vmt!
@@ -26,7 +26,7 @@ VertexLitGeneric
 //
 //////
 //
-// "Manual" here: https://github.com/LoveRenamon/Debiddos-Shared-Materials/blob/dev/materials/shared/vertexlit_anime_heavy_l4d2.vmt
+// "Manual" here: https://github.com/LoveRenamon/Debiddos-Shared-Materials/blob/dev/materials/shared/vertexlit_anime_hi_l4d2.vmt
 //////////////////////////////////////////////////////////////////////////////////
 
   $basetexture "vgui/white"
