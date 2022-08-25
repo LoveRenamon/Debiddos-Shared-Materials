@@ -140,7 +140,10 @@ VertexLitGeneric
   //////////////////////////////////////////////////////////////////////////////////
   // Emissive Blend
   //////////////////////////////////////////////////////////////////////////////////
-  $EmissiveBlendEnabled "1"              // It was earlier disabled by default, but for this sample and onwards would be enabled by default
+  "GPU>=2" // necessary to avoid make the model even more expensive for no good reason
+  {
+    $EmissiveBlendEnabled "1"            // It was earlier disabled by default, but for this sample and onwards would be enabled by default
+  }
   $EmissiveBlendBaseTexture "vgui/white" // The trick is use te $BaseTexture here
   $EmissiveBlendTexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
   $EmissiveBlendFlowTexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"

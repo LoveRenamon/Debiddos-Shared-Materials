@@ -19,7 +19,7 @@ VertexLitGeneric
 //  include "materials/shared/vertexlit_anime_l4d2.vmt"
 //  insert {
 //    $BaseTexture "your_albedo_texture_here"
-//    $EmissiveBlendBaseTexture "your_albedo_texture_here_gain"
+//    $emissiveblendbasetexture "your_albedo_texture_here_gain"
 //    // rest of your desired vmt parameters
 //  }
 // }
@@ -144,15 +144,19 @@ VertexLitGeneric
 
   //////////////////////////////////////////////////////////////////////////////////
   // Emissive Blend
+  //   NOTE: Use with caution since it double the amount of tringles being draw
   //////////////////////////////////////////////////////////////////////////////////
-  $EmissiveBlendEnabled "1"              // It was earlier disabled by default, but for this sample and onwards would be enabled by default
-  $EmissiveBlendBaseTexture "vgui/white" // The trick is use te $BaseTexture here
-  $EmissiveBlendTexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
-  $EmissiveBlendFlowTexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"
-  $EmissiveBlendTint " [ .44 .44 .44 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
-  $EmissiveStrength ".20"                // the strength of $EmissiveBlendTexture ( clamped between 0.000 ~ 1.000 )
-  $EmissiveBlendStrength ".4"            // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
-  $EmissiveBlendScrollVector " [ 0 0 ] " // X Y animation scroll speed
+  "GPU>=2" // necessary to avoid make the model even more expensive for no good reason
+  {
+    $emissiveblendenabled "1"            // It was earlier disabled by default, but for this sample and onwards would be enabled by default
+  }
+  $emissiveblendbasetexture "vgui/white" // The trick is use te $BaseTexture here
+  $emissiveblendtexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
+  $emissiveblendflowtexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"
+  $emissiveblendtint " [ .33 .33 .33 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
+  $EmissiveStrength ".11"                // the strength of $emissiveblendtexture ( clamped between 0.000 ~ 1.000 )
+  $emissiveblendstrength ".1"            // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
+  $emissiveblendscrollvector " [ 0 0 ] " // X Y animation scroll speed
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +226,7 @@ VertexLitGeneric
   // addiive boost the character ilumination by this ammount (default: 1)
   $LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
   
-  // clamp light for $color NOT $color2 and avoid make the model complete dark without when $EmissiveBlendEnabled "1"
+  // clamp light for $color NOT $color2 and avoid make the model complete dark without when $emissiveblendenabled "1"
   $MinLighting ".8"
   $MaxLighting ".972"
   
@@ -276,7 +280,7 @@ VertexLitGeneric
       resultVar $clr
     }
 
-    // We don't need Clamp, since EmissiveBlend is our "clamp", this is a safier method if $EmissiveBlendEnabled "0"
+    // We don't need Clamp, since EmissiveBlend is our "clamp", this is a safier method if $emissiveblendenabled "0"
     Clamp {
       min $MinLighting
       max $MaxLighting
@@ -307,13 +311,13 @@ VertexLitGeneric
       //srcVar1 $clr
       srcVar1 $Lighting                // Uses Raw value from $Lighting
       srcVar2 $EmissiveStrength        // Our base Strength for Emissive effect
-      resultVar $EmissiveBlendStrength // Send the modulation to EmissiveBlendStrength
+      resultVar $emissiveblendstrength // Send the modulation to EmissiveBlendStrength
     }
     Clamp {
       min $MinEmissive
       max $MaxLighting
-      srcVar1 $EmissiveBlendStrength
-      resultVar $EmissiveBlendStrength
+      srcVar1 $emissiveblendstrength
+      resultVar $emissiveblendstrength
     }
 
     // creatre quarter light to modulate EnvMapLight
