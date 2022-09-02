@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////////
-// Rockman X DiVE preset
-// $basetexture RGBA channels sendo Alpha para modular $color2 ou $selfillum ou $color2
-// $phongexponenttexture RGBA sendo Alpha para modular o $rimlightmask 1
-// $bumpmap RGBA sendo Alpha para modular $phong 1 e $envmapmask
-// $detail RGB para efeitos em HDR
-// Efeitos de "glow" são feitos individualmente ou por outro .vmt
-//
-// By: Davi (Debiddo) Gooz
-//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
+  //////////////////////////////////////////////////////////////////////////////////
+  // Rockman X DiVE preset
+  // $basetexture RGBA channels sendo Alpha para modular $color2 ou $selfillum ou $color2
+  // $phongexponenttexture RGBA sendo Alpha para modular o $rimlightmask 1
+  // $bumpmap RGBA sendo Alpha para modular $phong 1 e $envmapmask
+  // $detail RGB para efeitos em HDR
+  // Efeitos de "glow" são feitos individualmente ou por outro .vmt
+  //
+  // By: Davi (Debiddo) Gooz
+  //////////////////////////////////////////////////////////////////////////////////
+
   //////////////////////////////////////////////////////////////////////////////////
   // Main parameters
   //////////////////////////////////////////////////////////////////////////////////
@@ -21,12 +22,12 @@
   $translucent "0" // the true gradient
   $additive    "0" // like $translucent render pass but ignore light
   //$alphatestreference "0.01" // threshold to when $alphatest is usable. Alpha transparency clip point (Almost incompatible with everything)
-  $allowalphatocoverage "1" // allow $alphatest be "anti-aliased" based on client's AA settings
+  $allowalphatocoverage "1"    // allow $alphatest be "anti-aliased" based on client's AA settings
 
-  $basealphaenvmapmask "0" //  use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
-  $normalmapalphaenvmapmask "0" // use $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
+  $basealphaenvmapmask "0"       //  use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
+  $normalmapalphaenvmapmask "0"  // use $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
   $basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask
-  $basemapalphaphongmask "0" // use $basetexture alpha channel as phong mask
+  $basemapalphaphongmask "0"     // use $basetexture alpha channel as phong mask
 
   $halflambert "0"             // halflambert NPR shading
   $phongdisablehalflambert "1" // force disable halflambert, use with $halflambert 0
@@ -44,11 +45,11 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Main textures
   //////////////////////////////////////////////////////////////////////////////////
-  $basetexture "shared/generic_base" // Diffuse or Albedo texture, alpha by default do nothing
-  $bumpmap "dev/flat_normal" // Bump/Normal map and by default Alpha Channel is phong mask
+  $basetexture "vgui/white"                   // Diffuse or Albedo texture, alpha by default do nothing
+  $bumpmap "dev/flat_normal"                  // Bump/Normal map and by default Alpha Channel is phong mask
   $phongexponenttexture "shared/generic_base" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for $rimlightmask 1
   //$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
-  $lightwarptexture "shared/lightwarp_toon" // act like an diffuse color ramp
+  $lightwarptexture "shared/lightwarp_toon"   // act like an diffuse color ramp
 
   //////////////////////////////////////////////////////////////////////////////////
   // Color Modulator
@@ -62,16 +63,16 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Phong specullarity
   //////////////////////////////////////////////////////////////////////////////////
-  $phong "1" // enable phong, set zero to disable all phong and rimlight at same time
-  $invertphongmask "0" // invert the phong mask for $bumpmap alpha, can potentially broke the envmapmask since it share the same buffer
-  $forcephong "1" // force phong enabled even on lowend cards
-  $phongboost "1.85" // multiply phong by this value
-  $phongalbedotint "1" // use the $basetexture's RGB as tint value per textel
+  $phong "1"                   // enable phong, set zero to disable all phong and rimlight at same time
+  $invertphongmask "0"         // invert the phong mask for $bumpmap alpha, can potentially broke the envmapmask since it share the same buffer
+  $forcephong "1"              // force phong enabled even on lowend cards
+  $phongboost "1.85"           // multiply phong by this value
+  $phongalbedotint "1"         // use the $basetexture's RGB as tint value per textel
   //$phongtint " { 0 0 255 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
-  $phongalbedoboost "1" // for SFM, multiply the $phongexponenttexture Green channel by this value
-  //$phongexponent "4" // for override the default $phongexponenttexture's Red Channel
-  //$phongexponent2 "5" // for CS:GO compatibles, used in specific light sources
-  $phongexponentfactor "1" // multiply the $phongexponenttexture red channel by this value
+  $phongalbedoboost "1"        // for SFM, multiply the $phongexponenttexture Green channel by this value
+  //$phongexponent "4"         // for override the default $phongexponenttexture's Red Channel
+  //$phongexponent2 "5"        // for CS:GO compatibles, used in specific light sources
+  $phongexponentfactor "1"     // multiply the $phongexponenttexture red channel by this value
   $phongfresnelranges " [ .0 .625 1.197 ] " // XYZ fresnel values, you can use any float values
 
 
@@ -96,11 +97,10 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Emissive (Same as VortWarp Shader)
   //////////////////////////////////////////////////////////////////////////////////
-  $BaseTexture "dev/null"   // base texture here is a dummy texture, your model texture
   $EmissiveBlendEnabled "0"                  // Boolean On/Off
-  $EmissiveBlendTexture "shared/glow_line"   // our effect in a flat 2D texture
-  $EmissiveBlendBaseTexture "dev/null"       // a BW image pattern (where should be emissive) (I8 format reccomended)
-  $EmissiveBlendFlowTexture "dev/null"       // a RGB image vector
+  $EmissiveBlendTexture "shared/glow_line"   // a BW image pattern (where should be emissive) (I8 format reccomended)
+  $EmissiveBlendBaseTexture "vgui/white"     // our effect in a flat 2D texture
+  $EmissiveBlendFlowTexture "vgui/white"     // a RGB image vector
   $EmissiveBlendTint " [ 1 1 1 ] "           // boost the color instensity by RGB vector tint (works equal as $EnvMapTint)
   $EmissiveBlendStrength ".8"                // how much the effect is in place (Min:0 | Max: 1)
   $EmissiveBlendScrollVector " [ 0 .0337 ] " // to animate, X and Y values to set the speed in units per second

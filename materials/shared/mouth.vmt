@@ -1,3 +1,5 @@
+"VertexlitGeneric"
+{
 //////////////////////////////////////////////////////////////////////////////////
 // Mouth
 //  a generic toon-like mouth material for models that doesn't have a mouth by default
@@ -5,8 +7,7 @@
 //
 // By: Davi (Debiddo) Gooz
 //////////////////////////////////////////////////////////////////////////////////
-	"VertexlitGeneric"
-{
+
 	$model "1"                 // the character is a model
 	$nodecal "0"               // allow decals on at inner mouth
 	$nocull "0"                // allow the model to cull
@@ -26,7 +27,7 @@
 	$lightwarptexture "shared/lightwarp_toon" // 1D ramp for NPR
 
 	//////////////////////////////////////////////////////////////////////////////////
-	// Ensue there is nothing at this parameters
+	// Ensure there is nothing at this parameters
 	//////////////////////////////////////////////////////////////////////////////////
 	$bumpmap ""
 	$phongexponenttexture ""

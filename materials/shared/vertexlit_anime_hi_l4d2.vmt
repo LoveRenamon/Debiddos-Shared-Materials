@@ -184,7 +184,7 @@ VertexLitGeneric
   //$detail ""
   $detailscale "1"
   $detailblendmode "0"
-  $detailblendfactor ".80" // DEBUG: HLMV ONLY!
+  $detailblendfactor ".0" // DEBUG: HLMV ONLY!
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -224,10 +224,10 @@ VertexLitGeneric
   $Lighting ".5"
   
   // addiive boost the character ilumination by this ammount (default: 1)
-  $LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
+  $LightingBoost ".96" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
   
   // clamp light for $color NOT $color2 and avoid make the model complete dark without when $emissiveblendenabled "1"
-  $MinLighting ".8"
+  $MinLighting ".88"
   $MaxLighting ".972"
   
   // just store a simpler variable for pupil light modulation
@@ -270,11 +270,6 @@ VertexLitGeneric
       srcVar1 $LightingBoost
       srcVar2 $LightingHalf
       resultVar $clr
-    }
-
-    Equals {
-      srcVar1 $clr
-      resultVar $detailblendfactor
     }
 
     // We don't need Clamp, since emissiveblend is our "clamp", this is a safier method if $emissiveblendenabled "0"
@@ -322,6 +317,12 @@ VertexLitGeneric
       srcVar1 $Quarter
       srcVar2 $LightingHalf
       resultVar $LightingQuarter
+    }
+
+    Equals {
+      srcVar1 $LightingQuarter
+      srcVar2 $Half
+      resultVar $detailblendfactor
     }
 
     // Normalize 0 .. 1

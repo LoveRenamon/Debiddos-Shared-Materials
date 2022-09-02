@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////////////////
-// A ideia de materiais como esse são de flexibilizar e fácil edição entre multiplas texturas, use-a como "patch"
-// To be used with Proxy Color Tool from NotAKidOnSteam "https://steamcommunity.com/workshop/filedetails/?id=2063690158"
-//
-// By: Davi (Debiddo) Gooz
-//////////////////////////////////////////////////////////////////////////////////
 "VertexLitGeneric"
 {
+	//////////////////////////////////////////////////////////////////////////////////
+	// A ideia de materiais como esse são de flexibilizar e fácil edição entre multiplas texturas, use-a como "patch"
+	// To be used with Proxy Color Tool from NotAKidOnSteam "https://steamcommunity.com/workshop/filedetails/?id=2063690158"
+	//
+	// By: Davi (Debiddo) Gooz
+	//////////////////////////////////////////////////////////////////////////////////
+
 	$model "1" // this texture is made for models, and not menu
 	$nodecal "0" // allow decals by default
 	$nocull "0" // render just the face frontside, set one to also render the "inside" of the mesh

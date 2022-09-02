@@ -1,10 +1,11 @@
+"EyeRefract"
+{
 //////////////////////////////////////////////////////////////////////////////////
 // This will dynamically scale pupil with lighting that a entity see.
 //
 // By: Davi (Debiddo) Gooz
 //////////////////////////////////////////////////////////////////////////////////
-"EyeRefract"
-{
+
   //////////////////////////////////////////////////////////////////////////////////
   // Useful parameters to be changed
   //////////////////////////////////////////////////////////////////////////////////
@@ -24,10 +25,10 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Not really necessary change, unless you're using some custom Cornea Texture
   //////////////////////////////////////////////////////////////////////////////////
-  $Dilation ".5"     // The pupil size (Min: 0.2 | Max: 0.8)
-  $Glossiness ".8"   // the base intensity for $EnvMap (same as set any $EnvMapTint grey color)
-  $MinGlossiness ".4" // Minimum allowed intensity for $EnvMap
-  $MaxGlossiness "1"  // Maximum allowed intensity for $EnvMap
+  $Dilation      ".5"  // The pupil size (Min: 0.2 | Max: 0.8)
+  $Glossiness    ".8"  // the base intensity for $EnvMap (same as set any $EnvMapTint grey color)
+  $MinGlossiness ".4"  // Minimum allowed intensity for $EnvMap
+  $MaxGlossiness ".8"  // Maximum allowed intensity for $EnvMap
 
   $ParallaxStrength ".25"  // is a a displacement at $CorneaTexture Blue Channel
   $CorneaBumpStrength "1"  // This is the "BumpMap" / "NormalMap" intensity
@@ -38,6 +39,12 @@
   $HalfLambert "1"
   $EyeOrigin " [ 0 0 0 ] "
   $NoDecal "1"
+
+  $MinDilation ".2"
+  $MaxDilation ".8"
+
+  $PupilOpenRate ".34" // how fast Pupil dilates
+  $PupilCloseRate ".1" // how fast Pupil contract
 
   //////////////////////////////////////////////////////////////////////////////////
   // Fail safe parameters
@@ -52,6 +59,7 @@
   $IrisV " [ 0 0 1 0 ] "
 
   $lighting ".5"
+  $light    ".5"
 
   $taylor "1.0"
   $const1 "2.2"
@@ -72,32 +80,31 @@
   $quad2 ".0"
 
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // Proxies, I'll not explain nothing. It's same as logic code
-    //////////////////////////////////////////////////////////////////////////////////
-    Proxies {
+  //////////////////////////////////////////////////////////////////////////////////
+  // Proxies, I'll not explain nothing. It's just math
+  //////////////////////////////////////////////////////////////////////////////////
+  Proxies {
 
     Pupil {
       TextureVar $Iris
       TextureFrameNumVar $Irisframe
-      PupilCloseRate ".1"
-      PupilOpenRate ".1"
+      PupilCloseRate $PupilCloseRate
+      PupilOpenRate $PupilOpenRate
     }
 
 
-    // Transfer the catched light to Pupil size
     Equals {
       srcVar1 $lighting
       resultVar $Dilation
     }
 
-    // Clamp to more size control
     Clamp {
-      min .01
-      max .99
+      min $MinDilation
+      max $MaxDilation
       srcVar1 $Dilation
       resultVar $Dilation
     }
+
 
     //    Start Gamma Correction (2.2) //
 
@@ -106,8 +113,13 @@
     // 3.6(0.5x)^2 - 0.01, 0.2357 < x < 0.4
     // 0.5(1.2x)^2, 0 < x < 0.2357
 
-    Subtract {
+    Equals {
       srcVar1 $lighting
+      resultVar $light
+    }
+
+    Subtract {
+      srcVar1 $light
       srcVar2 $taylor
       resultVar $expConst
     }
@@ -181,7 +193,7 @@
 
 
     Multiply {
-      srcVar1 $lighting
+      srcVar1 $light
       srcVar2 $co1
       resultVar $temp
     }
@@ -198,7 +210,7 @@
 
 
     Multiply {
-      srcVar1 $lighting
+      srcVar1 $light
       srcVar2 $five
       resultVar $temp
     }
@@ -222,27 +234,27 @@
     LessOrEqual {
       LessEqualVar $quad1
       greaterVar $quad2
-      srcVar1 $lighting
+      srcVar1 $light
       srcVar2 $co2
       resultVar $temp
     }
     LessOrEqual {
       LessEqualVar $temp
       greaterVar $taylor
-      srcVar1 $lighting
+      srcVar1 $light
       srcVar2 $four
       resultVar $temp
     }
     Equals {
       srcVar1 $temp
-      resultVar $lighting
+      resultVar $light
     }
 
     //    End Gamma Correction    //
 
     // Garry's Mod only works as is
     Equals {
-      srcVar1 $lighting
+      srcVar1 $temp
       resultVar $Glossiness
     }
     Clamp {

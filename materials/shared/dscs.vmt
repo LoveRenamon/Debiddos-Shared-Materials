@@ -1,10 +1,11 @@
+"VertexLitGeneric"
+{
 //////////////////////////////////////////////////////////////////////////////////
 // Digimon Story: CyberSleuth | LinkZ | ReArise | New Century
 //
 // By: Davi (Debiddo) Gooz
 //////////////////////////////////////////////////////////////////////////////////
-"VertexLitGeneric"
-{
+
   $model       "1"     // this texture is made for models, and not menu
   $nodecal     "0"     // allow decals by default
   $nocull      "0"     // render just the face frontside, set one to also render the "inside" of the mesh
@@ -83,6 +84,23 @@
   $selfIllumFresnel "1"                          // enable/disable fresnel effect
   $selfillumtint " [ 1 1 1 ] "                   // RGB vectors for light intensity
   $selfIllumFresnelMinMaxExp " [ .337 1.8 1 ] "  // Mininum, Maximum and Exponent Values for fresnel
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Textures
+  //  the basic of Emissive Blend Texture
+  //
+  // all other parameters are complements to archive some effect
+  // they decend from VortWarp shader that is included on VertexLitGeneric
+  // everything here can be driven by Proxies and archive even more effects
+  //////////////////////////////////////////////////////////////////////////////////
+  $EmissiveBlendEnabled "0"                  // Boolean On/Off
+  $EmissiveBlendTexture "shared/glow_line"   // a BW image pattern (where should be emissive) (I8 format reccomended)
+  $EmissiveBlendBaseTexture "vgui/white"     // our effect in a flat 2D texture
+  $EmissiveBlendFlowTexture "vgui/white"     // a RGB image vector
+  $EmissiveBlendTint " [ 1 1 1 ] "           // boost the color instensity by RGB vector tint (works equal as $EnvMapTint)
+  $EmissiveBlendStrength ".8"                // how much the effect is in place (Min:0 | Max: 1)
+  $EmissiveBlendScrollVector " [ 0 .0337 ] " // to animate, X and Y values to set the speed in units per second
 
 
   //////////////////////////////////////////////////////////////////////////////////
