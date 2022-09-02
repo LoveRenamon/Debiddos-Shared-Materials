@@ -10,7 +10,7 @@ DebiddoNAME       = {}
 DebiddoCATEGORY   = {}
 DebiddoID         = {}
 DebiddoWORKSHOPID = {}
-DebiddoWORKSHOPID = {}
+DebiddoVM         = {}
 DebiddoPREFIX     = "models/debiddo/"
 
 --[[
@@ -20,7 +20,7 @@ CreateConVar( "sv_debiddo_npc_base_health", "100", FCVAR_GAMEDLL, "Changes the b
 local sv_debiddo_npc_base_health = GetConVar( "sv_debiddo_npc_base_health" )
 
 --[[
-		To add Player Models under "models/debiddo" that have a specific file names to each one
+		To add Player Models under "models/debiddo" that have a specific file names to each one, you can override it with local variable
 --]]
 function DebiddoPM( NAME, ID )
 	list.Set( "PlayerOptionsModel", NAME, DebiddoPREFIX..ID.."/pm.mdl" )

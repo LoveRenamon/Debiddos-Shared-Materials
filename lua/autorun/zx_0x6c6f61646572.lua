@@ -4,9 +4,6 @@
 --	print(n, f)
 --end
 
--- Clear table for sake of our memory alocation
---DebiddoID = nil
-
 --[[ FIXME: isso permitirá adicionar qualquer coisa que seja proveniente do meu workflow
 for n, f in ipairs( DebiddoID ) do
 	if SERVER then resource.AddWorkshop(DebiddoWORKSHOPID[n])
@@ -54,7 +51,7 @@ for n, f in ipairs( DebiddoID ) do
 end
 --]]
 
--- Clean Tables
+-- Clean Tables for sake of our memory alocation
 DebiddoNAME       = nil
 DebiddoCATEGORY   = nil
 DebiddoID         = nil
