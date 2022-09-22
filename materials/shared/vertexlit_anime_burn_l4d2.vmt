@@ -1,7 +1,7 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 3.2
+// Version 3.2.1
 // Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
 // Burn Effects and dynamic color modulation based where the entity is looking. 
 // The purpose is avoid overexposure for Anime-like characters
@@ -37,10 +37,11 @@ VertexLitGeneric
   // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
   $basemapluminancephongmask "1"
 
-  // Here the magick of a lightwarp that have some amount of red and make some fake skin scattering
+  // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering
   $lightwarptexture "shared/lightwarp_honkai3rd_l4d2"
   // Or this one which is the most common lightwarp used for anime characters over workshop
   //$lightwarptexture "shared/lightwarp_anime"
+  // many more lightwarps at: https://github.com/LoveRenamon/Debiddos-Shared-Materials/tree/dev/materials/shared
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -50,12 +51,13 @@ VertexLitGeneric
   $nocull "1"
 
   // allow decals for damage effects by bullets, If you'r model is expensive and unoptimized, you will need to set "1"
+  // NOTE: FOR ALL SOURCE ENGINE x86 BRANCHES: MODELS WITH >= 32768 VERTICES DO NEED THIS BE "1", NO EXCEPTIONS!
   $nodecal "0"
 
 
   //////////////////////////////////////////////////////////////////////////////////
   // Enable / Disable tilling
-  //  It will expose your made shitty UVMap
+  //  It will expose your shitty made UVMap
   //////////////////////////////////////////////////////////////////////////////////
   $ClampS "1" // Clamp S/X texture coordinates by default
   $ClampT "1" // Clamp T/Y texture coordinates by default
@@ -66,14 +68,16 @@ VertexLitGeneric
   // Tweak diffuse
   //  Only have effect with $HalfLambert "0"
   //////////////////////////////////////////////////////////////////////////////////
-  //$diffuseexp ".2"       // create nice gradients
+  //$diffuseexp  ".2"     // create nice diffuse gradients by warp the entire lambertian radiosity, 
+  //$halflambert "0"      // When true, warp radiosity to be at {{ 0.5 .. 1 }} range.
+  //NOTE: $diffuseexp Empty value have a different effect than "0" and without the declared parameter.
 
 
   //////////////////////////////////////////////////////////////////////////////////
   // Phong
-  //  Phong is a old specular method it's good use just a small amount for a dry skin
-  //  it computes by a exponent that is driven by a additive $phongboot and exponencial $phongexponent
-  //  the fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
+  //  Phong is an old specular method. Small amounts are good for a dry skin or opaque micro surface
+  //  it computes by a exponent driven by a additive $phongboot and exponencial $phongexponent
+  //  Fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
   //////////////////////////////////////////////////////////////////////////////////
 
   $phong "1"      // We'll use phong specular render pass
@@ -90,24 +94,26 @@ VertexLitGeneric
 
   $phongalbedotint "1" // use the $BaseTexture's RGB as tint value per textel
 
-  // Phong Fresnel Ranges are like "intencity modulators" as:
+  // Phong Fresnel Ranges are like "intensity modulator" as:
   // X direct view   (  0 radian angle)
   // Y indirect view ( 45 radian angle)
   // Z indirect view (180 radian angle)
   // They're XYZ fresnel values, you can use any float values
   // i.e: $phongfresnelranges " [ X Y Z ] "
-  $phongfresnelranges " [ .12 .5 1 ] "      // my recommended values, don't go out of the Valve's defaults
-  //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the workshop
-  //$phongfresnelranges " [ .3 .65 1.1 ] "
+  // NOTE: bellow Phong Fresnel Ranges take effect only at HLMV since will be overriden by BBQ Proxie
+  //$phongfresnelranges " [ .3 .65 1.1 ] "  // my recommended values
+  $phongfresnelranges " [ .12 .5 1 ] "      // my recommended values warped at Valve's default range
+  //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the steam workshop
 
   // Phong Exponent
   // for override the default $phongexponenttexture's Red Channel (255 for this sample file)
-  // Exponent means how hard the surface is, 0 means smoother and 255 means a irrealistic hard surface
-  // rasionable values are between 0 and 127
+  // you can unset with: $phongexponent ""
+  // Exponent means how hard the surface is and higher values make phong gradient be sharper; 0 means smoother and 255 means a irrealistic hard surface
+  // rasionable values are {{ 0 .. 127 }}
   $phongexponent "1"    // my recommended safe value, good for general HalfLambertian skin/surface
-  //$phongexponent "7"  // starts to go more sharper phong gradients, this is kinda better for leather, and harder micro surface
-  //$phongexponent "14" // you mand wanna use this one for things that are pseudo metalic or use a $bumpmap to spread the entire phong
-  //$phongexponent "40" // for metalic surfaces or have a $bumpmap which need this values
+  //$phongexponent "7"  // starts to go more sharper phong gradients, "kinda" better for leather, and harder micro surface
+  //$phongexponent "14" // you may wanna use this one for pseudo metalic or when $bumpmap will spread the entire phong
+  //$phongexponent "40" // for metalic surfaces or $bumpmap which have aberrant bumps
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -194,10 +200,10 @@ VertexLitGeneric
   $envmapfresnel ".8"                     // Multiply Fresnel Envirovment by this value
   $envmaptint " [ .4 .4 .4 ] "            // {RGB} or [vector] values to tune EnvMap
   //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values ( not compatible with $BumpMap )
-  $EnvMapReference ".4"                   // EnvMap reference used for modulate $envmaptint
-  $EnvMapReference_0 ".4"                 // EnvMap reference used for modulate $envmaptint Red   Channel
-  $EnvMapReference_1 ".4"                 // EnvMap reference used for modulate $envmaptint Green Channel
-  $EnvMapReference_2 ".4"                 // EnvMap reference used for modulate $envmaptint Blue  Channel
+  $EnvMapReference ".4"                   // EnvMap reference used to $envmaptint
+  $EnvMapReference_0 ".4"                 // EnvMap reference used to $envmaptint Red   Channel
+  $EnvMapReference_1 ".4"                 // EnvMap reference used to $envmaptint Green Channel
+  $EnvMapReference_2 ".4"                 // EnvMap reference used to $envmaptint Blue  Channel
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +224,8 @@ VertexLitGeneric
   // addiive boost the character ilumination by this ammount (default: 1)
   $LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
 
-  // clamp light for $color NOT $color2 and avoid make the model complete dark without when $EmissiveBlendEnabled "1"
+  // clamp light for $color NOT $color2 and avoid make the model complete dark when $EmissiveBlendEnabled "0"
+  // TODO: write a dynamic warp and solve the clamp waste amount
   $MinLighting ".8"
   $MaxLighting ".972"
 
@@ -357,6 +364,32 @@ VertexLitGeneric
       srcVar1 $EnvMapReference_2
       srcVar2 $EnvMapModulator
       resultVar "$envmaptint[2]"
+    }
+
+    // Add dynamic BBQ behaviour
+    BBQLevel {
+      resultVar $BBQAmount
+    }
+    Multiply {
+      srcVar1 $BBQAmount
+      srcVar2 $BBQMult
+      resultVar $BBQ
+    }
+
+    Multiply {
+      srcVar1 $PhongFresnelRange_0
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[0]"
+    }
+    Multiply {
+      srcVar1 $PhongFresnelRange_1
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[1]"
+    }
+    Multiply {
+      srcVar1 $PhongFresnelRange_2
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[2]"
     }
   }
 }

@@ -1,7 +1,7 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 3.2
+// Version 3.2.1
 // WIP based on Ellies Heavy DMG system to BBQ + IT + BurnLevel + Health + Pupil proxies as standalone
 // Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
 // Burn + Bille Effects and dynamic color modulation based where the entity is looking. 
@@ -38,10 +38,11 @@ VertexLitGeneric
   // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
   $basemapluminancephongmask "1"
 
-  // Here the magick of a lightwarp that have some amount of red and make some fake skin scattering
+  // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering
   $lightwarptexture "shared/lightwarp_honkai3rd_l4d2"
   // Or this one which is the most common lightwarp used for anime characters over workshop
   //$lightwarptexture "shared/lightwarp_anime"
+  // many more lightwarps at: https://github.com/LoveRenamon/Debiddos-Shared-Materials/tree/dev/materials/shared
 
   
 //////////////////////////////////////////////////////////////////////////////////
@@ -52,12 +53,13 @@ VertexLitGeneric
   $nocull "1"
 
   // allow decals for damage effects by bullets, If you'r model is expensive and unoptimized, you will need to set "1"
+  // NOTE: FOR ALL SOURCE ENGINE x86 BRANCHES: MODELS WITH >= 32768 VERTICES DO NEED THIS BE "1", NO EXCEPTIONS!
   $nodecal "0"
 
 
 //////////////////////////////////////////////////////////////////////////////////
 // Enable / Disable tilling
-//  It will expose your made shitty UVMap
+//  It will expose your shitty made UVMap
 //////////////////////////////////////////////////////////////////////////////////
 
   $ClampS "1" // Clamp S/X texture coordinates by default
@@ -69,19 +71,21 @@ VertexLitGeneric
 // Tweak diffuse
 //  Only have effect with $HalfLambert "0"
 //////////////////////////////////////////////////////////////////////////////////
-
-  //$diffuseexp ".2"       // create nice gradients
+  //$halflambert "0"      // When true, warp radiosity to be at {{ 0.5 .. 1 }} range.
+  //$diffuseexp  ".2"     // create nice diffuse gradients by warp the entire lambertian radiosity, 
+  //NOTE: $diffuseexp Empty value have a different effect than "0" and without the declared parameter.
 
 
 //////////////////////////////////////////////////////////////////////////////////
 // Phong
-//  Phong is a old specular method it's good use just a small amount for a dry skin
-//  it computes by a exponent that is driven by a additive $phongboot and exponencial $phongexponent
-//  the fresnel is same as the every fresnel, that can be boosted by $PhongFresnelRanges
+//  Phong is an old specular method. Small amounts are good for a dry skin or opaque micro surface
+//  it computes by a exponent driven by a additive $phongboot and exponencial $phongexponent
+//  Fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
 //////////////////////////////////////////////////////////////////////////////////
 
   $phong "1"      // We'll use phong specular render pass
   $forcephong "1" // force phong for potato PCs
+  $phongdisablehalflambert "0" // if true, make phong be lambertian
 
   // engine default white texture to enable phong tint
   $phongexponenttexture "vgui/white"
@@ -98,25 +102,36 @@ VertexLitGeneric
   // X direct view   (  0 radian angle)
   // Y indirect view ( 45 radian angle)
   // Z indirect view (180 radian angle)
-  // They're XYZ fresnel values, you can use any float values
+  // Them're XYZ fresnel vectors, you can use any float values
   // i.e: $PhongFresnelRanges " [ X Y Z ] "
   $PhongFresnelRange_0 ".12"
   $PhongFresnelRange_1 ".5"
   $PhongFresnelRange_2 "1"
-  $PhongFresnelRanges " [ .12 .5 1 ] "      // my recommended values, don't go out of the Valve's defaults
-  //$PhongFresnelRanges " [ 1 .1 .1 ] "     // the most used values over the workshop
-  //$PhongFresnelRanges " [ .3 .65 1.1 ] "
+  // NOTE: bellow Phong Fresnel Ranges take effect only at HLMV since will be overriden by BBQ Proxie
+  //$phongfresnelranges " [ .3 .65 1.1 ] "  // my recommended values
+  $phongfresnelranges " [ .12 .5 1 ] "      // my recommended values warped at Valve's default range
+  //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the steam workshop
   //$PhongFresnelRanges " [ .002 .05 7 ] "
   
   // Phong Exponent
   // for override the default $phongexponenttexture's Red Channel (255 for this sample file)
-  // Exponent means how hard the surface is, 0 means smoother and 255 means a irrealistic hard surface
-  // rasionable values are between 0 and 127
+  // you can unset with: $phongexponent ""
+  // Exponent means how hard the surface is and higher values make phong gradient be sharper; 0 means smoother and 255 means a irrealistic hard surface
+  // rasionable values are {{ 0 .. 127 }}
   $PhongExponent "1"    // my recommended safe value, good for general HalfLambertian skin/surface
-  //$phongexponent "7"  // starts to go more sharper phong gradients, this is kinda better for leather, and harder micro surface
-  //$phongexponent "14" // you mand wanna use this one for things that are pseudo metalic or use a $bumpmap to spread the entire phong
-  //$phongexponent "40" // for metalic surfaces or have a $bumpmap which need this values
+  //$phongexponent "7"  // starts to go more sharper phong gradients, "kinda" better for leather, and harder micro surface
+  //$phongexponent "14" // you may wanna use this one for pseudo metalic or when $bumpmap will spread the entire phong
+  //$phongexponent "40" // for metalic surfaces or $bumpmap which have aberrant bumps
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// Tweak Phong
+//   WARNING: IT BREAK THE WHOLE EFFECT
+//////////////////////////////////////////////////////////////////////////////////
   
+  $shinyblood "0"           // Set as False as failsafe parameter
+  //$shinybloodexponent "8"
+
 
 //////////////////////////////////////////////////////////////////////////////////
 // Alpha
@@ -126,9 +141,9 @@ VertexLitGeneric
   $alphatest "0"
   
   // Translucent SHOULD NOT be used along $alphatest
-  $translucent "0" // set "1" to enable gradient transparency, This will potentialy make a Z-Fighting if don't know when to use it
+  $translucent "0" // set "1" to enable gradient transparency, This will potentialy make a Z-Fighting if you don't know when and how to use it
 
-  // for $alphatest be antialiased, allow "gradient" steps based on MSAA Amount
+  // for $alphatest be antialiased, allow different "opaque" steps based on MSAA Amount
   $allowalphatocoverage "1"
 
   // YOU SHOULD NEVER USE THIS SHIT, DONT BE SO LAZY TO DISABLE THE COVERAGE EFFECT!!
@@ -167,6 +182,9 @@ VertexLitGeneric
   
   // we may have a too saturated color which allow use "greywish" color
   $color2 " [ .89 .89 .89 ] "
+
+  // This Parameter will be overwritten by proxies, used just for HLMV reference
+  $color " [ .973 .973 .973 ] "
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1345,7 +1363,6 @@ VertexLitGeneric
       srcVar2      $zero
       resultVar    $frameIsEntity  // This is the result and is used as a base (transition variable) for the checks
     }          // Note that this check applies both to $frame and $detailframe as only the next check dissociates them
-
 
 
 // ========================================================================================================================

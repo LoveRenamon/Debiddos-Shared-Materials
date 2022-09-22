@@ -1,12 +1,13 @@
+"VertexLitGeneric"
+{
 //////////////////////////////////////////////////////////////////////////////////
 // Generic preset for Anime characters
 //   By edit this file affect most of my Anime-like characters
 // A ideia de materiais como esse são de flexibilizar e fácil edição entre multiplas texturas, use-a como "patch"
 //
 // By: Davi (Debiddo) Gooz
+// Steam: https://steamcommunity.com/id/Debiddo
 //////////////////////////////////////////////////////////////////////////////////
-"VertexLitGeneric"
-{
   $model       "1" // this texture is made for models, and not menu
   $nodecal     "0" // allow decals by default
   $nocull      "0" // render just the face frontside, set one to also render the "inside" of the mesh
@@ -15,7 +16,7 @@
   $translucent "0" // the true gradient
   $additive    "0" // like $translucent but ignore light
 
-  $allowalphatocoverage "0"    // Control AntiAliasing for alphatest
+  $allowalphatocoverage "1"    // Control AntiAliasing for alphatest
   //$alphatestreference ".01"  // threshold to when $alphatest is usable. Almost incompatible with everything
 
   $basealphaenvmapmask       "0" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
@@ -48,7 +49,7 @@
   // all other parameters are for optimizations and use a single material
   // and a trade-off of optimizations by use more memory
   //////////////////////////////////////////////////////////////////////////////////
-  $basetexture "shared/generic_base"                        // Diffuse or Albedo texture
+  $basetexture "vgui/white"                                 // Diffuse or Albedo texture
   $bumpmap "shared/generic_normalmap"                       // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
   $phongexponenttexture "shared/generic_phong"              // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for "$rimlightmask 1"
   //$phongwarptexture "models/ministrider/mini_iridescence" // is like an phong color ramp
@@ -71,19 +72,19 @@
 
   //////////////////////////////////////////////////////////////////////////////////
   // Phong
-  //  Phong is a old specular method it's good use just a small amount for a dry skin
-  //  it computes by a exponent that is driven by a additive $phongboot and exponencial $phongexponent
-  //  the fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
+  //  Phong is an old specular method. Small amounts are good for a dry skin or opaque micro surface
+  //  it computes by a exponent driven by a additive $phongboot and exponencial $phongexponent
+  //  Fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
   //////////////////////////////////////////////////////////////////////////////////
-  $phong "1" // enable phong, set zero to disable all phong and rimlight at same time
-  $forcephong "1" // force phong enabled even on lowend cards
-  $phongboost ".8" // multiply phong by this value
-  $phongalbedotint "1" // use the $basetexture's RGB as tint value per textel
-  //$phongtint " { 83 85 122 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
-  $phongalbedoboost "1.08" // for SFM, multiply the tint channel by this value
-  //$phongexponent "4" // for override the default $phongexponenttexture's Red Channel
-  //$phongexponent2 "5" // for CS:GO compatibles, used in specific light sources
-  $phongexponentfactor ".8" // multiply the $phongexponenttexture red channel by this value
+  $phong "1"                             // enable phong, set zero to disable all phong and rimlight at same time
+  $forcephong "1"                        // force phong enabled even on lowend cards
+  $phongboost ".8"                       // multiply phong by this value
+  $phongalbedotint "1"                   // use the $basetexture's RGB as tint value per textel
+  //$phongtint " { 83 85 122 } "         // uncomment if you need a solid phong color and $phongalbedotint is 0
+  $phongalbedoboost "1.08"               // for SFM, multiply the tint channel by this value
+  //$phongexponent "4"                   // for override the default $phongexponenttexture's Red Channel
+  //$phongexponent2 "5"                  // for CS:GO compatibles, used in specific light sources
+  $phongexponentfactor ".8"              // multiply the $phongexponenttexture red channel by this value
   $phongfresnelranges " [ .0001 .4 1 ] " // XYZ fresnel values, you can use any float values
 
 
@@ -115,12 +116,9 @@
   //  Mental Notes:
   //    Use with caution
   //   Source2013: If you use on one model's vmt, all other materials of the same mdl file should use,
-  // or your model will become brighter than expected at $body and $model qc parameters.
-  //
-  // Mental Notes:
-  // if you use on one model's vmt, all other materials of the same mdl file should use, or your model will become brighter than expected at $body and $model qc parameters.
+  // or your model will become brighter than expected at $body and $model qc parameters. While $bodygroup will keep working as expected
   //////////////////////////////////////////////////////////////////////////////////
-  //$detail "dev/flat_null" // here the magic, we boost the $basetexture with $detail
+  //$detail "vgui/black"    // here the magic, we boost the $basetexture with $detail
   $detailscale       "1"    // do not scale and use the original size
   $detailblendmode   "0"    // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
   $detailblendfactor ".4"   // multiply the $detail by this value. like: how much the effect is in use.

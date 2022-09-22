@@ -1,7 +1,7 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 3.2
+// Version 3.2.1
 // Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
 // Dynamic color modulation based where the entity is looking. 
 // The purpose is avoid overexposure for Anime-like characters and let $detail be used for cool effects over albedo
@@ -37,10 +37,11 @@ VertexLitGeneric
   // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
   $basemapluminancephongmask "1"
 
-  // Here the magick of a lightwarp that have some amount of red and make some fake skin scattering
+  // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering
   $lightwarptexture "shared/lightwarp_honkai3rd_l4d2"
   // Or this one which is the most common lightwarp used for anime characters over workshop
   //$lightwarptexture "shared/lightwarp_anime"
+  // many more lightwarps at: https://github.com/LoveRenamon/Debiddos-Shared-Materials/tree/dev/materials/shared
 
   
   //////////////////////////////////////////////////////////////////////////////////
@@ -50,12 +51,13 @@ VertexLitGeneric
   $nocull "1"
 
   // allow decals for damage effects by bullets, If you'r model is expensive and unoptimized, you will need to set "1"
+  // NOTE: FOR ALL SOURCE ENGINE x86 BRANCHES: MODELS WITH >= 32768 VERTICES DO NEED THIS BE "1", NO EXCEPTIONS!
   $nodecal "0"
 
 
   //////////////////////////////////////////////////////////////////////////////////
   // Enable / Disable tilling
-  //  It will expose your made shitty UVMap
+  //  It will expose your shitty made UVMap
   //////////////////////////////////////////////////////////////////////////////////
   $ClampS "1" // Clamp S/X texture coordinates by default
   $ClampT "1" // Clamp T/Y texture coordinates by default
@@ -66,15 +68,16 @@ VertexLitGeneric
   // Tweak diffuse
   //  Only have effect with $HalfLambert "0"
   //////////////////////////////////////////////////////////////////////////////////
-  $halflambert "0"
-  $diffuseexp  ""       // create nice gradients
+  $halflambert "0"      // When true, warp radiosity to be at {{ 0.5 .. 1 }} range.
+  $diffuseexp  ""       // create nice diffuse gradients by warp the entire lambertian radiosity, 
+  //NOTE: $diffuseexp Empty value have a different effect than "0" and without the declared parameter.
 
 
   //////////////////////////////////////////////////////////////////////////////////
   // Phong
-  //  Phong is a old specular method it's good use just a small amount for a dry skin
-  //  it computes by a exponent that is driven by a additive $phongboot and exponencial $phongexponent
-  //  the fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
+  //  Phong is an old specular method. Small amounts are good for a dry skin or opaque micro surface
+  //  it computes by a exponent driven by a additive $phongboot and exponencial $phongexponent
+  //  Fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
   //////////////////////////////////////////////////////////////////////////////////
   
   $phong "1"      // We'll use phong specular render pass
@@ -92,27 +95,29 @@ VertexLitGeneric
   
   $phongalbedotint "1" // use the $BaseTexture's RGB as tint value per textel
 
-  // Phong Fresnel Ranges are like "intencity modulators" as:
+  // Phong Fresnel Ranges are like "intensity modulator" as:
   // X direct view   (  0 radian angle)
   // Y indirect view ( 45 radian angle)
   // Z indirect view (180 radian angle)
-  // They're XYZ fresnel values, you can use any float values
+  // Them're XYZ fresnel vectors, you can use any float values
   // i.e: $phongfresnelranges " [ X Y Z ] "
   $PhongFresnelRange_0 ".12" //   0º fresnel value
   $PhongFresnelRange_1 ".5"  //  45º fresnel value
   $PhongFresnelRange_2 ".99" // 180º fresnel value
-  //$phongfresnelranges " [ .12 .5 1 ] "      // my recommended values, don't go out of the Valve's defaults
-  //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the workshop
-  $phongfresnelranges " [ .3 .65 1.1 ] "
+  // NOTE: bellow Phong Fresnel Ranges take effect only at HLMV since will be overriden by BBQ Proxie
+  $phongfresnelranges " [ .3 .65 1.1 ] "    // my recommended values
+  //$phongfresnelranges " [ .12 .5 1 ] "    // my recommended values warped at Valve's default range
+  //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the steam workshop
   
   // Phong Exponent
   // for override the default $phongexponenttexture's Red Channel (255 for this sample file)
-  // Exponent means how hard the surface is, 0 means smoother and 255 means a irrealistic hard surface
-  // rasionable values are between 0 and 127
+  // you can unset with: $phongexponent ""
+  // Exponent means how hard the surface is and higher values make phong gradient be sharper; 0 means smoother and 255 means a irrealistic hard surface
+  // rasionable values are {{ 0 .. 127 }}
   $phongexponent "1"    // my recommended safe value, good for general HalfLambertian skin/surface
-  //$phongexponent "7"  // starts to go more sharper phong gradients, this is kinda better for leather, and harder micro surface
-  //$phongexponent "14" // you mand wanna use this one for things that are pseudo metalic or use a $bumpmap to spread the entire phong
-  //$phongexponent "40" // for metalic surfaces or have a $bumpmap which need this values
+  //$phongexponent "7"  // starts to go more sharper phong gradients, "kinda" better for leather, and harder micro surface
+  //$phongexponent "14" // you may wanna use this one for pseudo metalic or when $bumpmap will spread the entire phong
+  //$phongexponent "40" // for metalic surfaces or $bumpmap which have aberrant bumps
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -131,11 +136,11 @@ VertexLitGeneric
 
   // set "1" to enable binary transparency
   $alphatest "0"
-  
-  // Translucent SHOULD NOT be used along $alphatest
-  $translucent "0" // set "1" to enable gradient transparency, This will potentialy make a Z-Fighting if don't know when to use it
 
-  // for $alphatest be antialiased, allow "gradient" steps based on MSAA Amount
+  // Translucent SHOULD NOT be used along $alphatest
+  $translucent "0" // set "1" to enable gradient transparency, This will potentialy make a Z-Fighting if you don't know when and how to use it
+
+  // for $alphatest be antialiased, allow different "opaque" steps based on MSAA Amount
   $allowalphatocoverage "1"
 
   // YOU SHOULD NEVER USE THIS SHIT, DONT BE SO LAZY TO DISABLE THE COVERAGE EFFECT!!
@@ -173,8 +178,8 @@ VertexLitGeneric
   
   // we may have a too saturated color which allow use "greywish" color
   $color2 " [ .8479 .8479 .8479 ] "
-  
-  // This Parameter will be overwritten by proxies
+
+  // This Parameter will be overwritten by proxies, used just for HLMV reference
   $color " [ .973 .973 .973 ] "
 
 
@@ -224,14 +229,16 @@ VertexLitGeneric
   $Lighting ".5"
   
   // addiive boost the character ilumination by this ammount (default: 1)
-  $LightingBoost ".96" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
+  $LightingBoost ".96"
+  //$LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
   
-  // clamp light for $color NOT $color2 and avoid make the model complete dark without when $emissiveblendenabled "1"
+  // clamp light for $color NOT $color2 and avoid make the model complete dark when $emissiveblendenabled "0"
+  // TODO: write a dynamic warp and solve the clamp waste amount
   $MinLighting ".88"
   $MaxLighting ".972"
   
   // just store a simpler variable for pupil light modulation
-  // it behave like a ramp smooth for dark/light ambients
+  // it behave like a ramp smoother for dark/light ambients
   // appear that .073 is our Open/Brighter magic number and 0.4 our Close/Darkener magic number
   $PupilOpenRate  ".073" // referece values: 1.1 (fast) || .3 (slower)
   $PupilCloseRate ".4"   // referece values: 1.1 (fast) || .3 (slower)
