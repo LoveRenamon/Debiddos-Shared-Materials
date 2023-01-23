@@ -1,19 +1,21 @@
 "VertexLitGeneric"
 {
 //////////////////////////////////////////////////////////////////////////////////
+// Version 1.10.1
 // Honkai Impact 3rd preset by Debiddo
-// $basetexture RGBA channels sendo Alpha para modular $color2
-// $phongexponenttexture RGBA sendo Alpha para modular o $rimlightmask 1
-// there no need for $bumpmap (avoid use)
-// $detail RGB para efeitos em HDR e efeitos de "glow"
+// $basetexture RGBA channels with Alpha as $color2 modulator
+// $phongexponenttexture RGBA with Alpha as $rimlightmask 1 modulator
+// there no need for $bumpmap (avoid use) unless for $EnvMap
+// $detail RGB for HDR tonemap
+// $emissiveblendenabled for glow effects
 //////////////////////////////////////////////////////////////////////////////////
 
   $model       "1"     // this texture is made for models, and not menu
   $nodecal     "0"     // allow decals by default
-  $nocull      "0"     // render just the frontside, set zero to also render the "inside" of the mesh
+  $nocull      "0"     // render just the frontside, set one to also render the "inside" of the mesh
   $surfaceprop "flesh" // control the decal and sound on hit; Buggy in gmod since 2018
 
-  $additive "0"                // like $translucent but ignore light
+  $additive "0"                // much like $translucent but ignore light
   $translucent "0"             // the true gradient
   $alphatest "0"               // set on/off $basetexture Alpha channel as transparency
   $allowalphatocoverage "1"    // Control AntiAliasing for alphatest
@@ -21,13 +23,13 @@
 
   $basealphaenvmapmask         "0" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
   $normalmapalphaenvmapmask    "0" // use $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
-  $basemapluminancephongmask   "1" // use luminance of the $basetexture as phong mask (l4d and l4d2 only)
+  $basemapluminancephongmask   "1" // use luminance of the $basetexture as phong mask (4all after l4d, except gmod)
   $basemapalphaphongmask       "0" // $basetexture Alpha channel as phong mask
 
   // $color and $color2 toggle
   $allowdiffusemodulation      "1" // allow $color / $color2 tint
 
-  $blendtintbybasealpha        "0" // use $basetexture Alpha channel as $color2 mask
+  $blendtintbybasealpha        "0" // 1 = use $basetexture Alpha channel as $color2 mask
   $blendtintcoloroverbase      "0" // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
 
   $ambientocclusion        "0" // does see to do nothing
@@ -108,8 +110,9 @@
   $envmapfresnel "1"                      // Multiply Fresnel Envirovment by this value
   //$envmaplightscale "1"                 // determine how much is tinted by an light source and Cubemap
   $noenvmapmip "1"                        // disable MipMap for Cubemaps
-  $envmaptint " [ 1 1 1 ] "               // {RGB} or [vector] values to tune EnvMap
+  $envmaptint " [ 1 1 1 ] "             // {RGB} or [vector] values to tune EnvMap
   //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values (not compatible with $bumpmap)
+  $EnvMapReference ".99"                  // EnvMap reference used for modulate $envmaptint
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -124,4 +127,134 @@
   $detailscale       "1"             // do not scale, and use the original size
   $detailblendmode   "5"             // set "0" to use as decal (finetune hdr) || "5" to use as "$selfillum".
   $detailblendfactor "1"             // multiply the $detail by this value. like: how much the effect is in use.
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Emissive Blend
+  //   NOTE: Use with caution since it double the amount of tringles being draw
+  //////////////////////////////////////////////////////////////////////////////////
+  //"GPU>=2" // necessary to avoid make the model even more expensive for no good reason
+  //{
+  //  $emissiveblendenabled "1"          // Since this is a game breaking change. It is disabled by default
+  //}
+  $emissiveblendbasetexture "vgui/white" // The trick is use te $BaseTexture here
+  $emissiveblendtexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
+  $emissiveblendflowtexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"
+  $emissiveblendtint " [ .33 .33 .33 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
+  $EmissiveStrength ".11"                // the strength of $emissiveblendtexture ( clamped between 0.000 ~ 1.000 )
+  $emissiveblendstrength ".1"            // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
+  $emissiveblendscrollvector " [ 0 0 ] " // X Y animation scroll speed
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Proxie Parameters
+  //////////////////////////////////////////////////////////////////////////////////
+  // cache Light
+  $Lighting ".5"
+  
+  // addiive boost the character ilumination by this ammount (default: 1)
+  $LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
+  
+  // clamp light for $color NOT $color2 and avoid make the model complete dark without when $emissiveblendenabled "1"
+  // TODO: write a dynamic warp and solve the clamp waste amount
+  $MinLighting ".8"
+  $MaxLighting ".972"
+  
+  // just store a simpler variable for pupil light modulation
+  // it behave like a ramp smoother for dark/light ambients
+  // appear that .073 is our Open/Brighter magic number and 0.4 our Close/Darkener magic number
+  $PupilOpenRate  ".073" // referece values: 1.1 (fast) || .3 (slower)
+  $PupilCloseRate ".4"   // referece values: 1.1 (fast) || .3 (slower)
+
+  // Store some dummy color variables, Don't touch it
+  $zero ".0"
+  $one "1.0"
+  $clr ".0"
+  $dummy ".0"
+  $Half ".5"
+  $Quarter ".25"
+  $LightingHalf ".0"
+  $LightingQuarter ".0"
+  $LightingWarped ".0"
+  $MinEmissive ".0"
+
+
+  //////////////////////////////////////////////////////////////////////////////////
+  // Proxies
+  //    Proxies are like code the VMT to have dynamic behaviours
+  //////////////////////////////////////////////////////////////////////////////////
+  Proxies {
+    Pupil {
+      TextureVar $basetexture       // try get luminance from lightwarp
+      TextureFrameNumVar $dummy     // as the name says just store this number for no reason
+      PupilCloseRate $PupilOpenRate
+      PupilOpenRate $PupilCloseRate
+    }
+
+    Multiply {
+      srcVar1 $Half
+      srcVar2 $Lighting
+      resultVar $LightingHalf
+    }
+    Subtract {
+      srcVar1 $LightingBoost
+      srcVar2 $LightingHalf
+      resultVar $clr
+    }
+
+    // We don't need Clamp, since EmissiveBlend is our "clamp", this is a safier method if $emissiveblendenabled "0"
+    Clamp {
+      min $MinLighting
+      max $MaxLighting
+      srcVar1 $clr
+      resultVar $color2
+    }
+
+    // Emissive is supposed to take a small, but important role by default
+    Multiply {
+      srcVar1 $EmissiveStrength
+      srcVar2 $EmissiveStrength
+      resultVar $MinEmissive
+    }
+    Multiply {
+      srcVar1 $Lighting                // Uses Raw value from $Lighting
+      srcVar2 $EmissiveStrength        // Our base Strength for Emissive effect
+      resultVar $emissiveblendstrength // Send the modulation to EmissiveBlendStrength
+    }
+    Clamp {
+      min $MinEmissive
+      max $MaxLighting
+      srcVar1 $emissiveblendstrength
+      resultVar $emissiveblendstrength
+    }
+
+    // creatre quarter light to modulate EnvMapLight
+    Multiply {
+      srcVar1 $Quarter
+      srcVar2 $LightingHalf
+      resultVar $LightingQuarter
+    }
+
+    // Normalize 0 .. 1
+    //Clamp {
+    //  min $zero
+    //  max $one
+    //  srcVar1 $LightingQuarter
+    //  resultVar $LightingQuarter
+    //}
+    // Note: WarpMinMax don't exist in L4D2
+    WrapMinMax {
+      minVal $zero
+      maxVal $one
+      srcVar1 $Lighting
+      resultVar $LightingWarped
+    }
+
+    // EnvMap here is lying for when required
+    Multiply {
+      srcVar1 $LightingQuarter   // Re uses half-lighting
+      srcVar2 $EnvMapReference   // Our base Strength for EnvMap effect
+      resultVar $envmaptint      // Send the modulation to $envmaptint
+    }
+  }
 }

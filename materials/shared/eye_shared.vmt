@@ -10,7 +10,7 @@
   // Useful parameters to be changed
   //////////////////////////////////////////////////////////////////////////////////
   $Iris "shared/eyes/type1_blue"
-  $CorneaTexture "Engine/eye-cornea"              // it a linear multi purpose texture: Red and Blue drives X and Y normal | Blue drive the displacement (AKA>: Parallax) | Alpha drives the light intensity
+  $CorneaTexture "Engine/eye-cornea"              // its a linear multi purpose texture: Red and Blue drives X and Y normal | Blue drive the displacement (AKA.: Parallax) | Alpha drives the light intensity
   $lightwarptexture "shared/lightwarp_dod_snow"   // act like a color ramp, good for NPR
   $EnvMap "Engine/eye-reflection-cubemap-"        // the specullar texture, for a dynamic one, use "env_cubemap"
 
