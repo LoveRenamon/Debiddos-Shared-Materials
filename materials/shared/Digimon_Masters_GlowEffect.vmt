@@ -35,10 +35,10 @@
    // everything here can be driven by Proxies and archive even more effects
    //////////////////////////////////////////////////////////////////////////////////
    $EmissiveBlendEnabled "1"                  // Boolean On/Off
-   $EmissiveBlendTexture "shared/glow_line"   // a BW image pattern (where should be emissive) (I8 format reccomended)
-   $EmissiveBlendBaseTexture "vgui/white"     // our effect in a flat 2D texture
-   $EmissiveBlendFlowTexture "vgui/white"     // a RGB image vector
-   $EmissiveBlendTint " [ 1 1 1 ] "           // boost the color instensity by RGB vector tint (works equal as $EnvMapTint)
-   $EmissiveBlendStrength ".8"                // how much the effect is in place (Min:0 | Max: 1)
-   $EmissiveBlendScrollVector " [ 0 .0337 ] " // to animate, X and Y values to set the speed in units per second
+   $EmissiveBlendTexture "shared/glow_line"   // a BW image pattern (where should be emissive) (I8 format recommended)
+   $EmissiveBlendBaseTexture "vgui/white"     // our Emissive Texture, it can be a BW I8 texture or a DXT1 (recommended), DXT3, DXT5 RBG texture for our effect in a flat 2D texture
+   $EmissiveBlendFlowTexture "vgui/white"     // a flowmap RGB image vectors, http://graphicsrunner.blogspot.com/2010/08/water-using-flow-maps.html
+   $EmissiveBlendTint " [ 1 1 1 ] "           // boost the color instensity by RGB vector tint (works equal as $EnvMapTint) (support HDR)
+   $EmissiveBlendStrength ".8"                // how much the effect is in place (Min: 0 | Max: 1)
+   $EmissiveBlendScrollVector " [ 0 .0337 ] " // to animate, X (horizontal) and Y (vertical) values to set the speed in units per second
 }
