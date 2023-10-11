@@ -1,13 +1,13 @@
 VertexLitGeneric
 {
 //////////////////////////////////////////////////////////////////////////////////
-// Version 3.2.1
-// Honkai Impact 3rd preset by Debiddo especially for Left 4 Dead 2
+// Version 3.2.7
+// Honkai Impact 3rd preset by Debiddo speacialy for Left 4 Dead 2
 // Dynamic color modulation based where the entity is looking. 
 // The purpose is avoid overexposure for Anime-like characters and let $detail be used for cool effects over albedo
 //
 // Note: this works only for entities! static props will make the game crash!
-// Note: this is made to be hi quality colors, for "Burn" use vertexlit_anime_burn_l4d2.vmt and for "_IT" (Bile) Effect see vertexlit_anime_l4d2.vmt!
+// Note: this is made for archive High fidelity colors, and for "Burn" effect use vertexlit_anime_burn_l4d2.vmt and for "_IT" (Bile) Effect see vertexlit_anime_l4d2.vmt!
 //
 //
 // By: Davi (Debiddo) Gooz 
@@ -33,17 +33,17 @@ VertexLitGeneric
 
   // We don't really need a normal map, use if you wish to...
   //$bumpmap "dev/flat_normal"
-  
-  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
+
+  // in case you have a $bumpmap and you have a Phong Mask or $EnvMap Mask at Alpha Channel remember to disable:
   $basemapluminancephongmask "1"
 
-  // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering
+  // Here the magic of a lightwarp with some amount of red for some faked skin scattering
   $lightwarptexture "shared/lightwarp_honkai3rd_l4d2"
-  // Or this one which is the most common lightwarp used for anime characters over workshop
+  // Or use this one which is the most common lightwarp used by most anime characters over workshop
   //$lightwarptexture "shared/lightwarp_anime"
   // many more lightwarps at: https://github.com/LoveRenamon/Debiddos-Shared-Materials/tree/dev/materials/shared
 
-  
+
   //////////////////////////////////////////////////////////////////////////////////
   // Swtich values
   //////////////////////////////////////////////////////////////////////////////////
@@ -76,13 +76,13 @@ VertexLitGeneric
   //////////////////////////////////////////////////////////////////////////////////
   // Phong
   //  Phong is an old specular method. Small amounts are good for a dry skin or opaque micro surface
-  //  it computes by a exponent driven by a additive $phongboot and exponencial $phongexponent
+  //  it computes exponent driven by a additive $phongboot and exponencial $phongexponent
   //  Fresnel is same as the every fresnel, that can be boosted by $phongfresnelranges
   //////////////////////////////////////////////////////////////////////////////////
-  
+
   $phong "1"      // We'll use phong specular render pass
   $forcephong "1" // force phong for potato PCs
-  $phongdisablehalflambert "1" // make phong be lambertian
+  $phongdisablehalflambert "1" // flag phong as lambertian
 
   // engine default white texture to enable phong tint
   $phongexponenttexture "vgui/white"
@@ -92,28 +92,26 @@ VertexLitGeneric
   //$phongboost ".2"   //  20% effect
   $phongboost ".5"     //  50% effect, seens rasionable if the texture is too bright
   //$phongboost "1"    // 100% effect, seens rasionable if you have a custom mask
-  
+
   $phongalbedotint "1" // use the $BaseTexture's RGB as tint value per textel
 
   // Phong Fresnel Ranges are like "intensity modulator" as:
   // X direct view   (  0 radian angle)
   // Y indirect view ( 45 radian angle)
   // Z indirect view (180 radian angle)
-  // Them're XYZ fresnel vectors, you can use any float values
+  // As XYZ fresnel vectors, you can use any float values
   // i.e: $phongfresnelranges " [ X Y Z ] "
-  $PhongFresnelRange_0 ".12" //   0º fresnel value
-  $PhongFresnelRange_1 ".5"  //  45º fresnel value
-  $PhongFresnelRange_2 ".99" // 180º fresnel value
-  // NOTE: bellow Phong Fresnel Ranges take effect only at HLMV since will be overriden by BBQ Proxie
-  $phongfresnelranges " [ .3 .65 1.1 ] "    // my recommended values
+  // NOTE: bellow Phong Fresnel Ranges take effect only at HLMV since will be later modulated by Proxies
+  $phongfresnelranges " [ .12 .5 .99 ] "    // my recommended values
   //$phongfresnelranges " [ .12 .5 1 ] "    // my recommended values warped at Valve's default range
   //$phongfresnelranges " [ 1 .1 .1 ] "     // the most used values over the steam workshop
-  
+
   // Phong Exponent
   // for override the default $phongexponenttexture's Red Channel (255 for this sample file)
   // you can unset with: $phongexponent ""
   // Exponent means how hard the surface is and higher values make phong gradient be sharper; 0 means smoother and 255 means a irrealistic hard surface
   // rasionable values are {{ 0 .. 127 }}
+  //$phongexponent ""   // NOTE: you can set empty to disable and let $phongexponenttexture Red Channel takes it place.
   $phongexponent "1"    // my recommended safe value, good for general HalfLambertian skin/surface
   //$phongexponent "7"  // starts to go more sharper phong gradients, "kinda" better for leather, and harder micro surface
   //$phongexponent "14" // you may wanna use this one for pseudo metalic or when $bumpmap will spread the entire phong
@@ -126,7 +124,7 @@ VertexLitGeneric
   //////////////////////////////////////////////////////////////////////////////////
   $shinyblood "0"           // Set as False as failsafe parameter
   //$shinybloodexponent "8"
-  
+
 
   //////////////////////////////////////////////////////////////////////////////////
   // Alpha
@@ -144,7 +142,7 @@ VertexLitGeneric
   $allowalphatocoverage "1"
 
   // YOU SHOULD NEVER USE THIS SHIT, DONT BE SO LAZY TO DISABLE THE COVERAGE EFFECT!!
-  //$alphatestreference ".7" // .7 is the default value
+  $alphatestreference "" // .7 is the default value
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -155,31 +153,31 @@ VertexLitGeneric
   {
     $emissiveblendenabled "1"            // It was earlier disabled by default, but for this sample and onwards would be enabled by default
   }
-  $emissiveblendbasetexture "vgui/white" // The trick is use te $BaseTexture here
-  $emissiveblendtexture "vgui/white"     // this modulate how much effect. Note that use $BaseTexture may result into a mismatch into effect strenght but for a few cases archive a really good effect
+  $emissiveblendproxie "1"               // Set 0 to ignore my Proxie setup (bring back original behaviour)
+  $emissiveblendstrength ".1"            // This sets actual strenght for Emissive effect, however, it'll be modulated by $EmissiveStrength at Proxie setups
+  $emissiveblendbasetexture "vgui/white" // The trick is use the $BaseTexture here
+  $emissiveblendtexture "vgui/white"     // how much effect modulation. Note that by use $BaseTexture you may result into a effect strenght mismatch pulse, however, for a most cases archives a really good effect
   $emissiveblendflowtexture "vgui/white" // unless you'll make animated effect leave as "vgui/white"
   $emissiveblendtint " [ .33 .33 .33 ] " // how much of this effect should be tinted over the $BaseTexture " [ .1 .1 .1 ] "
-  $EmissiveStrength ".09"                // the strength of $emissiveblendtexture ( clamped between 0.000 ~ 1.000 )
-  $emissiveblendstrength ".1"            // This is the actual strenght for Emissive effect, however it'll be over writen by $EmissiveStrength value
   $emissiveblendscrollvector " [ 0 0 ] " // X Y animation scroll speed
 
 
   //////////////////////////////////////////////////////////////////////////////////
   // Color Modulation
   //////////////////////////////////////////////////////////////////////////////////
-  // Allow color tint
+  // Prevents the model's material from being tinted by $color2 or rendercolor.
   $allowdiffusemodulation "1"
 
-  // Tint before apply the $BaseTexture
+  // Sets the amount to replace with solid color. A value of '0' will be full tint while a value of '1.00' will replace the albedo in the mask area with the color defined with $color2.
   $blendtintcoloroverbase "0"
 
   // this is a reference color to be applyed along the $color parameter
   //$color2 " [ .973 .973 .975 ] "
-  
-  // we may have a too saturated color which allow use "greywish" color
-  $color2 " [ .8479 .8479 .8479 ] "
 
-  // This Parameter will be overwritten by proxies, used just for HLMV reference
+  // we may have a too saturated color which allow use "greywish" color
+  //$color2 " [ .8479 .8479 .8479 ] "
+
+  // This Parameter will be overwritten by proxies, used just for HLMV reference, incase you want edit, use $MinLighting and $MaxLighting
   $color " [ .973 .973 .973 ] "
 
 
@@ -189,7 +187,7 @@ VertexLitGeneric
   //$detail ""
   $detailscale "1"
   $detailblendmode "0"
-  $detailblendfactor ".0" // DEBUG: HLMV ONLY!
+  $detailblendfactor ".0" // DEBUG: HLMV ONLY! Proxies will modulate it
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -203,16 +201,12 @@ VertexLitGeneric
   // Env Map
   //  Envmap / Reflections, recommended use a mask
   //////////////////////////////////////////////////////////////////////////////////
-  //$envmap "env_cubemap"                 // The Envirovment texture. "env_cubemap" for auto. Change to make static.
+  //$envmap "env_cubemap"                 // The Envirovment texture. "env_cubemap" for auto. Empty disables
   //$envmapcontrast "0"                   // how much is multply by color*color . 0 is the "natural" value ( not compatible with $Phong "1" )
   $envmapfresnel ".8"                     // Multiply Fresnel Envirovment by this value
   $envmaptint " [ .9 .9 .9 ] "            // {RGB} or [vector] values to tune EnvMap
   //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values ( not compatible with $BumpMap )
   $EnvMapReference ".99"                  // EnvMap reference used for modulate $envmaptint
-  $EnvMapReference_0 ".4"                 // EnvMap reference used for modulate $envmaptint Red   Channel
-  $EnvMapReference_1 ".4"                 // EnvMap reference used for modulate $envmaptint Green Channel
-  $EnvMapReference_2 ".4"                 // EnvMap reference used for modulate $envmaptint Blue  Channel
-
 
   //////////////////////////////////////////////////////////////////////////////////
   // Proxie Parameters
@@ -224,137 +218,283 @@ VertexLitGeneric
   $BBQAmount ".0"
   $BBQMult ".99"
   $BBQ ".0"
-  
-  // cache Light
-  $Lighting ".5"
-  
-  // addiive boost the character ilumination by this ammount (default: 1)
-  $LightingBoost ".96"
-  //$LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
-  
-  // clamp light for $color NOT $color2 and avoid make the model complete dark when $emissiveblendenabled "0"
-  // TODO: write a dynamic warp and solve the clamp waste amount
-  $MinLighting ".88"
-  $MaxLighting ".972"
-  
+
+  // additive boost character's ilumination by this ammount (default: 0)
+  $LightingBoost ".0"
+
+  // warp and constraint light for $color and NOT $color2 at this range. Also avoid let model be pitch black when $emissiveblendenabled "0"
+  $MinLighting ".901" // uses magic number
+  $MaxLighting ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
+
   // just store a simpler variable for pupil light modulation
   // it behave like a ramp smoother for dark/light ambients
-  // appear that .073 is our Open/Brighter magic number and 0.4 our Close/Darkener magic number
-  $PupilOpenRate  ".073" // referece values: 1.1 (fast) || .3 (slower)
-  $PupilCloseRate ".4"   // referece values: 1.1 (fast) || .3 (slower)
+  // appear that .073 is our Open/Brighter magic number and .4 our Close/Darkener magic number
+  $PupilOpenRate  "1.1073" // referece values: 1.1 (fast) || .3 (slower)
+  $PupilCloseRate "1.14"   // referece values: 1.1 (fast) || .3 (slower)
 
-  // Store some dummy color variables, Don't touch it
+  // Store some variables handled by Proxies, DO NOT TOUCH IT
+  $false "0"
+  $true "1"
   $zero ".0"
-  $one "1.0"
+  $one "1.0001"
   $clr ".0"
   $dummy ".0"
   $Half ".5"
   $Quarter ".25"
-  $LightingHalf ".0"
-  $LightingQuarter ".0"
+  $lighting ".5"
   $LightingWarped ".0"
   $MinEmissive ".0"
+  $Emissive ".0"
+  $EmissiveStrength ".09" // the strength of $emissiveblendtexture ( clamped between 0.000 ~ 1.000 )
   $EnvMapModulator ".0"
+  $EnvMapReference_0 ".0" // EnvMap reference used by $envmaptint Red   Channel
+  $EnvMapReference_1 ".0" // EnvMap reference used by $envmaptint Green Channel
+  $EnvMapReference_2 ".0" // EnvMap reference used by $envmaptint Blue  Channel
+  $EnvMapTint_0 ".0"      // EnvMap read-only $envmaptint Red   Channel
+  $EnvMapTint_1 ".0"      // EnvMap read-only $envmaptint Green Channel
+  $EnvMapTint_2 ".0"      // EnvMap read-only $envmaptint Blue  Channel
+
+  $color_0 ".0" // Color used at $color Red   Channel
+  $color_1 ".0" // Color used at $color Green Channel
+  $color_2 ".0" // Color used at $color Blue  Channel
+  $colorR ".0"  // Red   Channel color modulated by proxies
+  $colorG ".0"  // Green Channel color modulated by proxies
+  $colorB ".0"  // Blue  Channel color modulated by proxies
+
+  $PhongFresnelRangeX ".0"  //   0º fresnel value used by proxie
+  $PhongFresnelRangeY ".0"  //  45º fresnel value used by proxie
+  $PhongFresnelRangeZ ".0"  // 180º fresnel value used by proxie
+  $PhongFresnelRange_0 ".0" //   0º fresnel value used by proxie
+  $PhongFresnelRange_1 ".0" //  45º fresnel value used by proxie
+  $PhongFresnelRange_2 ".0" // 180º fresnel value used by proxie
 
   //////////////////////////////////////////////////////////////////////////////////
   // Proxies
-  //    Proxies are like code the VMT to have dynamic behaviours
+  //    Proxies are like code the VMT for dynamic behaviours
   //////////////////////////////////////////////////////////////////////////////////
   Proxies {
     Pupil {
-      TextureVar $lightwarptexture  // try get luminance from lightwarp
-      TextureFrameNumVar $dummy     // as the name says just store this number for no reason
+      TextureVar $basetexture
+      TextureFrameNumVar $dummy
       PupilCloseRate $PupilOpenRate
       PupilOpenRate $PupilCloseRate
     }
 
-    Multiply {
-      srcVar1 $Half
-      srcVar2 $Lighting
-      resultVar $LightingHalf
-    }
-    Subtract {
-      srcVar1 $LightingBoost
-      srcVar2 $LightingHalf
-      resultVar $clr
-    }
-
-    // We don't need Clamp, since emissiveblend is our "clamp", this is a safier method if $emissiveblendenabled "0"
-    Clamp {
-      min $MinLighting
-      max $MaxLighting
-      srcVar1 $clr
-      resultVar $clr
-    }
-
     Equals {
+      srcVar1 $zero
+      resultVar $dummy
+    }
+
+    // allow user increse this $lighting
+    Add {
+      srcVar1 $lighting
+      srcVar2 $LightingBoost
+      resultVar $dummy
+    }
+    Equals {
+      srcVar1 $dummy
+      resultVar $lighting
+    }
+    Equals {
+      srcVar1 $zero
+      resultVar $dummy
+    }
+
+    // NOTE: ( $lighting - $zero ) * ( $MaxLighting - $MinLighting ) / ( $one - $zero ) + $MinLighting
+    Subtract {
+      srcVar1 $MaxLighting
+      srcVar2 $MinLighting
+      resultVar $LightingWarped
+    }
+    Multiply {
+      srcVar1 $lighting
+      srcVar2 $LightingWarped
+      resultVar $LightingWarped
+    }
+    Add {
+      srcVar1 $LightingWarped
+      srcVar2 $MinLighting
+      resultVar $clr
+    }
+
+    // Split $color vectors
+    Clamp {
+      min "$color2[0]"
+      max "$color[0]"
+      srcVar1 $zero
+      resultVar $color_0
+    }
+    Clamp {
+      min "$color2[1]"
+      max "$color[1]"
+      srcVar1 $zero
+      resultVar $color_1
+    }
+    Clamp {
+      min "$color2[2]"
+      max "$color[2]"
+      srcVar1 $zero
+      resultVar $color_2
+    }
+
+    // if $colorR is not 0 then $colorR == $colorR else $colorR == $color_0
+    SelectFirstIfNonZero {
+      srcVar1 $colorR
+      srcVar2 $color_0
+      resultVar $colorR
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $colorG
+      srcVar2 $color_1
+      resultVar $colorG
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $colorB
+      srcVar2 $color_2
+      resultVar $colorB
+    }
+
+    // modulate $color with our tweaked $lighting
+    Multiply {
       srcVar1 $clr
+      srcVar2 $colorR
       resultVar "$color[0]"
     }
-    Equals {
+    Multiply {
       srcVar1 $clr
+      srcVar2 $colorG
       resultVar "$color[1]"
     }
-    Equals {
+    Multiply {
       srcVar1 $clr
+      srcVar2 $colorB
       resultVar "$color[2]"
     }
 
     // Emissive is supposed to take a small, but important role by default
+    Equals { // in case user want disable this modulation, store $emissiveblendstrength to later hijack back
+      srcVar1 $emissiveblendstrength
+      resultVar $dummy
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $Emissive
+      srcVar2 $emissiveblendstrength
+      resultVar $Emissive
+    }
     Multiply {
-      srcVar1 $EmissiveStrength
-      srcVar2 $EmissiveStrength
+      srcVar1 $Emissive
+      srcVar2 $Emissive
       resultVar $MinEmissive
     }
-    Multiply {
-      //srcVar1 $clr
-      srcVar1 $Lighting                // Uses Raw value from $Lighting
-      srcVar2 $EmissiveStrength        // Our base Strength for Emissive effect
-      resultVar $emissiveblendstrength // Send the modulation to emissiveblendstrength
+    Subtract {
+      srcVar1 $Emissive
+      srcVar2 $MinEmissive
+      resultVar $EmissiveStrength
     }
-    Clamp {
-      min $MinEmissive
-      max $MaxLighting
-      srcVar1 $emissiveblendstrength
+    Multiply {
+      srcVar1 $lighting
+      srcVar2 $EmissiveStrength
+      resultVar $EmissiveStrength
+    }
+    Add {
+      srcVar1 $EmissiveStrength
+      srcVar2 $MinEmissive
       resultVar $emissiveblendstrength
     }
 
-    // creatre quarter light to modulate EnvMapLight
+    // if $emissiveblendproxie > 0 then $emissiveblendstrength == $emissiveblendstrength else $emissiveblendstrength == $dummy
+    Int {
+      srcVar1 $emissiveblendproxie
+      resultVar $emissiveblendproxie
+    }
+    LessOrEqual {
+      LessEqualVar $dummy
+      greaterVar $emissiveblendstrength
+      srcVar1 $emissiveblendproxie
+      srcVar2 $false
+      resultVar $emissiveblendstrength    
+    }
+    Equals { // clear $dummy, just incase I need reuse this
+      srcVar1 $zero
+      resultVar $dummy
+    }
+
+    // create quarter light to modulate EnvMapLight
     Multiply {
-      srcVar1 $Quarter
-      srcVar2 $LightingHalf
+      srcVar1 $lighting
+      srcVar2 $Quarter
       resultVar $LightingQuarter
     }
 
     Equals {
       srcVar1 $LightingQuarter
-      srcVar2 $Half
       resultVar $detailblendfactor
     }
 
-    // Normalize 0 .. 1
+    // Constraint $LightingQuarter to 0..1 range
     Clamp {
       min $zero
       max $one
       srcVar1 $LightingQuarter
       resultVar $LightingQuarter
     }
-    // Note: WarpMinMax don't exist in L4D2
-    //WrapMinMax {
-    //  minVal $zero
-    //  maxVal $one
-    //  srcVar1 $Lighting
-    //  resultVar $LightingWarped
-    //}
 
-    // EnvMap here is lying for when required
+    // Split $envmaptint vectors
+    Clamp {
+      min "$envmaptint[0]"
+      max "$envmaptint[0]"
+      srcVar1 $zero
+      resultVar $EnvMapTint_0
+    }
+    Clamp {
+      min "$envmaptint[1]"
+      max "$envmaptint[1]"
+      srcVar1 $zero
+      resultVar $EnvMapTint_1
+    }
+    Clamp {
+      min "$envmaptint[2]"
+      max "$envmaptint[2]"
+      srcVar1 $zero
+      resultVar $EnvMapTint_2
+    }
+
+    // store user defined $EnvMapTint vectors and use at Proxie setup
+    SelectFirstIfNonZero {
+      srcVar1 $EnvMapReference_0
+      srcVar2 $EnvMapTint_0
+      resultVar $EnvMapReference_0
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $EnvMapReference_1
+      srcVar2 $EnvMapTint_1
+      resultVar $EnvMapReference_1
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $EnvMapReference_2
+      srcVar2 $EnvMapTint_2
+      resultVar $EnvMapReference_2
+    }
+
     Multiply {
-      srcVar1 $LightingQuarter   // Re uses half-lighting
+      srcVar1 $EnvMapReference_0
+      srcVar2 $EnvMapReference_1
+      resultVar $EnvMapReference
+    }
+    Multiply {
+      srcVar1 $EnvMapReference
+      srcVar2 $EnvMapReference_2
+      resultVar $EnvMapReference
+    }
+
+    // EnvMap modulation
+    Multiply {
+      srcVar1 $LightingQuarter   // Re uses half-Lighting
       srcVar2 $EnvMapReference   // Our base Strength for EnvMap effect
       resultVar $EnvMapModulator // Send the modulation to $EnvMapModulator
     }
 
-    // Apply to $EnvMapTint
+    // Apply to $envmaptint
     Subtract {
       srcVar1 $EnvMapReference_0
       srcVar2 $EnvMapModulator
@@ -381,6 +521,44 @@ VertexLitGeneric
       resultVar $BBQ
     }
 
+    // Split $phongfresnelranges vectors
+    Clamp {
+      min "$PhongFresnelRanges[0]"
+      max "$PhongFresnelRanges[0]"
+      srcVar1 $zero
+      resultVar $PhongFresnelRangeX
+    }
+    Clamp {
+      min "$PhongFresnelRanges[1]"
+      max "$PhongFresnelRanges[1]"
+      srcVar1 $zero
+      resultVar $PhongFresnelRangeY
+    }
+    Clamp {
+      min "$PhongFresnelRanges[2]"
+      max "$PhongFresnelRanges[2]"
+      srcVar1 $zero
+      resultVar $PhongFresnelRangeZ
+    }
+
+    // store user defined $PhongFresnelRanges vectors and use at Proxie setup
+    SelectFirstIfNonZero {
+      srcVar1 $PhongFresnelRange_0
+      srcVar2 $PhongFresnelRangeX
+      resultVar $PhongFresnelRange_0
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $PhongFresnelRange_1
+      srcVar2 $PhongFresnelRangeY
+      resultVar $PhongFresnelRange_1
+    }
+    SelectFirstIfNonZero {
+      srcVar1 $PhongFresnelRange_2
+      srcVar2 $PhongFresnelRangeZ
+      resultVar $PhongFresnelRange_2
+    }
+
+    // modulate $phongfresnelranges with BBQ
     Multiply {
       srcVar1 $PhongFresnelRange_0
       srcVar2 $BBQ
