@@ -34,7 +34,7 @@ VertexLitGeneric
   // We don't really need a normal map, use if you wish to...
   //$bumpmap "dev/flat_normal"
   
-  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
+  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remember to disable:
   $basemapluminancephongmask "1"
 
   // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering
@@ -189,7 +189,7 @@ VertexLitGeneric
   $detail "models/survivors/survivor_it"
   $detailscale "2.222"
   $detailblendmode "0"
-  $detailblendfactor ".000" // DEBUG: HLMV ONLY!
+  $detailblendfactor "1.000" // DEBUG: HLMV ONLY!
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -229,35 +229,40 @@ VertexLitGeneric
   $Lighting ".5"
   
   // addiive boost the character ilumination by this ammount (default: 1)
-  $LightingBoost ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
+  $LightingBoost ".973"
   
   // clamp light for $color NOT $color2 and avoid make the model complete dark without when $emissiveblendenabled "1"
-  // TODO: write a dynamic warp and solve the clamp waste amount
   $MinLighting ".8"
-  $MaxLighting ".972"
+  $MaxLighting ".972" // It uses median of the most "real world" albedo value, Snow. As (R+G+B)/3
   
   // just store a simpler variable for pupil light modulation
   // it behave like a ramp smoother for dark/light ambients
-  // appear that .073 is our Open/Brighter magic number and 0.4 our Close/Darkener magic number
+  // appear that .073 is our Open/Brighter magic number and .4 our Close/Darkener magic number
   $PupilOpenRate  ".073" // referece values: 1.1 (fast) || .3 (slower)
   $PupilCloseRate ".4"   // referece values: 1.1 (fast) || .3 (slower)
 
   // Store some dummy color variables, Don't touch it
   $zero ".0"
-  $one "1.0"
+  $one "1.0001"
   $clr ".0"
+  $clrRaw ".0"
+  $clrSub ".0"
+  $clrResult ".0"
+  $clrBoost ".0"
   $dummy ".0"
   $Half ".5"
   $Quarter ".25"
   $LightingHalf ".0"
   $LightingQuarter ".0"
+  $LightingBalance ".0"
   $LightingWarped ".0"
+  $MinLightingDoubled ".0"
   $MinEmissive ".0"
   $EnvMapModulator ".0"
 
   //////////////////////////////////////////////////////////////////////////////////
   // Proxies
-  //    Proxies are like code the VMT to have dynamic behaviours
+  //    Proxies are like code the VMT for dynamic behaviours
   //////////////////////////////////////////////////////////////////////////////////
   Proxies {
     IT {
@@ -280,17 +285,57 @@ VertexLitGeneric
       srcVar2 $Lighting
       resultVar $LightingHalf
     }
-    Subtract {
-      srcVar1 $LightingBoost
-      srcVar2 $LightingHalf
-      resultVar $clr
-    }
 
-    // We don't need Clamp, since EmissiveBlend is our "clamp", this is a safier method if $emissiveblendenabled "0"
+    // Start a warp to avoid clamp, it boost light when darker places
+    // We don't need Clamp since EmissiveBlend is our "clamp", this is a safier method if $emissiveblendenabled "0"
+    // X = ( $MaxLighting - $Lighting )
+    // Y = ( X / ( $MinLighting + X) ) + $MinLighting
+    // Z = 1 - Y >= 0
+    // C = Y - Z
+    Subtract {
+      srcVar1 $MaxLighting
+      srcVar2 $Lighting
+      resultVar $LightingBalance
+    }
+    Add {
+      srcVar1 $MinLighting
+      srcVar2 $LightingBalance
+      resultVar $LightingWarped
+    }
+    Add {
+      srcVar1 $LightingWarped
+      srcVar2 $MinLighting
+      resultVar $MinLightingDoubled
+    }
+    Divide {
+      srcVar1 $LightingBalance
+      srcVar2 $MinLightingDoubled
+      resultVar $clrRaw
+    }
+    Subtract {
+      srcVar1 $clrRaw
+      srcVar2 $one
+      resultVar $clrSub
+    }
+    Multiply {
+      srcVar1 $clrSub
+      srcVar2 $LightingHalf
+      resultVar $clrResult
+    }
     Clamp {
-      min $MinLighting
-      max $MaxLighting
-      srcVar1 $clr
+      min $zero
+      max $one
+      srcVar1 $clrResult
+      resultVar $clrResult
+    }
+    Subtract {
+      srcVar1 $clrRaw
+      srcVar2 $clrResult
+      resultVar $clrBoost
+    }
+    Add {
+      srcVar1 $clrBoost
+      srcVar2 $LightingBoost
       resultVar $clr
     }
 
