@@ -34,7 +34,7 @@ VertexLitGeneric
   // We don't really need a normal map, use if you wish to...
   //$bumpmap "dev/flat_normal"
 
-  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
+  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remember to disable:
   $basemapluminancephongmask "1"
 
   // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering

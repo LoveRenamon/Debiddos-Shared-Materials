@@ -34,8 +34,8 @@ VertexLitGeneric
 
   // We don't really need a normal map, use if you wish to...
   //$bumpmap "dev/flat_normal"
-  
-  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remeber to disable:
+
+  // If using a $bumpmap and you have a Phong Mask at Alpha Channel remember to disable:
   $basemapluminancephongmask "1"
 
   // Here the magic of a lightwarp that have some amount of red and make some fake skin scattering
@@ -44,7 +44,7 @@ VertexLitGeneric
   //$lightwarptexture "shared/lightwarp_anime"
   // many more lightwarps at: https://github.com/LoveRenamon/Debiddos-Shared-Materials/tree/dev/materials/shared
 
-  
+
 //////////////////////////////////////////////////////////////////////////////////
 // Swtich values
 //////////////////////////////////////////////////////////////////////////////////
@@ -127,10 +127,11 @@ VertexLitGeneric
 //////////////////////////////////////////////////////////////////////////////////
 // Tweak Phong
 //   WARNING: IT BREAK THE WHOLE EFFECT
+//   Gives a better look to the blood
 //////////////////////////////////////////////////////////////////////////////////
   
   $shinyblood "0"           // Set as False as failsafe parameter
-  //$shinybloodexponent "8"
+  //$shinybloodexponent "8" //
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -303,7 +304,6 @@ VertexLitGeneric
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   $detailblendmode "0"  // $detail blend mode. Should normally be set to 0. Do not change it unless you know what you're doing.
-  $shinyblood "0"       // Gives a better look to the blood
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DO NOT MODIFY ANYTHING BELOW THIS
@@ -430,7 +430,7 @@ VertexLitGeneric
   $burnRaw         ".0"  // This is used to store the raw amount of "burn" (BBQLevel) of the survivor or infected
   $burnAmount      ".0"  // This is used to store the real amount of burn (between 0 = no burn to 1 = max burn)
   $worstBurnAmount ".0"  // This is used to store the worst burn amount ever reached and force a loop to restart
-  $BBQ             ".0"  // store the BBQ math to pong fresnel
+  $BBQ             ".0"  // store the BBQ math to phong fresnel
 
   $forceMaxSoot  "0"  // [SPECIAL] : if is equal to 2, force the biggest possible burn effect no matter what
 
