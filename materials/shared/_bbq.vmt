@@ -1,46 +1,86 @@
-"VertexLitGeneric"
-{
-	// Purpose: Sample for BBQ that modify fresnel when the entity burn
-	$PhongFresnelRange_0 ".0" // Fresnel at front view (0º)
-	$PhongFresnelRange_1 ".5" // Fresnel at 3/4 view (45º)
-	$PhongFresnelRange_2 "1.0" // fresnel at back view/rimlight (180º)
+VertexLitGeneric {
+  // Purpose: Sample for BBQ that modify fresnel when the entity burn
+  $PhongFresnelRanges " [ .0 .5 1 ] " // the default 3D vector that will be driven by the above values
 
-	$PhongFresnelRanges " [ .0 .5 1 ] " // the default 3D vector that will be driven by the above values
+  // This is just to store values
+  $PhongFresnelRange_0 ".0" // Fresnel at front view (0º)
+  $PhongFresnelRange_1 ".0" // Fresnel at 3/4 view (45º)
+  $PhongFresnelRange_2 ".0" // fresnel at back view/rimlight (180º)
+  $PhongFresnelRangeX ".0"
+  $PhongFresnelRangeY ".0"
+  $PhongFresnelRangeZ ".0"
 
-	$BBQAmount ".0"
-	$BBQMult "1.01"
-	$BBQ ".0"
+  $BBQ ".0" // fetch BBQ every frame
+  $BBQMult "1.01" // This scales BBQ Modulation
 
-	Proxies
-	{
-		BBQLevel
-		{
-			resultVar $BBQAmount
-		}
-		Multiply
-		{
-			srcVar1 $BBQAmount
-			srcVar2 $BBQMult
-			resultVar $BBQ
-		}
+  Proxies {
+    BBQLevel {
+       resultVar $BBQ
+    }
+    Multiply {
+       srcVar1 $BBQ
+       srcVar2 $BBQMult
+       resultVar $BBQ
+    }
 
-		Multiply
-		{
-			srcVar1 $PhongFresnelRange_0
-			srcVar2 $BBQ
-			resultVar "$PhongFresnelRanges[0]"
-		}
-		Multiply
-		{
-			srcVar1 $PhongFresnelRange_1
-			srcVar2 $BBQ
-			resultVar "$PhongFresnelRanges[1]"
-		}
-		Multiply
-		{
-			srcVar1 $PhongFresnelRange_2
-			srcVar2 $BBQ
-			resultVar "$PhongFresnelRanges[2]"
-		}
-	}
+    // Split $phongfresnelranges vectors
+    Clamp {
+      min "$PhongFresnelRanges[0]"
+      max "$PhongFresnelRanges[0]"
+      srcVar1 $zero
+      resultVar $PhongFresnelRangeX
+    }
+    Clamp {
+      min "$PhongFresnelRanges[1]"
+      max "$PhongFresnelRanges[1]"
+      srcVar1 $zero
+      resultVar $PhongFresnelRangeY
+    }
+    Clamp {
+      min "$PhongFresnelRanges[2]"
+      max "$PhongFresnelRanges[2]"
+      srcVar1 $zero
+      resultVar $PhongFresnelRangeZ
+    }
+
+    // store user defined $PhongFresnelRanges vectors and use at Proxie setup
+    LessOrEqual {
+      lessEqualVar $PhongFresnelRangeX
+      greaterVar $PhongFresnelRange_0
+      srcVar1 $PhongFresnelRange_0
+      srcVar2 $zero
+      resultVar $PhongFresnelRange_0
+    }
+    LessOrEqual {
+      lessEqualVar $PhongFresnelRangeY
+      greaterVar $PhongFresnelRange_1
+      srcVar1 $PhongFresnelRange_1
+      srcVar2 $zero
+      resultVar $PhongFresnelRange_1
+    }
+    LessOrEqual {
+      lessEqualVar $PhongFresnelRangeZ
+      greaterVar $PhongFresnelRange_2
+      srcVar1 $PhongFresnelRange_2
+      srcVar2 $zero
+      resultVar $PhongFresnelRange_2
+    }
+
+    // modulate $phongfresnelranges with BBQ
+    Multiply {
+      srcVar1 $PhongFresnelRange_0
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[0]"
+    }
+    Multiply {
+      srcVar1 $PhongFresnelRange_1
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[1]"
+    }
+    Multiply {
+      srcVar1 $PhongFresnelRange_2
+      srcVar2 $BBQ
+      resultVar "$PhongFresnelRanges[2]"
+    }
+  }
 }

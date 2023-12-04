@@ -1,23 +1,19 @@
-"VertexLitGeneric"
-{
-// Purpose: Sample for increase the Blood amount based on number of melee hits
-	$Detail "models/infected/hunter/hunter_01_detail"
-	$DetailScale "1.5"
-	$DetailBlendFactor ".0001"
-	$DetailBlendMode "0"
+VertexLitGeneric {
+  // Purpose: Sample for increase the Blood amount based on number of melee hits
+  $Detail "models/infected/hunter/hunter_01_detail"
+  $DetailScale "1.5"
+  $DetailBlendFactor ".0001"
+  $DetailBlendMode "0"
 
-	$BloodyAmount ".0"
+  $BloodyAmount ".0"
 
-	Proxies
-	{
-		BloodyHands
-		{
-			resultVar $BloodyAmount
-		}
-		Equals
-		{
-			srcVar1 $BloodyAmount
-			resultVar $DetailBlendFactor
-		}
-	}
+  Proxies {
+    BloodyHands {
+      resultVar $BloodyAmount
+    }
+    Equals {
+      srcVar1 $BloodyAmount
+      resultVar $DetailBlendFactor
+    }
+  }
 }

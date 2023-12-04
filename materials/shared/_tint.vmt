@@ -8,9 +8,35 @@
 
   $LightBoost ".9"
   $clr ".0"
+  $zro ".0"
+  $color " [ 1 1 1 ] "
 
   Proxies
   {
+
+    // Split $color vector otherwise it doesn't work in Gmod
+    Clamp 
+    {
+      srcVar1 $zro
+      min "$color[0]"
+      max "$color[0]"
+      resultVar "$color[0]"
+    }
+    Clamp 
+    {
+      srcVar1 $zro
+      min "$color[1]"
+      max "$color[1]"
+      resultVar "$color[1]"
+    }
+    Clamp 
+    {
+      srcVar1 $zro
+      min "$color[2]"
+      max "$color[2]"
+      resultVar "$color[2]"
+    }
+
     // drive $lighting
     Pupil
     {
@@ -19,12 +45,14 @@
       PupilCloseRate .08
       PupilOpenRate .08
     }
+
     Subtract
     {
       srcVar1 $LightBoost
       srcVar2 $lighting
       resultVar $clr
     }
+
     // Clamp for limit and prevent to bright/dark
     Clamp
     {
@@ -33,6 +61,7 @@
       srcVar1 $clr
       resultVar $clr
     }
+
     // Transfer the calc light from Pupil to $color
     Equals
     {
@@ -49,5 +78,6 @@
       srcVar1 $clr
       resultVar "$color[2]"
     }
+
   }
 }
