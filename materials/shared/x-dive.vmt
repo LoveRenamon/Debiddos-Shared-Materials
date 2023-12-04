@@ -24,9 +24,9 @@
   //$alphatestreference "0.01" // threshold to when $alphatest is usable. Alpha transparency clip point (Almost incompatible with everything)
   $allowalphatocoverage "1"    // allow $alphatest be "anti-aliased" based on client's AA settings
 
-  $basealphaenvmapmask "0"       //  use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
-  $normalmapalphaenvmapmask "0"  // use $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
-  $basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask
+  $basealphaenvmapmask "0"       //  use $basetexture Alpha channel as $envmaskmap. // NOTE: Only when no $bumpmap is present
+  $normalmapalphaenvmapmask "0"  // use $bumpmap Alpha channel as $envmaskmap // NOTE: Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
+  $basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask // BUG: Don't work for GMod
   $basemapalphaphongmask "0"     // use $basetexture alpha channel as phong mask
 
   $halflambert "0"             // halflambert NPR shading
@@ -66,10 +66,10 @@
   $phong "1"                   // enable phong, set zero to disable all phong and rimlight at same time
   $invertphongmask "0"         // invert the phong mask for $bumpmap alpha, can potentially broke the envmapmask since it share the same buffer
   $forcephong "1"              // force phong enabled even on lowend cards
-  $phongboost "1.85"           // multiply phong by this value
+  $phongboost "1.85"           // multiply phong by this value.
   $phongalbedotint "1"         // use the $basetexture's RGB as tint value per textel
   //$phongtint " { 0 0 255 } " // uncomment if you need a solid phong color and $phongalbedotint is 0
-  $phongalbedoboost "1"        // for SFM, multiply the $phongexponenttexture Green channel by this value
+  $phongalbedoboost "1"        // for SFM, multiply the $phongexponenttexture Green channel by this value // NOTE: Disabled if $detail is present see: https://github.com/Facepunch/garrysmod-issues/issues/5557
   //$phongexponent "4"         // for override the default $phongexponenttexture's Red Channel
   //$phongexponent2 "5"        // for CS:GO compatibles, used in specific light sources
   $phongexponentfactor "1"     // multiply the $phongexponenttexture red channel by this value
@@ -109,7 +109,7 @@
   //////////////////////////////////////////////////////////////////////////////////
   // $Detail trick to boost colors
   //////////////////////////////////////////////////////////////////////////////////
-  //$detail "shared/generic_base" // here the magic, we boost the $basetexture with $detail
+  //$detail "shared/generic_base" // here the magic, we boost the $basetexture with $detail // NOTE: Breaks $phongalbedoboost
   $detailscale "1" // do not scale, and use the original size
   $detailblendmode "0" // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
   $detailblendfactor ".476" // multiply the $detail by this value. like: how much the effect is in use.

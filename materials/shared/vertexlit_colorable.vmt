@@ -18,7 +18,7 @@
   $nolod "1" // disable Level of Detail texture scaling to reduce VRAM usage. Good for LowRes Textures
   $ClampS "1" // enable/disable ClampS texture coordinades
   $ClampT "1" // enable/disable ClampT texture coordinades
-  $ClampU "1" // enable/disable ClampT texture coordinades
+  $ClampU "1" // enable/disable ClampU texture coordinades
   $no_fullbright "1" // disable the fullbright
   $nomip "1" // ignore the MipMap texture to reduce VRAM usage. Good for LowRes Textures
   //$ignorez "0" // ignore distance buffer

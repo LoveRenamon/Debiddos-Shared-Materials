@@ -19,9 +19,9 @@
   $allowalphatocoverage "1"    // Control AntiAliasing for alphatest
   //$alphatestreference ".01"  // threshold to when $alphatest is usable. Almost incompatible with everything
 
-  $basealphaenvmapmask       "0" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
-  $normalmapalphaenvmapmask  "0" // use $bumpmap Alpha channel as $envmaskmap
-  $basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask
+  $basealphaenvmapmask       "0" // use $basetexture Alpha channel as $envmaskmap. // NOTE: Only when no $bumpmap is present
+  $normalmapalphaenvmapmask  "0" // use $bumpmap Alpha channel as $envmaskmap // NOTE: Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
+  $basemapluminancephongmask "0" // use luminance of the $basetexture as phong mask // BUG: Don't work for GMod
   $basemapalphaphongmask     "0" // use $basetexture alpha channel as phong mask
 
   // $color and $color2 toggle
@@ -81,7 +81,7 @@
   $phongboost ".8"                       // multiply phong by this value
   $phongalbedotint "1"                   // use the $basetexture's RGB as tint value per textel
   //$phongtint " { 83 85 122 } "         // uncomment if you need a solid phong color and $phongalbedotint is 0
-  $phongalbedoboost "1.08"               // for SFM, multiply the tint channel by this value
+  $phongalbedoboost "1.08"               // for SFM, multiply the $phongexponenttexture Green channel by this value // NOTE: Disabled if $detail is present see: https://github.com/Facepunch/garrysmod-issues/issues/5557
   //$phongexponent "4"                   // for override the default $phongexponenttexture's Red Channel
   //$phongexponent2 "5"                  // for CS:GO compatibles, used in specific light sources
   $phongexponentfactor ".8"              // multiply the $phongexponenttexture red channel by this value
@@ -118,7 +118,7 @@
   //   Source2013: If you use on one model's vmt, all other materials of the same mdl file should use,
   // or your model will become brighter than expected at $body and $model qc parameters. While $bodygroup will keep working as expected
   //////////////////////////////////////////////////////////////////////////////////
-  //$detail "vgui/black"    // here the magic, we boost the $basetexture with $detail
+  //$detail "vgui/black"    // here the magic, we boost the $basetexture with $detail // NOTE: Breaks $phongalbedoboost
   $detailscale       "1"    // do not scale and use the original size
   $detailblendmode   "0"    // set zero to use as "decal". RGB values higher than 127 make brighter (intense), and lower make it darker. TIP.: use to tunedown the HDR overbright.
   $detailblendfactor ".4"   // multiply the $detail by this value. like: how much the effect is in use.

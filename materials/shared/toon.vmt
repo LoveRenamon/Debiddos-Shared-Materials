@@ -16,9 +16,9 @@
   $translucent "0" // the true gradient
   $additive "0"    // like $translucent but ignore light
 
-  $basealphaenvmapmask "0"       // $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
-  $normalmapalphaenvmapmask "0"  // $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
-  $basemapalphaphongmask "0"     // $basetexture Alpha channel as phong mask
+  $basealphaenvmapmask "0"       // $basetexture Alpha channel as $envmaskmap. // NOTE: Only when no $bumpmap is present
+  $normalmapalphaenvmapmask "0"  // $bumpmap Alpha channel as $envmaskmap // NOTE: Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
+  $basemapalphaphongmask "0"     // $basetexture Alpha channel as phong mask // BUG: Don't work for GMod
   $basemapluminancephongmask "1" // use computed luminance of the $basetexture as phong mask
 
   $allowalphatocoverage "0"    // Control AntiAliasing for alphatest
@@ -31,10 +31,10 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Main textures
   //////////////////////////////////////////////////////////////////////////////////
-  $basetexture "dev/null"                        // Diffuse or Albedo texture
-  $bumpmap "dev/flat_normal"                     // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
-  $phongexponenttexture "shared/lightwarp_white" // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for $rimlightmask 1
-  $lightwarptexture "shared/lightwarp_toon"      // is like an diffuse color ramp
+  $basetexture "vgui/white"                 // Diffuse or Albedo texture
+  $bumpmap "dev/flat_normal"                // Bump/Normal map | Alpha Channel is used for "$phong 1" mask by default
+  $phongexponenttexture "vgui/white"        // phong modulator, Red channel is exponent; Green channel as $phongalbedotint modulator; Blue channel unused; Alpha channel is for $rimlightmask 1
+  $lightwarptexture "shared/lightwarp_toon" // is like an diffuse color ramp
 
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@
   $forcephong "1"                    // force phong enabled even on lowend cards
   $phongboost "1.5"                  // multiply phong by this value
   $phongalbedotint "1"               // use the $basetexture's RGB as tint value per textel
-  $phongalbedoboost "1"              // for SFM, multiply the $phongexponenttexture Green channel by this value
+  $phongalbedoboost "1"              // for SFM, multiply the $phongexponenttexture Green channel by this value // NOTE: Disabled if $detail is present see: https://github.com/Facepunch/garrysmod-issues/issues/5557
   $phongexponent "200"               // for override the default $phongexponenttexture's Red Channel
   $phongexponent2 "222"              // for CS:GO compatibles, used in specific light sources
   $phongexponentfactor "1"           // multiply the $phongexponenttexture red channel by this value
@@ -63,7 +63,7 @@
   //////////////////////////////////////////////////////////////////////////////////
   // $Detail to boost colors do trick
   //////////////////////////////////////////////////////////////////////////////////
-  //$detail "shared/lightwarp_black" // here the magic, we boost the $basetexture with $detail
+  //$detail "shared/lightwarp_black" // here the magic, we boost the $basetexture with $detail // NOTE: Breaks $phongalbedoboost
   //$detailscale "1"                 // do not scale, and use the original size
   //$detailblendmode "5"             // set "0" to use as decal (finetune hdr) || "5" to use as "$selfillum".
   //$detailblendfactor "1"           // multiply the $detail by this value. like: how much the effect is in use.

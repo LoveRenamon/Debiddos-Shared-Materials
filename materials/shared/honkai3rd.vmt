@@ -21,9 +21,9 @@
   $allowalphatocoverage "1"    // Control AntiAliasing for alphatest
   //$alphatestreference ".05"  // threshold to when $alphatest is usable. Alpha transparency clip point (Almost incompatible with everything)
 
-  $basealphaenvmapmask         "0" // use $basetexture Alpha channel as $envmaskmap. Only when no $bumpmap is present
-  $normalmapalphaenvmapmask    "0" // use $bumpmap Alpha channel as $envmaskmap, Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
-  $basemapluminancephongmask   "1" // use luminance of the $basetexture as phong mask (4all after l4d, except gmod)
+  $basealphaenvmapmask         "0" // use $basetexture Alpha channel as $envmaskmap. // NOTE: Only when no $bumpmap is present
+  $normalmapalphaenvmapmask    "0" // use $bumpmap Alpha channel as $envmaskmap // NOTE: Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
+  $basemapluminancephongmask   "1" // use luminance of the $basetexture as phong mask // BUG: Don't work for GMod
   $basemapalphaphongmask       "0" // $basetexture Alpha channel as phong mask
 
   // $color and $color2 toggle
@@ -85,7 +85,7 @@
   $phongboost "1"                         // multiply phong by this value
   $phongalbedotint "1"                    // use the $basetexture's RGB as tint value per textel
   //$phongtint " { 83 85 122 } "          // uncomment if you need a solid phong color and $phongalbedotint is 0
-  $phongalbedoboost "1"                   // for SFM, multiply the $phongexponenttexture Green channel by this value
+  $phongalbedoboost "1"                   // for SFM, multiply the $phongexponenttexture Green channel by this value // NOTE: Disabled if $detail is present see: https://github.com/Facepunch/garrysmod-issues/issues/5557
   //$phongexponent "10"                   // for override the default $phongexponenttexture's Red Channel
   //$phongexponent2 "10"                  // for CS:GO compatibles, used in specific light sources
   $phongexponentfactor "1"                // multiply the $phongexponenttexture red channel by this value
@@ -110,7 +110,7 @@
   $envmapfresnel "1"                      // Multiply Fresnel Envirovment by this value
   //$envmaplightscale "1"                 // determine how much is tinted by an light source and Cubemap
   $noenvmapmip "1"                        // disable MipMap for Cubemaps
-  $envmaptint " [ 1 1 1 ] "             // {RGB} or [vector] values to tune EnvMap
+  $envmaptint " [ 1 1 1 ] "               // {RGB} or [vector] values to tune EnvMap
   //$envmapfresnelminmaxexp " [ 0 1 2 ] " // Override the Min, Max and Exponent Fresnel values (not compatible with $bumpmap)
   $EnvMapReference ".99"                  // EnvMap reference used for modulate $envmaptint
 
@@ -123,7 +123,7 @@
   //   Source2013: If you use on one model's vmt, all other materials of the same mdl file should use,
   // or your model will become brighter than expected at $body and $model qc parameters.
   //////////////////////////////////////////////////////////////////////////////////
-  //$detail "shared/lightwarp_black" // here the magic, we boost the $basetexture with $detail
+  //$detail "shared/lightwarp_black" // here the magic, we boost the $basetexture with $detail // NOTE: Breaks $phongalbedoboost
   $detailscale       "1"             // do not scale, and use the original size
   $detailblendmode   "5"             // set "0" to use as decal (finetune hdr) || "5" to use as "$selfillum".
   $detailblendfactor "1"             // multiply the $detail by this value. like: how much the effect is in use.

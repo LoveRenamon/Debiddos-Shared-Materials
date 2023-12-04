@@ -9,7 +9,7 @@
    $model "1"                    // this texture is made for models, and not ui
    $nodecal "0"                  // allow decals by default
    $nocull "0"                   // render just the face frontside, set one to also render the "inside" of the mesh
-   $normalmapalphaenvmapmask "1" // use $bumpmap Alpha channel as $envmaskmap
+   $normalmapalphaenvmapmask "1" // use $bumpmap Alpha channel as $envmaskmap // NOTE: Not work with $basemapalphaphongmask 1 or $basemapluminancephongmask 1
    $allowdiffusemodulation "1"   // allow $color $color2 tint
    $blendtintbybasealpha "0"     // use $basetexture Alpha channel as $color2 mask
    $blendtintcoloroverbase "0"   // where to tint. 0 is under $basetexture. 1 is over the $basetexture (float 0 to 1)
@@ -33,13 +33,13 @@
    $phongboost ".8"                  // multiply phong by this value
    $phongalbedotint "1"              // use the $basetexture's RGB as tint value per textel
    $phongtint " { 83 85 122 } "      // uncomment if you need a solid phong color and $phongalbedotint is 0
-   $phongalbedoboost "1.08"          // for SFM, multiply the tint channel by this value
+   $phongalbedoboost "108"           // for SFM, multiply the tint channel by this value // NOTE: Disabled if $detail is present see: https://github.com/Facepunch/garrysmod-issues/issues/5557
    $phongexponent "4"                // for override the default $phongexponenttexture's Red Channel
    $phongexponent2 "5"               // for CS:GO compatibles, used in specific light sources
    $phongexponentfactor "1.08"       // multiply the $phongexponenttexture red channel by this value
    $phongfresnelranges " [ 1 3 2 ] " // XYZ fresnel values, you can use any float values
 
-   // here the magic, we boost the $basetexture with $detail
+   // here the magic, we boost the $basetexture with $detail // NOTE: Breaks $phongalbedoboost
 	$detail "shared/generic_blue255"
    // Mental Notes: if you use on one model's vmt, all other materials of the same mdl file should use, or your model will become brighter than expected at $body and $model qc parameters.
 	// BUG: GMod cannot handle materials with mixed on/off $detail
