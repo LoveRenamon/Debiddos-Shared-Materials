@@ -19,6 +19,7 @@
     "*.tga",
     "*.txt",
     ".git*",
+    "*.grd",
     "lua/matproxy/_Debug.lua",
     "materials/shared/_detail.vmt",
     "materials/shared/_detail_v1.vmt",
