@@ -1,6 +1,7 @@
 "EyeRefract"
 {
 //////////////////////////////////////////////////////////////////////////////////
+// Version 1.3.1
 // This will dynamically scale pupil with lighting that a entity see.
 //
 // By: Davi (Debiddo) Gooz
@@ -14,12 +15,12 @@
   $lightwarptexture "shared/lightwarp_dod_snow"   // act like a color ramp, good for NPR
   $EnvMap "Engine/eye-reflection-cubemap-"        // the specullar texture, for a dynamic one, use "env_cubemap"
 
-  $AmbientOcclusion "1"                           // Enable Disable AmbientOcclusionTexture and AmbientOcclusionColor
-  $AmbientOcclColor " [ .33 .33 .33 ] "           // Same as "Decal Modulate" Tint Ambient Occlusion with this RGB color; When aboce 128 brighten and bellow make it darker
-  $AmbientOcclTexture "shared/eye_ao"             // The path to AmbientOcclusionTexture
+  $AmbientOcclusion "1"                 // Enable/Disable AmbientOcclusionTexture and AmbientOcclusionColor
+  $AmbientOcclColor " [ .33 .33 .33 ] " // Same as "Decal Modulate", it Tints Ambient Occlusion with this RGB color; When above 128 brighten and bellow make it darker
+  $AmbientOcclTexture "shared/eye_ao"   // The path to AmbientOcclusionTexture
 
   $EyeballRadius "1"       // the eyeball size for $RayTraceSphere
-  $RayTraceSphere "0"      // mark the shader to RayTrace and tweak UVMap with PixelShader 2.0 | Allow a true sphere on a flat surface, so flexes can bend and $Iris will be nicer rendered
+  $RayTraceSphere "0"      // mark the shader to RayTrace and tweak UVMap with PixelShader 2.0 | Allow a true sphere render over a flat surface, so flexes can bend and $Iris will be nicer rendered
   $SphereTexkillCombo "0"  // curl $Iris based on the $EyeballRadius
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +41,13 @@
   $EyeOrigin " [ 0 0 0 ] "
   $NoDecal "1"
 
+  // when $IsAnimeEyes is true, adds some math to boost $AmbientOcclColor at darker places
+  $IsAnimeEyes "0"
+
+  $MinLighting ".4"
+  $MaxLighting "2.2"
+
+  // This allow constraint $Dilation
   $MinDilation ".2"
   $MaxDilation ".8"
 
@@ -54,6 +62,24 @@
   $ClampU "0"
 
   $NoMip "0"
+
+  $AmbientColor ".0"
+  $clrRaw ".0"
+  $clrSub ".0"
+  $AmbientLight ".0"
+  $LightingBalance ".0"
+  $LightingWarped ".0"
+  $MinLightingDoubled ".0"
+  $ToneMap "1.0"
+  $AnimeAmbientOcclColor ".0"
+  $AmbientOcclColorValue ".0"
+
+  $AmbientOcclColor_R ".33"
+  $AmbientOcclColor_G ".33"
+  $AmbientOcclColor_B ".33"
+  $AmbientOcclColor_0 ".0"
+  $AmbientOcclColor_1 ".0"
+  $AmbientOcclColor_2 ".0"
 
   $IrisU " [ 0 1 0 0 ] "
   $IrisV " [ 0 0 1 0 ] "
@@ -70,6 +96,7 @@
   $exp ".0"
   $temp ".0"
 
+  $zro "0"
   $five ".5"
   $four ".4"
   $one ".01"
@@ -84,6 +111,13 @@
   // Proxies, I'll not explain nothing. It's just math
   //////////////////////////////////////////////////////////////////////////////////
   Proxies {
+
+    // NOTE: GMod doesnt support it, So for GMod Version does need a Lua MatProxy
+    // BUG: Left 4 Dead 2 always output 0 regarless the actual mat_hdr_tonemapscale value
+    ConVar {
+      convar "mat_hdr_tonemapscale"
+      resultVar $ToneMap
+    }
 
     Pupil {
       TextureVar $Iris
@@ -252,15 +286,113 @@
 
     //    End Gamma Correction    //
 
-    // Garry's Mod only works as is
-    Equals {
-      srcVar1 $temp
-      resultVar $Glossiness
+
+    // NOTE: ( $lighting - $zro ) * ( $MaxLighting - $MinLighting ) / ( $ToneMap - $zro ) + $MinLighting
+    Subtract {
+      srcVar1 $MaxLighting
+      srcVar2 $MinLighting
+      resultVar $LightingWarped
     }
+    Multiply {
+      srcVar1 $temp
+      srcVar2 $LightingWarped
+      resultVar $LightingWarped
+    }
+    Add {
+      srcVar1 $LightingWarped
+      srcVar2 $MinLighting
+      resultVar $AnimeAmbientOcclColor
+    }
+    //Subtract {
+    //  srcVar1 $MaxLighting
+    //  srcVar2 $AnimeAmbientOcclColor
+    //  resultVar $AnimeAmbientOcclColor
+    //}
+
+    LessOrEqual {
+      srcVar1 $IsAnimeEyes
+      srcVar2 $zro
+      lessEqualVar $AmbientOcclusion
+      greaterVar $AnimeAmbientOcclColor
+      resultVar $AmbientOcclColorValue
+    }
+
+    Clamp {
+      max $ToneMap
+      min $zro
+      srcVar1 $AmbientOcclColorValue
+      resultVar $AmbientOcclColorValue
+    }
+
+
+    // HACK: split $AmbientOcclColor vectors
+    Clamp {
+      srcVar1 $zro
+      min "$AmbientOcclColor[0]"
+      max "$AmbientOcclColor[0]"
+      resultVar $AmbientOcclColor_0
+    }
+    Clamp {
+      srcVar1 $zro
+      min "$AmbientOcclColor[1]"
+      max "$AmbientOcclColor[1]"
+      resultVar $AmbientOcclColor_1
+    }
+    Clamp {
+      srcVar1 $zro
+      min "$AmbientOcclColor[2]"
+      max "$AmbientOcclColor[2]"
+      resultVar $AmbientOcclColor_2
+    }
+
+
+    // store user defined $AmbientOcclColor vectors and use at Proxie setup
+    LessOrEqual {
+      lessEqualVar $AmbientOcclColor_0
+      greaterVar $AmbientOcclColor_R
+      srcVar1 $AmbientOcclColor_R
+      srcVar2 $zro
+      resultVar $AmbientOcclColor_R
+    }
+    LessOrEqual {
+      lessEqualVar $AmbientOcclColor_1
+      greaterVar $AmbientOcclColor_G
+      srcVar1 $AmbientOcclColor_G
+      srcVar2 $zro
+      resultVar $AmbientOcclColor_G
+    }
+    LessOrEqual {
+      lessEqualVar $AmbientOcclColor_2
+      greaterVar $AmbientOcclColor_B
+      srcVar1 $AmbientOcclColor_B
+      srcVar2 $zro
+      resultVar $AmbientOcclColor_B
+    }
+
+
+    // Control Brightness
+    Subtract {
+     srcVar1 $AmbientOcclColorValue
+     srcVar2 $AmbientOcclColor_R
+     resultVar "$AmbientOcclColor[0]"
+    }
+    Subtract {
+     srcVar1 $AmbientOcclColorValue
+     srcVar2 $AmbientOcclColor_G
+     resultVar "$AmbientOcclColor[1]"
+    }
+    Subtract {
+     srcVar1 $AmbientOcclColorValue
+     srcVar2 $AmbientOcclColor_B
+     resultVar "$AmbientOcclColor[2]"
+    }
+
+
+    // set EnvMap intensity
     Clamp {
       min $MinGlossiness
       max $MaxGlossiness
-      srcVar1 $Glossiness
+      srcVar1 $temp
       resultVar $Glossiness
     }
   }
