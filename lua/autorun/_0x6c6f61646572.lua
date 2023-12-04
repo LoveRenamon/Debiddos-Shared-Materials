@@ -3,8 +3,8 @@ DebiddoSharedMaterials = true
 
 --[[
 		The ideia behind everything here is use a table to be indexed at end of all lua files that match, being called a single time, but... I'm still figuring how to do it on LUA with GLUA libs
-		Also the GMod community like the official Discord server are mostly dick people with behaviour of a "self-disorder complex" that look to entertain theirselves.
-		It may looks rude, but is what you read at their daily messages
+			Also due most GMod community like official Discord server are mostly dick people with behaviour of a "self-disorder complex" that look to entertain theirselves. It's hard to just understand their messy workarounds at my free time.
+			It may looks rude, but is what you read at their daily messages
 --]]
 DebiddoNAME       = {}
 DebiddoCATEGORY   = {}
@@ -16,7 +16,7 @@ DebiddoPREFIX     = "models/debiddo/"
 --[[
 		Allow edit NPCs base HP that use out CVar
 --]]
-CreateConVar( "sv_debiddo_npc_base_health", "100", FCVAR_GAMEDLL, "Changes the base health for the newler HL2 based NPCs by Debiddo\nUsually Citizens have: <base>*0.8\nCombine NPCs have <base>*1.1\n", "1", "2147483648" )
+CreateConVar( "sv_debiddo_npc_base_health", 100, FCVAR_GAMEDLL, "Changes the base health for the newler HL2 based NPCs by Debiddo\nUsually Citizens have: <base>*0.8\nCombine NPCs have <base>*1.1\n", "1", "2147483648" )
 local sv_debiddo_npc_base_health = GetConVar( "sv_debiddo_npc_base_health" )
 
 --[[
